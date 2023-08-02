@@ -33,6 +33,8 @@ geracao_atual = []
 juncao_de_geracoes = []
 valores_proporcionais = []
 
+ja_sorteados = []
+
 # variavel para ajudar a direcionar os primeiros projeteis exatamente na direção do surgimento do player, para eliminar os piores
 primeiro_inimigo = 0
 
@@ -129,7 +131,7 @@ class Inimigo:  # classe que gerencia os inimigos
 class Player:
     def __init__(self):
         global contador_geracoes, melhor_peso_primeira_camada_oculta, melhor_peso_camada_de_saida, primeiro_individuo, \
-                juncao_de_geracoes
+                juncao_de_geracoes, ja_sorteados
 
         # variavel para contar a quantidade de loops que o player conseguiu passar
         self.tick = 0
@@ -219,7 +221,7 @@ class Player:
             # faz um sorteio dos individuos com preferencia dos melhores
             else:
 
-                self.ja_sorteados = []
+                ja_sorteados = []
 
                 # função que sorteia os individuos que ainda não foram sorteados
                 def roleta():
@@ -233,9 +235,9 @@ class Player:
                     while True:
 
                         if meio == 0 or meio == ultimo or (roleta > valores_proporcionais[meio - 1] and
-                            roleta < valores_proporcionais[meio + 1] and meio not in self.ja_sorteados):
+                            roleta < valores_proporcionais[meio + 1] and meio not in ja_sorteados):
 
-                            self.ja_sorteados.append(meio)
+                            ja_sorteados.append(meio)
                             break
 
                         elif roleta > valores_proporcionais[meio]:
@@ -607,6 +609,8 @@ while True:
         # zera a geração atual para ser preenchida novamente
         geracao_atual = []
         primeiro_individuo = True
+
+        ja_sorteados = []
 
         criar_objetos(20, 1500)
 
