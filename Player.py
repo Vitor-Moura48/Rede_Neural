@@ -1,4 +1,5 @@
 from Config import *
+import Variaveis_globais
 from Criação_de_Rede import*
 
 # classe que gerencia o player
@@ -36,7 +37,7 @@ class Player:
 
     # pega a quantidade de loops que o player passou e retorna esse valor
     def funcao_de_perda(self):
-
+        
         '''fim = time.time()
         tempo_normalizado = (fim - self.inicio) / 60'''
         tempo_em_tick = self.tick
@@ -52,7 +53,7 @@ class Player:
 
         # obtem as distâncias de cada inimigo para o jogador e retorna o valor
         def obter_distancias():
-            for inimigo in grupo_inimigos:
+            for inimigo in Variaveis_globais.grupo_inimigos:
 
                 coordenada_inimigo = inimigo.informar_posicao()
                 distancia_x = 1 - (abs(coordenada_inimigo[0] - self.rect_player.center[0]) / 110)

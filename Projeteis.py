@@ -1,11 +1,12 @@
 from Config import *
+import Variaveis_globais
 
 class Inimigo:  # classe que gerencia os inimigos
     def __init__(self):
         global primeiro_inimigo
 
         # cria dois projeteis na direção do spaw do inimigo
-        if primeiro_inimigo == 0:
+        if Variaveis_globais.primeiro_inimigo == 0:
             self.posicao_x = -20
             self.posicao_y = 245
             self.angulo = numpy.radians(0)
@@ -13,15 +14,15 @@ class Inimigo:  # classe que gerencia os inimigos
             self.coseno = numpy.cos(self.angulo)
             self.configuracao = 1
 
-            primeiro_inimigo += 1
-        elif primeiro_inimigo == 1:
+            Variaveis_globais.primeiro_inimigo += 1
+        elif Variaveis_globais.primeiro_inimigo == 1:
             self.posicao_x = 745
             self.posicao_y = -20
             self.angulo = numpy.radians(270)
             self.seno = numpy.sin(self.angulo)
             self.coseno = numpy.cos(self.angulo)
             self.configuracao = 2
-            primeiro_inimigo += 1
+            Variaveis_globais.primeiro_inimigo += 1
 
         # spaw padrão dos inimigos
         else:

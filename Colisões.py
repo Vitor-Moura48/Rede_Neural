@@ -1,4 +1,5 @@
 from Config import *
+import Variaveis_globais
 
 class Colisoes:
     def __init__(self):
@@ -13,12 +14,14 @@ class Colisoes:
         self.colidiu = False
 
         # confere se cada inimigo colidiu com o player
-        for player in grupo_players:
-            for inimigo in grupo_inimigos:
+        for player in Variaveis_globais.grupo_players:
+            for inimigo in Variaveis_globais.grupo_inimigos:
+              
                 if player.rect_player.colliderect(inimigo.rect_inimigo):
-
+                
+   
                     # se sim, vai remover o player do grupo de players
-                    grupo_players.remove(player)
+                    Variaveis_globais.grupo_players.remove(player)
 
                     # obter o tempo de vida do individuo
                     tempo_de_vida = player.funcao_de_perda()
@@ -29,20 +32,20 @@ class Colisoes:
                     pesos_individuo.append(player.grupo_neuronios_primeira_camada_oculta)
                     pesos_individuo.append(player.grupo_neuronios_camada_de_saida)
 
-                    geracao_atual.append(pesos_individuo)
+                    Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # se o tempo de vida dele for maior que o do melhor individuo, ele se torna o melhor
-                    if tempo_de_vida > melhor_tempo:
-                        melhor_tempo = tempo_de_vida
-                        melhor_peso_primeira_camada_oculta = []
-                        melhor_peso_camada_de_saida = []
+                    if tempo_de_vida > Variaveis_globais.melhor_tempo:
+                        Variaveis_globais.melhor_tempo = tempo_de_vida
+                        Variaveis_globais.melhor_peso_primeira_camada_oculta = []
+                        Variaveis_globais.melhor_peso_camada_de_saida = []
 
                         # seus pesos são guardados em um lugar separado
                         for neuronio in player.grupo_neuronios_primeira_camada_oculta:
-                            melhor_peso_primeira_camada_oculta.append(neuronio)
+                            Variaveis_globais.melhor_peso_primeira_camada_oculta.append(neuronio)
 
                         for neuronio in player.grupo_neuronios_camada_de_saida:
-                            melhor_peso_camada_de_saida.append(neuronio)
+                            Variaveis_globais.melhor_peso_camada_de_saida.append(neuronio)
 
                     # avisa que o player já colidiu
                     self.colidiu = True
@@ -51,16 +54,16 @@ class Colisoes:
                     break
 
     def colisao_player_tela(self):
-        global melhor_tempo, geracao_atual
+        global melhor_tempo, geracao_atual, grupo_players, melhor_peso_primeira_camada_oculta, melhor_peso_camada_de_saida
 
         # confere se o player saiu dos limites da tela
-        for player in grupo_players:
+        for player in Variaveis_globais.grupo_players:
             if player.rect_player.bottom < 0 or player.rect_player.top > altura or \
                     player.rect_player.left < 0 or player.rect_player.right > largura and not self.colidiu:
 
                 # se saiu, faz a mesma coisa da colisão com um inimigo
-                if player in grupo_players:
-                    grupo_players.remove(player)
+                if player in Variaveis_globais.grupo_players:
+                    Variaveis_globais.grupo_players.remove(player)
 
                     tempo_de_vida = player.funcao_de_perda()
 
@@ -69,20 +72,21 @@ class Colisoes:
                     pesos_individuo.append(player.grupo_neuronios_primeira_camada_oculta)
                     pesos_individuo.append(player.grupo_neuronios_camada_de_saida)
 
-                    geracao_atual.append(pesos_individuo)
+                    Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # so vai para "pódio" de melhor individuo se for pelo menos 10% melhor que o atual melhor
-                    if tempo_de_vida > melhor_tempo * 1.1:
-                        melhor_tempo = tempo_de_vida
-                        melhor_peso_primeira_camada_oculta = []
-                        melhor_peso_camada_de_saida = []
+                    if tempo_de_vida > Variaveis_globais.melhor_tempo * 1.1:
+                        Variaveis_globais.melhor_tempo = tempo_de_vida
+                        Variaveis_globais.melhor_peso_primeira_camada_oculta = []
+                        Variaveis_globais.melhor_peso_camada_de_saida = []
 
                         for neuronio in player.grupo_neuronios_primeira_camada_oculta:
-                            melhor_peso_primeira_camada_oculta.append(neuronio)
+                            Variaveis_globais.melhor_peso_primeira_camada_oculta.append(neuronio)
 
                         for neuronio in player.grupo_neuronios_camada_de_saida:
-                            melhor_peso_camada_de_saida.append(neuronio)
+                            Variaveis_globais.melhor_peso_camada_de_saida.append(neuronio)
 
     def update(self):
         self.colisao_player_inimigo()
         self.colisao_player_tela()
+

@@ -1,4 +1,6 @@
 from Config import *
+import Variaveis_globais
+
 
 class CriarRedeNeural:
     def __init__(self):
@@ -56,9 +58,9 @@ class CriarRedeNeural:
     def reproduzir_geracao(self):
 
         # o melhor individuo sempre será passa do para a próxima geração
-        if primeiro_individuo:
-            self.grupo_neuronios_primeira_camada_oculta = copy.deepcopy(melhor_peso_primeira_camada_oculta)
-            self.grupo_neuronios_camada_de_saida = copy.deepcopy(melhor_peso_camada_de_saida)
+        if Variaveis_globais.primeiro_individuo:
+            self.grupo_neuronios_primeira_camada_oculta = copy.deepcopy(Variaveis_globais.melhor_peso_primeira_camada_oculta)
+            self.grupo_neuronios_camada_de_saida = copy.deepcopy(Variaveis_globais.melhor_peso_camada_de_saida)
 
             # percorre cada neuronio e cada peso do neuronio e randomiza-os
             for neuronio in range(len(self.grupo_neuronios_primeira_camada_oculta)):
@@ -76,7 +78,7 @@ class CriarRedeNeural:
                             round(uniform(self.grupo_neuronios_camada_de_saida[neuronio][peso] - 1,
                                     self.grupo_neuronios_camada_de_saida[neuronio][peso] + 1), 8)
 
-            primeiro_individuo = False
+            Variaveis_globais.primeiro_individuo = False
 
         # faz um sorteio dos individuos com preferencia dos melhores
         else:
@@ -88,19 +90,19 @@ class CriarRedeNeural:
 
                 roleta = uniform(0, 1)
                 primeiro = 0
-                ultimo = len(valores_proporcionais) - 1
+                ultimo = len(Variaveis_globais.valores_proporcionais) - 1
                 meio = (primeiro + ultimo) // 2
 
                 # faz uma busca binaria do individuo sorteado
                 while True:
 
-                    if meio == 0 or meio == ultimo or (roleta > valores_proporcionais[meio - 1] and
-                        roleta < valores_proporcionais[meio + 1] and meio not in ja_sorteados):
+                    if meio == 0 or meio == ultimo or (roleta > Variaveis_globais.valores_proporcionais[meio - 1] and
+                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and meio not in ja_sorteados):
 
                         ja_sorteados.append(meio)
                         break
 
-                    elif roleta > valores_proporcionais[meio]:
+                    elif roleta > Variaveis_globais.valores_proporcionais[meio]:
                         primeiro = meio + 1
                         meio = (primeiro + ultimo) // 2
                     else:
@@ -123,21 +125,21 @@ class CriarRedeNeural:
                 neuronio = randint(0, 18)
 
 
-                novo_individuo[0] = juncao_de_geracoes[roleta_1][1][:neuronio + 1]
+                novo_individuo[0] = Variaveis_globais.juncao_de_geracoes[roleta_1][1][:neuronio + 1]
                 if neuronio != 18:
-                    novo_individuo[0] += juncao_de_geracoes[roleta_2][1][neuronio + 1:]
+                    novo_individuo[0] += Variaveis_globais.juncao_de_geracoes[roleta_2][1][neuronio + 1:]
 
 
-                novo_individuo[1] = juncao_de_geracoes[roleta_2][2]
+                novo_individuo[1] = Variaveis_globais.juncao_de_geracoes[roleta_2][2]
 
             elif camada == 2:
                 neuronio = randint(0, 4)
 
-                novo_individuo[0] = juncao_de_geracoes[roleta_1][1]
+                novo_individuo[0] = Variaveis_globais.juncao_de_geracoes[roleta_1][1]
 
-                novo_individuo[1] = juncao_de_geracoes[roleta_1][2][:neuronio + 1]
+                novo_individuo[1] = Variaveis_globais.juncao_de_geracoes[roleta_1][2][:neuronio + 1]
                 if neuronio != 4:
-                    novo_individuo[1] += juncao_de_geracoes[roleta_2][2][neuronio + 1:]
+                    novo_individuo[1] += Variaveis_globais.juncao_de_geracoes[roleta_2][2][neuronio + 1:]
 
             # percorre cada neuronio e cada peso do neuronio e randomiza-os
             for neuronio in range(len(novo_individuo[0])):
@@ -163,11 +165,11 @@ class CriarRedeNeural:
 
     def obter_resultado(self):
         # se for a primeira geração ele cria os pesos e randomiza-os
-        if contador_geracoes == 0:
+        if Variaveis_globais.contador_geracoes == 0:
             resultado = self.criar_geracao()
             
         # caso não for a primeira geração, ele faz uma nova a partir da(s) anterior(es)
-        else:
+        else: 
             resultado = self.reproduzir_geracao()
         
         return resultado
