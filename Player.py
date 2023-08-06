@@ -1,15 +1,13 @@
 from Config import *
 import Variaveis_globais
-from Criação_de_Rede import*
+
 
 # classe que gerencia o player
 class Player:
-    def __init__(self):
-        global contador_geracoes, melhor_peso_primeira_camada_oculta, melhor_peso_camada_de_saida, primeiro_individuo, \
-                juncao_de_geracoes, ja_sorteados
+    def __init__(self, grupo_neuronios_primeira_camada_oculta, grupo_neuronios_camada_de_saida):
         
-        nova_rede = CriarRedeNeural()
-        self.grupo_neuronios_primeira_camada_oculta, self.grupo_neuronios_camada_de_saida = nova_rede.obter_resultado()
+        self.grupo_neuronios_primeira_camada_oculta = grupo_neuronios_primeira_camada_oculta
+        self.grupo_neuronios_camada_de_saida = grupo_neuronios_camada_de_saida
         
 
         # variavel para contar a quantidade de loops que o player conseguiu passar

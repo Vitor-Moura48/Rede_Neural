@@ -8,14 +8,30 @@ from Colisões import *
 
 # função para criar os objetos
 def criar_objetos(quantidade_inimigos, quantidade_playes):
-
+   
+   # cria os projeteis
     for i in range(quantidade_inimigos):
+
         projetil = Inimigo()
         Variaveis_globais.grupo_inimigos.append(projetil)
-    for i in range(quantidade_playes):
-        player = Player()
-        Variaveis_globais.grupo_players.append(player)
 
+    # cria um contador de playes na rede neural
+    rede = 0
+    nova_rede = CriarRedeNeural()
+    
+    # cria os players
+    for i in range(quantidade_playes):
+        
+        # cria dois players por cada rede neural feita, se não for a primeira geração
+        if rede == 2 or Variaveis_globais.contador_geracoes == 0:
+            nova_rede = CriarRedeNeural()
+            rede = 0
+
+        resultado = nova_rede.randomizar_resultados()
+        player = Player(resultado[0], resultado[1])
+        rede += 1
+
+        Variaveis_globais.grupo_players.append(player)
 
  # lógica para contar o fps
 def exibir_fps():
@@ -28,7 +44,7 @@ def exibir_fps():
 
         mensagem_fps = "fps " + str(Variaveis_globais.contador)
         mensagem_fps_para_tela = fonte.render(mensagem_fps, True, (255, 000, 000))
-        
+
         Variaveis_globais.contador = 0
         Variaveis_globais.tempo_inicio = tempo_atual
     

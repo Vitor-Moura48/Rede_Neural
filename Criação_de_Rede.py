@@ -5,7 +5,14 @@ import Variaveis_globais
 class CriarRedeNeural:
     def __init__(self):
 
-       pass
+       # se for a primeira geração ele cria os pesos e randomiza-os
+        if Variaveis_globais.contador_geracoes == 0:
+            self.resultado = self.criar_geracao()
+            
+        # caso não for a primeira geração, ele faz uma nova a partir da(s) anterior(es)
+        else: 
+            self.resultado = self.reproduzir_geracao()
+        
 
     def criar_geracao(self):
 
@@ -53,6 +60,7 @@ class CriarRedeNeural:
         
         return (self.grupo_neuronios_primeira_camada_oculta, self.grupo_neuronios_camada_de_saida)
     
+
     
     def reproduzir_geracao(self):
 
@@ -60,19 +68,6 @@ class CriarRedeNeural:
         if Variaveis_globais.primeiro_individuo:
             self.grupo_neuronios_primeira_camada_oculta = copy.deepcopy(Variaveis_globais.melhor_peso_primeira_camada_oculta)
             self.grupo_neuronios_camada_de_saida = copy.deepcopy(Variaveis_globais.melhor_peso_camada_de_saida)
-
-            # percorre cada neuronio e cada peso do neuronio e randomiza-os
-            for neuronio in range(len(self.grupo_neuronios_primeira_camada_oculta)):
-
-                for peso in range(len(self.grupo_neuronios_primeira_camada_oculta[neuronio]) - 1):
-                    if randint(1, 10) == 1:
-                        self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = round(uniform(-1, 1), 8)
-
-            for neuronio in range(len(self.grupo_neuronios_camada_de_saida)):
-
-                for peso in range(len(self.grupo_neuronios_camada_de_saida[neuronio]) - 1):
-                    if randint(1, 10) == 1:
-                        self.grupo_neuronios_camada_de_saida[neuronio][peso] = round(uniform(-1, 1), 8)
 
             Variaveis_globais.primeiro_individuo = False
 
@@ -137,34 +132,28 @@ class CriarRedeNeural:
                 if neuronio != 4:
                     novo_individuo[1] += Variaveis_globais.juncao_de_geracoes[roleta_2][2][neuronio + 1:]
 
-            # percorre cada neuronio e cada peso do neuronio e randomiza-os
-            for neuronio in range(len(novo_individuo[0])):
-
-                for peso in range(len(novo_individuo[0][neuronio]) - 1):
-                    if randint(1, 10) == 1:
-                        novo_individuo[0][neuronio][peso] = round(uniform(-1, 1), 8)
-
-            for neuronio in range(len(novo_individuo[1])):
-
-                for peso in range(len(novo_individuo[1][neuronio]) - 1):
-                    if randint(1, 10) == 1:
-                        novo_individuo[1][neuronio][peso] = round(uniform(-1, 1), 8)
-
+    
             # adiciona cada conjunto de pesos nas variaveis
             self.grupo_neuronios_primeira_camada_oculta = novo_individuo[0]
             self.grupo_neuronios_camada_de_saida = novo_individuo[1]
+           
 
+    def randomizar_resultados(self):
+
+        # percorre cada neuronio e cada peso do neuronio e randomiza-os
+        for neuronio in range(len(self.grupo_neuronios_primeira_camada_oculta)):
+
+            for peso in range(len(self.grupo_neuronios_primeira_camada_oculta[neuronio]) - 1):
+                if randint(1, 10) == 1:
+                    self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = round(uniform(-1, 1), 8)
+
+        for neuronio in range(len(self.grupo_neuronios_camada_de_saida)):
+
+            for peso in range(len(self.grupo_neuronios_camada_de_saida[neuronio]) - 1):
+                if randint(1, 10) == 1:
+                    self.grupo_neuronios_camada_de_saida[neuronio][peso] = round(uniform(-1, 1), 8)
+        
         return (self.grupo_neuronios_primeira_camada_oculta, self.grupo_neuronios_camada_de_saida)
 
-    def obter_resultado(self):
-        # se for a primeira geração ele cria os pesos e randomiza-os
-        if Variaveis_globais.contador_geracoes == 0:
-            resultado = self.criar_geracao()
-            
-        # caso não for a primeira geração, ele faz uma nova a partir da(s) anterior(es)
-        else: 
-            resultado = self.reproduzir_geracao()
-        
-        return resultado
-        
+    
                 
