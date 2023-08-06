@@ -66,17 +66,13 @@ class CriarRedeNeural:
 
                 for peso in range(len(self.grupo_neuronios_primeira_camada_oculta[neuronio]) - 1):
                     if randint(1, 10) == 1:
-                        self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = \
-                        round(uniform(self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] - 1,
-                                        self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] + 1), 8)
+                        self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = round(uniform(-1, 1), 8)
 
             for neuronio in range(len(self.grupo_neuronios_camada_de_saida)):
 
                 for peso in range(len(self.grupo_neuronios_camada_de_saida[neuronio]) - 1):
                     if randint(1, 10) == 1:
-                        self.grupo_neuronios_camada_de_saida[neuronio][peso] = \
-                            round(uniform(self.grupo_neuronios_camada_de_saida[neuronio][peso] - 1,
-                                    self.grupo_neuronios_camada_de_saida[neuronio][peso] + 1), 8)
+                        self.grupo_neuronios_camada_de_saida[neuronio][peso] = round(uniform(-1, 1), 8)
 
             Variaveis_globais.primeiro_individuo = False
 
@@ -144,18 +140,15 @@ class CriarRedeNeural:
             # percorre cada neuronio e cada peso do neuronio e randomiza-os
             for neuronio in range(len(novo_individuo[0])):
 
-                for peso in range(len(novo_individuo[0][neuronio])):
+                for peso in range(len(novo_individuo[0][neuronio]) - 1):
                     if randint(1, 10) == 1:
-                        novo_individuo[0][neuronio][peso] = \
-                            round(uniform(novo_individuo[0][neuronio][peso] - 1,
-                                            novo_individuo[0][neuronio][peso] + 1), 8)
+                        novo_individuo[0][neuronio][peso] = round(uniform(-1, 1), 8)
 
             for neuronio in range(len(novo_individuo[1])):
-                for peso in range(len(novo_individuo[1][neuronio])):
+
+                for peso in range(len(novo_individuo[1][neuronio]) - 1):
                     if randint(1, 10) == 1:
-                        novo_individuo[1][neuronio][peso] = \
-                            round(uniform(novo_individuo[1][neuronio][peso] - 1,
-                                            novo_individuo[1][neuronio][peso] + 1), 8)
+                        novo_individuo[1][neuronio][peso] = round(uniform(-1, 1), 8)
 
             # adiciona cada conjunto de pesos nas variaveis
             self.grupo_neuronios_primeira_camada_oculta = novo_individuo[0]
