@@ -15,9 +15,6 @@ class Player:
         # variavel para contar a quantidade de loops que o player conseguiu passar
         self.tick = 0
 
-        # define o valor do vies da rede neural
-        self.bias = 1
-
          # define o ponto de spaw do player
         self.posicao_x = 750
         self.posicao_y = 250
@@ -94,7 +91,7 @@ class Player:
 
         # junta todos os dados que vão para a entrada da rede em uma única lista
         juncao = []
-        juncao.append(self.bias)
+        juncao.append(bias)
         juncao.append(abs(1 - (self.rect_player.center[0] / 750)))
         juncao.append(abs(1 - (self.rect_player.center[1] / 250)))
         for coordenada in resultados:

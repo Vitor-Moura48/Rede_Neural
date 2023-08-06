@@ -28,9 +28,7 @@ def exibir_fps():
 
         mensagem_fps = "fps " + str(Variaveis_globais.contador)
         mensagem_fps_para_tela = fonte.render(mensagem_fps, True, (255, 000, 000))
-
-        print(f'fps {Variaveis_globais.contador}')
-
+        
         Variaveis_globais.contador = 0
         Variaveis_globais.tempo_inicio = tempo_atual
     

@@ -26,4 +26,8 @@ tela.fill((000, 000, 000))
 fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 
+# define o valor do vies da rede neural
+bias = 1
+
+
 

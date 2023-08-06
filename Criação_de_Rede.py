@@ -5,8 +5,7 @@ import Variaveis_globais
 class CriarRedeNeural:
     def __init__(self):
 
-        # define o valor do vies da rede neural
-        self.bias = 1
+       pass
 
     def criar_geracao(self):
 
@@ -44,13 +43,13 @@ class CriarRedeNeural:
         # randomizando cada peso
         for neuronio in range(len(self.grupo_neuronios_primeira_camada_oculta)):
             for peso in range(19):
-                self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = round(uniform(-5, 5), 6)
-            self.grupo_neuronios_primeira_camada_oculta[neuronio][-1] = self.bias
+                self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = round(uniform(-1, 1), 8)
+            self.grupo_neuronios_primeira_camada_oculta[neuronio][-1] = bias
 
         for neuronio in range(len(self.grupo_neuronios_camada_de_saida)):
             for peso in range(5):
-                self.grupo_neuronios_camada_de_saida[neuronio][peso] = round(uniform(-5, 5), 6)
-            self.grupo_neuronios_camada_de_saida[neuronio][-1] = self.bias
+                self.grupo_neuronios_camada_de_saida[neuronio][peso] = round(uniform(-1, 1), 8)
+            self.grupo_neuronios_camada_de_saida[neuronio][-1] = bias
         
         return (self.grupo_neuronios_primeira_camada_oculta, self.grupo_neuronios_camada_de_saida)
     
@@ -65,14 +64,15 @@ class CriarRedeNeural:
             # percorre cada neuronio e cada peso do neuronio e randomiza-os
             for neuronio in range(len(self.grupo_neuronios_primeira_camada_oculta)):
 
-                for peso in range(len(self.grupo_neuronios_primeira_camada_oculta[neuronio])):
+                for peso in range(len(self.grupo_neuronios_primeira_camada_oculta[neuronio]) - 1):
                     if randint(1, 10) == 1:
                         self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] = \
                         round(uniform(self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] - 1,
                                         self.grupo_neuronios_primeira_camada_oculta[neuronio][peso] + 1), 8)
 
             for neuronio in range(len(self.grupo_neuronios_camada_de_saida)):
-                for peso in range(len(self.grupo_neuronios_camada_de_saida[neuronio])):
+
+                for peso in range(len(self.grupo_neuronios_camada_de_saida[neuronio]) - 1):
                     if randint(1, 10) == 1:
                         self.grupo_neuronios_camada_de_saida[neuronio][peso] = \
                             round(uniform(self.grupo_neuronios_camada_de_saida[neuronio][peso] - 1,
