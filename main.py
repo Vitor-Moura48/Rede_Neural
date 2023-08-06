@@ -1,9 +1,9 @@
-from Config import *
-import Variaveis_globais
-from Projeteis import *
-from Criação_de_Rede import *
-from Player import *
-from Colisões import *
+from Jogo.Config import *
+import Jogo.Variaveis_globais as Variaveis_globais
+from Jogo.Projeteis import *
+from Rede_Neural.Criação_de_Rede import *
+from Rede_Neural.Player import *
+from Jogo.Colisões import *
 
 
 # função para criar os objetos
@@ -15,22 +15,14 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         projetil = Inimigo()
         Variaveis_globais.grupo_inimigos.append(projetil)
 
-    # cria um contador de playes na rede neural
-    rede = 0
-    nova_rede = CriarRedeNeural()
-    
+
     # cria os players
     for i in range(quantidade_playes):
         
-        # cria dois players por cada rede neural feita, se não for a primeira geração
-        if rede == 2 or Variaveis_globais.contador_geracoes == 0:
-            nova_rede = CriarRedeNeural()
-            rede = 0
-
+        nova_rede = CriarRedeNeural()
         resultado = nova_rede.randomizar_resultados()
         player = Player(resultado[0], resultado[1])
-        rede += 1
-
+       
         Variaveis_globais.grupo_players.append(player)
 
  # lógica para contar o fps
