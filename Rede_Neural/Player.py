@@ -1,5 +1,5 @@
-from Config import *
-import Variaveis_globais
+from Jogo.Config import *
+import Jogo.Variaveis_globais as Variaveis_globais
 
 
 # classe que gerencia o player

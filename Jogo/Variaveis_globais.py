@@ -1,4 +1,4 @@
-from Config import pygame, time
+from Jogo.Config import pygame, time
 
 # ajuda a selecionar o melhor individuo de cada geração
 melhor_tempo = 0
