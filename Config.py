@@ -29,5 +29,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 # define o valor do vies da rede neural
 bias = 1
 
+configuracao_de_camadas = (19, 5, 4)
+
 
 

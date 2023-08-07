@@ -1,10 +1,9 @@
-from Jogo.Config import pygame, time
+from Config import pygame, time
 
 # ajuda a selecionar o melhor individuo de cada geração
 melhor_tempo = 0
 
-melhor_peso_primeira_camada_oculta = []
-melhor_peso_camada_de_saida = []
+melhor_individuo = []
 
 contador_geracoes = 0
 

@@ -1,5 +1,5 @@
-from Jogo.Config import *
-import Jogo.Variaveis_globais as Variaveis_globais
+from Config import *
+import Variaveis_globais as Variaveis_globais
 
 
 # classe que gerencia o player
@@ -41,7 +41,6 @@ class Player:
 
     # função para retornar as entradas para a rede neural
     def obter_entradas(self):
-        global grupo_inimigos
 
         # variavel que vai ser retornada após ser tratada
         resultados_sensores = []
@@ -80,7 +79,7 @@ class Player:
     
     # atualiza o estado do player
     def update(self):
-
+       
         # conta os loops
         self.tick += 1
 

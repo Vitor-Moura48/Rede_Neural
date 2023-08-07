@@ -1,10 +1,9 @@
-from Jogo.Config import *
-import Jogo.Variaveis_globais as Variaveis_globais
+from Config import *
+import Variaveis_globais as Variaveis_globais
 
 class Inimigo:  # classe que gerencia os inimigos
     def __init__(self):
-        global primeiro_inimigo
-
+    
         # cria dois projeteis na direção do spaw do inimigo
         if Variaveis_globais.primeiro_inimigo == 0:
             self.posicao_x = -20
