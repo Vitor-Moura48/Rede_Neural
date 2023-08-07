@@ -27,8 +27,8 @@ class Colisoes:
                     # enviar os pesos do individuo para a lista da geração
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])
-                    pesos_individuo.append(player.camadas[0])
-                    pesos_individuo.append(player.camadas[1])
+                    for camada in player.camadas:
+                        pesos_individuo.append(camada)
 
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
@@ -59,8 +59,9 @@ class Colisoes:
 
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])
-                    pesos_individuo.append(player.camadas[0])
-                    pesos_individuo.append(player.camadas[1])
+                    for camada in player.camadas:
+                        pesos_individuo.append(camada)
+                    
 
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
