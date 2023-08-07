@@ -6,8 +6,10 @@ import Variaveis_globais as Variaveis_globais
 class Player:
     def __init__(self, *args):
         
-        self.grupo_neuronios_primeira_camada_oculta = args[0]
-        self.grupo_neuronios_camada_de_saida = args[1]
+        self.camadas = []
+
+        for arg in args:
+            self.camadas.append(arg)
         
 
         # variavel para contar a quantidade de loops que o player conseguiu passar
@@ -100,25 +102,25 @@ class Player:
 
         entradas_2 = []
         # faz a soma de todas as entradas com seus respectivos pesos e usa função de ativação para melhorar o  resultado
-        camada_oculta_1_neuronoio_1 = self.funcao_relu(sum(entradas_1 * self.grupo_neuronios_primeira_camada_oculta[0]))
+        camada_oculta_1_neuronoio_1 = self.funcao_relu(sum(entradas_1 * self.camadas[0][0]))   ##################################
         entradas_2.append(camada_oculta_1_neuronoio_1)
-        camada_oculta_1_neuronoio_2 = self.funcao_relu(sum(entradas_1 * self.grupo_neuronios_primeira_camada_oculta[1]))
+        camada_oculta_1_neuronoio_2 = self.funcao_relu(sum(entradas_1 * self.camadas[0][1]))
         entradas_2.append(camada_oculta_1_neuronoio_2)
-        camada_oculta_1_neuronoio_3 = self.funcao_relu(sum(entradas_1 * self.grupo_neuronios_primeira_camada_oculta[2]))
+        camada_oculta_1_neuronoio_3 = self.funcao_relu(sum(entradas_1 * self.camadas[0][2]))
         entradas_2.append(camada_oculta_1_neuronoio_3)
-        camada_oculta_1_neuronoio_4 = self.funcao_relu(sum(entradas_1 * self.grupo_neuronios_primeira_camada_oculta[3]))
+        camada_oculta_1_neuronoio_4 = self.funcao_relu(sum(entradas_1 * self.camadas[0][3]))
         entradas_2.append(camada_oculta_1_neuronoio_4)
-        camada_oculta_1_neuronoio_5 = self.funcao_relu(sum(entradas_1 * self.grupo_neuronios_primeira_camada_oculta[4]))
+        camada_oculta_1_neuronoio_5 = self.funcao_relu(sum(entradas_1 * self.camadas[0][4]))
         entradas_2.append(camada_oculta_1_neuronoio_5)
 
         # vai transformando as listas em arrays, para facilitar os calculos
         entradas_2 = numpy.array(entradas_2)
 
         # faz os mesmos calculos que a camada acima
-        camada_saida_neuronio_1 = self.funcao_relu(sum(entradas_2 * self.grupo_neuronios_camada_de_saida[0]))
-        camada_saida_neuronio_2 = self.funcao_relu(sum(entradas_2 * self.grupo_neuronios_camada_de_saida[1]))
-        camada_saida_neuronio_3 = self.funcao_relu(sum(entradas_2 * self.grupo_neuronios_camada_de_saida[2]))
-        camada_saida_neuronio_4 = self.funcao_relu(sum(entradas_2 * self.grupo_neuronios_camada_de_saida[3]))
+        camada_saida_neuronio_1 = self.funcao_relu(sum(entradas_2 * self.camadas[1][0]))   ###################################
+        camada_saida_neuronio_2 = self.funcao_relu(sum(entradas_2 * self.camadas[1][1]))
+        camada_saida_neuronio_3 = self.funcao_relu(sum(entradas_2 * self.camadas[1][2]))
+        camada_saida_neuronio_4 = self.funcao_relu(sum(entradas_2 * self.camadas[1][3]))
 
         # as saidas definem a direção que o player vai tomar
         if camada_saida_neuronio_1 > 0:
