@@ -100,37 +100,36 @@ class Player:
         # vai transformando as listas em arrays, para facilitar os calculos
         entradas_1 = numpy.array(juncao)
 
-        entradas_2 = []
-        # faz a soma de todas as entradas com seus respectivos pesos e usa função de ativação para melhorar o  resultado
-        camada_oculta_1_neuronoio_1 = self.funcao_relu(sum(entradas_1 * self.camadas[0][0]))   ##################################
-        entradas_2.append(camada_oculta_1_neuronoio_1)
-        camada_oculta_1_neuronoio_2 = self.funcao_relu(sum(entradas_1 * self.camadas[0][1]))
-        entradas_2.append(camada_oculta_1_neuronoio_2)
-        camada_oculta_1_neuronoio_3 = self.funcao_relu(sum(entradas_1 * self.camadas[0][2]))
-        entradas_2.append(camada_oculta_1_neuronoio_3)
-        camada_oculta_1_neuronoio_4 = self.funcao_relu(sum(entradas_1 * self.camadas[0][3]))
-        entradas_2.append(camada_oculta_1_neuronoio_4)
-        camada_oculta_1_neuronoio_5 = self.funcao_relu(sum(entradas_1 * self.camadas[0][4]))
-        entradas_2.append(camada_oculta_1_neuronoio_5)
+        # armazena o resultado dos calculos de cada neuronios e divide em camadas
+        processamentos_da_rede = []
+      
 
-        # vai transformando as listas em arrays, para facilitar os calculos
-        entradas_2 = numpy.array(entradas_2)
+        # Faz todos os calculos de cada camada e armazena na variavel acima
+        for camada in range(1, len(configuracao_de_camadas)):
+            processamento_da_camada = []
 
-        # faz os mesmos calculos que a camada acima
-        camada_saida_neuronio_1 = self.funcao_relu(sum(entradas_2 * self.camadas[1][0]))   ###################################
-        camada_saida_neuronio_2 = self.funcao_relu(sum(entradas_2 * self.camadas[1][1]))
-        camada_saida_neuronio_3 = self.funcao_relu(sum(entradas_2 * self.camadas[1][2]))
-        camada_saida_neuronio_4 = self.funcao_relu(sum(entradas_2 * self.camadas[1][3]))
+            if camada == 1:
+                for neuronio in range(configuracao_de_camadas[camada]):
+                    processamento_neuronio = self.funcao_relu(sum(entradas_1 * self.camadas[camada - 1][neuronio]))
+                    processamento_da_camada.append(processamento_neuronio)             
+                
+            else:
+                for neuronio in range(configuracao_de_camadas[camada]):          
+                    processamento_neuronio = self.funcao_relu(sum(processamentos_da_rede[-1] * self.camadas[camada - 1][neuronio]))
+                    processamento_da_camada.append(processamento_neuronio)
+            
+            processamentos_da_rede.append(numpy.array(processamento_da_camada))
+            
 
         # as saidas definem a direção que o player vai tomar
-        if camada_saida_neuronio_1 > 0:
+        if processamentos_da_rede[-1][0] > 0:
             self.posicao_x += velocidade_ia
-        if camada_saida_neuronio_2 > 0:
+        if processamentos_da_rede[-1][1] > 0:
             self.posicao_x -= velocidade_ia
 
-        if camada_saida_neuronio_3 > 0:
+        if processamentos_da_rede[-1][2] > 0:
             self.posicao_y += velocidade_ia
-        if camada_saida_neuronio_4 > 0:
+        if processamentos_da_rede[-1][3] > 0:
             self.posicao_y -= velocidade_ia
         
         # cria um retandulo de colisão e mostra na tela
