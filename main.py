@@ -1,5 +1,5 @@
-from Jogo.Config import *
-import Jogo.Variaveis_globais as Variaveis_globais
+from Config import *
+import Variaveis_globais as Variaveis_globais
 from Jogo.Projeteis import *
 from Rede_Neural.Criação_de_Rede import *
 from Rede_Neural.Player import *
@@ -54,6 +54,7 @@ def atualizar_objetos():
     colisoes.update()
 
 def nova_geracao():
+        Variaveis_globais.juncao_de_geracoes = []
 
         # registra que uma geração foi completa
         Variaveis_globais.contador_geracoes += 1
@@ -79,6 +80,7 @@ def nova_geracao():
             Variaveis_globais.geracao_anterior = Variaveis_globais.geracao_atual
 
         # junta as duas gerações mais recentes e organiza os individuos pela recompensa obtida por cada um
+        
         Variaveis_globais.juncao_de_geracoes = Variaveis_globais.geracao_avo + Variaveis_globais.geracao_anterior
         Variaveis_globais.juncao_de_geracoes.sort(key=lambda x: x[0])
 
@@ -86,7 +88,12 @@ def nova_geracao():
 
         # soma todas as recompensas dos individuos
         for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
+            
+      
+            
             total_de_recompesa += int(Variaveis_globais.juncao_de_geracoes[individuo][0][0])
+
+        
 
         # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
         for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
@@ -96,9 +103,22 @@ def nova_geracao():
 
                 # soma o valor anterior com o do individuo (para manter os valores "progredindo")
             else:
+              
                 Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] +
                                              Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
+                      
 
+        lista_sem_fitness = []
+        
+        # retira o fitness dos individuos
+        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
+          
+            lista_sem_fitness.append(Variaveis_globais.juncao_de_geracoes[individuo][1:])
+        
+        # atribui as informações sem fitness para a variavel global
+        Variaveis_globais.juncao_de_geracoes = lista_sem_fitness
+
+       
         # zera a geração atual para ser preenchida novamente
         Variaveis_globais.geracao_atual = []
         Variaveis_globais.primeiro_individuo = True
@@ -132,6 +152,7 @@ while True:
     # se todos os players foram "mortos", cria uma nova geração
     if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao()
+        print(len(Variaveis_globais.juncao_de_geracoes))
 
     # define um limite de fps
     Variaveis_globais.clock.tick(fps)
