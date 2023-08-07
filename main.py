@@ -21,7 +21,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         
         nova_rede = CriarRedeNeural()
         resultado = nova_rede.randomizar_resultados()
-        player = Player(resultado[0], resultado[1])
+        player = Player(*resultado)
        
         Variaveis_globais.grupo_players.append(player)
 
@@ -87,14 +87,10 @@ def nova_geracao():
         total_de_recompesa = 0
 
         # soma todas as recompensas dos individuos
-        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
-            
-      
-            
+        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):      
             total_de_recompesa += int(Variaveis_globais.juncao_de_geracoes[individuo][0][0])
 
         
-
         # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
         for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
             if individuo == 0:
@@ -103,7 +99,6 @@ def nova_geracao():
 
                 # soma o valor anterior com o do individuo (para manter os valores "progredindo")
             else:
-              
                 Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] +
                                              Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
                       
@@ -152,7 +147,6 @@ while True:
     # se todos os players foram "mortos", cria uma nova geração
     if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao()
-        print(len(Variaveis_globais.juncao_de_geracoes))
 
     # define um limite de fps
     Variaveis_globais.clock.tick(fps)

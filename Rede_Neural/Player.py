@@ -4,10 +4,10 @@ import Variaveis_globais as Variaveis_globais
 
 # classe que gerencia o player
 class Player:
-    def __init__(self, grupo_neuronios_primeira_camada_oculta, grupo_neuronios_camada_de_saida):
+    def __init__(self, *args):
         
-        self.grupo_neuronios_primeira_camada_oculta = grupo_neuronios_primeira_camada_oculta
-        self.grupo_neuronios_camada_de_saida = grupo_neuronios_camada_de_saida
+        self.grupo_neuronios_primeira_camada_oculta = args[0]
+        self.grupo_neuronios_camada_de_saida = args[1]
         
 
         # variavel para contar a quantidade de loops que o player conseguiu passar
