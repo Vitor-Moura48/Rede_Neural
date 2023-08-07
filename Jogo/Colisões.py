@@ -27,15 +27,15 @@ class Colisoes:
                     # enviar os pesos do individuo para a lista da geração
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])
-                    pesos_individuo.append(player.grupo_neuronios_primeira_camada_oculta)
-                    pesos_individuo.append(player.grupo_neuronios_camada_de_saida)
+                    pesos_individuo.append(player.camadas[0])
+                    pesos_individuo.append(player.camadas[1])
 
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # se o tempo de vida dele for maior que o do melhor individuo, ele se torna o melhor
                     if tempo_de_vida > Variaveis_globais.melhor_tempo:
                         Variaveis_globais.melhor_tempo = tempo_de_vida
-                        Variaveis_globais.melhor_individuo = (player.grupo_neuronios_primeira_camada_oculta, player.grupo_neuronios_camada_de_saida)
+                        Variaveis_globais.melhor_individuo = player.camadas
                         
 
                     # avisa que o player já colidiu
@@ -59,15 +59,15 @@ class Colisoes:
 
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])
-                    pesos_individuo.append(player.grupo_neuronios_primeira_camada_oculta)
-                    pesos_individuo.append(player.grupo_neuronios_camada_de_saida)
+                    pesos_individuo.append(player.camadas[0])
+                    pesos_individuo.append(player.camadas[1])
 
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # so vai para "pódio" de melhor individuo se for pelo menos 10% melhor que o atual melhor
                     if tempo_de_vida > Variaveis_globais.melhor_tempo * 1.1:
                         Variaveis_globais.melhor_tempo = tempo_de_vida
-                        Variaveis_globais.melhor_individuo = (player.grupo_neuronios_primeira_camada_oculta, player.grupo_neuronios_camada_de_saida)
+                        Variaveis_globais.melhor_individuo = player.camadas
                         
 
     def update(self):
