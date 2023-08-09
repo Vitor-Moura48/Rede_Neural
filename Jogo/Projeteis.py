@@ -37,11 +37,7 @@ class Inimigo:  # classe que gerencia os inimigos
         if self.configuracao == 1:
             self.posicao_x = choice([-20, 1520])
             self.posicao_y = randint(20, 480)
-        else:
-            self.posicao_y = choice([-20, 520])
-            self.posicao_x = randint(20, 1480)
-
-        if self.configuracao == 1:
+            
             if self.posicao_x == -20:
                 self.angulo = choice([numpy.radians(randint(0, 60)), numpy.radians(randint(300, 360))])
                 self.seno = numpy.sin(self.angulo)
@@ -51,7 +47,11 @@ class Inimigo:  # classe que gerencia os inimigos
                 self.seno = numpy.sin(self.angulo)
                 self.coseno = numpy.cos(self.angulo)
 
-        if self.configuracao == 2:
+
+        else:
+            self.posicao_y = choice([-20, 520])
+            self.posicao_x = randint(20, 1480)
+
             if self.posicao_y == -20:
                 self.angulo = numpy.radians(randint(210, 330))
                 self.seno = math.sin(self.angulo)
@@ -63,7 +63,7 @@ class Inimigo:  # classe que gerencia os inimigos
 
     # informa a posição do inimigo para calcular a distancia entre os individuos e os inimigos
     def informar_posicao(self):
-        return self.rect_inimigo.center
+        return self.rect_inimigo.center[0], self.rect_inimigo.center[1], self.angulo
 
     # atualiza estado
     def update(self):

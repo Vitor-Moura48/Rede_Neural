@@ -17,7 +17,7 @@ valores_proporcionais = []
 ja_sorteados = []
 
 # variavel para ajudar a manter sempre o melhor player
-primeiro_individuo = True
+primeiro_individuo = 0
 
 # variavel para ajudar a direcionar os primeiros projeteis exatamente na direção do surgimento do player, para eliminar os piores
 primeiro_inimigo = 0

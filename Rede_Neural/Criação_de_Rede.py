@@ -16,7 +16,8 @@ class CriarRedeNeural:
 
                     pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
                     self.camadas[-1].append(pesos) 
-
+        
+        self.taxa_de_mutacao = 0
 
        # se for a primeira geração ele randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:
@@ -40,10 +41,11 @@ class CriarRedeNeural:
     def reproduzir_geracao(self):
 
         # o melhor individuo sempre será passa do para a próxima geração
-        if Variaveis_globais.primeiro_individuo:
+        if Variaveis_globais.primeiro_individuo < numero_de_elitismo:
             self.camadas = Variaveis_globais.melhor_individuo
+            self.taxa_de_mutacao = 0.1
             
-            Variaveis_globais.primeiro_individuo = False
+            Variaveis_globais.primeiro_individuo += 1
 
         # faz um sorteio dos individuos com preferencia dos melhores
         else:
@@ -60,7 +62,7 @@ class CriarRedeNeural:
                 while True:
 
                     if meio == 0 or meio == ultimo or (roleta > Variaveis_globais.valores_proporcionais[meio - 1] and
-                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 2):
+                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 5):
 
                         Variaveis_globais.ja_sorteados.append(meio)
                         break
@@ -78,6 +80,11 @@ class CriarRedeNeural:
             roleta_1 = roleta()
             roleta_2 = roleta()
 
+            # calcula a média do desempenho dos dois individuos sorteados
+            media_de_recompensa = ((Variaveis_globais.juncao_de_geracoes[roleta_1][0][0] + Variaveis_globais.juncao_de_geracoes[roleta_1][0][0]) / 2) 
+
+            # reduz um pouco a taxa de mutação base a partir da
+            self.taxa_de_mutacao = taxa_de_mutacao_base - (media_de_recompensa / recompensa_objetivo)
 
             # inicia o novo individuo com a mesma estrutura inicial 
             novo_individuo = []
@@ -94,33 +101,37 @@ class CriarRedeNeural:
             for camada in range(len(self.camadas)):
                 for neuronio in range(len(self.camadas[camada])):
 
-                    if camada < camada_insercao_escolhida:
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada][neuronio]
+                    if camada < camada_insercao_escolhida:                                         # primeira camada = fitness
+                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
                     
                     elif camada == camada_insercao_escolhida and neuronio < neuronio_insercao_escolhida: 
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_1][camada][neuronio]
+                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_1][camada + 1][neuronio]
                 
 
                     elif camada == camada_insercao_escolhida and neuronio >= neuronio_insercao_escolhida:
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada][neuronio]
+                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
                     
                     elif camada > camada_insercao_escolhida:
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada][neuronio]
+                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
                     
                     else:
-                        print('houve alguma exeção!!!!!!')
+                        print('houve alguma exeção!!!')         
             
 
 
     def randomizar_resultados(self):
+        contador_r = 0
+        contador_tudo = 0
 
-        # randomizando cada peso
+        # randomizando cada peso de acordo com a taxa de mutação
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio]) - 1):
-                    if randint(1, 10) == 1:
-                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1))
-                    self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8)
+                    contador_tudo += 1
+                    if uniform(0, 1) <= self.taxa_de_mutacao:
+                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8)
+                        contador_r += 1
+        print(contador_tudo, contador_r)
         
         return (self.camadas)
 

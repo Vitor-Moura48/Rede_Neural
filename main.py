@@ -103,27 +103,17 @@ def nova_geracao():
                                              Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
                       
 
-        lista_sem_fitness = []
-        
-        # retira o fitness dos individuos
-        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
-          
-            lista_sem_fitness.append(Variaveis_globais.juncao_de_geracoes[individuo][1:])
-        
-        # atribui as informações sem fitness para a variavel global
-        Variaveis_globais.juncao_de_geracoes = lista_sem_fitness
-
        
         # zera a geração atual para ser preenchida novamente
         Variaveis_globais.geracao_atual = []
-        Variaveis_globais.primeiro_individuo = True
+        Variaveis_globais.primeiro_individuo = 0
 
         Variaveis_globais.ja_sorteados = []
 
-        criar_objetos(20, 1500)
+        criar_objetos(numero_inimigos, numero_players)
 
 
-criar_objetos(20, 1500)
+criar_objetos(numero_inimigos, numero_players)
 
 # cria classe de colisões
 colisoes = Colisoes()
