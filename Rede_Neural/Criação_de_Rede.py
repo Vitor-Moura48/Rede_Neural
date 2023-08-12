@@ -17,7 +17,7 @@ class CriarRedeNeural:
                     pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
                     self.camadas[-1].append(pesos) 
         
-        self.taxa_de_mutacao = 0
+        self.taxa_de_mutacao = taxa_de_mutacao_base
 
        # se for a primeira geração ele randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:
@@ -42,8 +42,7 @@ class CriarRedeNeural:
 
         # o melhor individuo sempre será passa do para a próxima geração
         if Variaveis_globais.primeiro_individuo < numero_de_elitismo:
-            self.camadas = Variaveis_globais.melhor_individuo
-            self.taxa_de_mutacao = 0.1
+            self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo)
             
             Variaveis_globais.primeiro_individuo += 1
 
@@ -120,19 +119,15 @@ class CriarRedeNeural:
 
 
     def randomizar_resultados(self):
-        contador_r = 0
-        contador_tudo = 0
 
         # randomizando cada peso de acordo com a taxa de mutação
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio]) - 1):
-                    contador_tudo += 1
+
                     if uniform(0, 1) <= self.taxa_de_mutacao:
-                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8)
-                        contador_r += 1
-        print(contador_tudo, contador_r)
-        
+                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8) 
+
         return (self.camadas)
 
     
