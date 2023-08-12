@@ -54,10 +54,10 @@ class Player:
                 informacoes_inimigo = inimigo.informar_posicao()
                 distancia_x = 1 - (abs(informacoes_inimigo[0] - self.rect_player.center[0]) / 110)
                 distancia_y = 1 - (abs(informacoes_inimigo[1] - self.rect_player[1]) / 110)
-
+            
                 distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
 
-                resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2]])
+                resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3], velocidade_projetil])
 
         # ordena cada coordenada (dos inimigos) de acordo com os que estão mais próximos
         def ordenar_cada_inimigo():
@@ -90,8 +90,13 @@ class Player:
 
         # junta todos os dados que vão para a entrada da rede em uma única lista
         juncao = []
-        juncao.append(abs(1 - (self.rect_player.center[0] / 750)))
-        juncao.append(abs(1 - (self.rect_player.center[1] / 250)))
+
+        # adiciona como entrada a distancia para cada canto da tela
+        juncao.append(self.rect_player.center[0] / 1500)
+        juncao.append(1 - (self.rect_player.center[0] / 1500))
+
+        juncao.append(self.rect_player.center[1] / 500)
+        juncao.append(1 - (self.rect_player.center[1] / 500))
         for coordenada in resultados:
             for valor in coordenada:
                 juncao.append(valor)
