@@ -60,10 +60,14 @@ class Inimigo:  # classe que gerencia os inimigos
                 self.angulo = numpy.radians(randint(30, 150))
                 self.seno = math.sin(self.angulo)
                 self.coseno = math.cos(self.angulo)
+    
+    
 
     # informa a posição do inimigo para calcular a distancia entre os individuos e os inimigos
     def informar_posicao(self):
-        return self.rect_inimigo.center[0], self.rect_inimigo.center[1], self.angulo
+        direcao_x_do_projetil = self.coseno
+        direcao_y_do_projetil = self.seno
+        return self.rect_inimigo.center[0], self.rect_inimigo.center[1], direcao_x_do_projetil, direcao_y_do_projetil
 
     # atualiza estado
     def update(self):
