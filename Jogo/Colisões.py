@@ -55,7 +55,8 @@ class Colisoes:
                 if player in Variaveis_globais.grupo_players:
                     Variaveis_globais.grupo_players.remove(player)
 
-                    tempo_de_vida = player.funcao_de_perda()
+                    # pune os individuos que colidiram com a tela
+                    tempo_de_vida = (player.funcao_de_perda() * 0.5)
 
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])
@@ -66,7 +67,7 @@ class Colisoes:
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # so vai para "pódio" de melhor individuo se for pelo menos 10% melhor que o atual melhor
-                    if tempo_de_vida > Variaveis_globais.melhor_tempo * 1.1:
+                    if tempo_de_vida > Variaveis_globais.melhor_tempo:
                         Variaveis_globais.melhor_tempo = tempo_de_vida
                         Variaveis_globais.melhor_individuo = player.camadas
                         
