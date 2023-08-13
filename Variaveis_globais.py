@@ -1,4 +1,4 @@
-from Config import pygame, time
+from Config import *
 
 # ajuda a selecionar o melhor individuo de cada geração
 melhor_tempo = 0
@@ -9,7 +9,10 @@ contador_geracoes = 0
 
 geracao_avo = []
 geracao_anterior = []
+
 geracao_atual = []
+for individuo in range(numero_players):
+    geracao_atual.append([])
 
 juncao_de_geracoes = []
 valores_proporcionais = []
