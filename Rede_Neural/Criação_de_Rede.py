@@ -17,7 +17,7 @@ class CriarRedeNeural:
                     pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
                     self.camadas[-1].append(pesos) 
         
-        self.taxa_de_mutacao = taxa_de_mutacao_base
+        self.taxa_de_mutacao = 0.03
 
        # se for a primeira geração ele randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:
@@ -61,7 +61,7 @@ class CriarRedeNeural:
                 while True:
 
                     if meio == 0 or meio == ultimo or (roleta > Variaveis_globais.valores_proporcionais[meio - 1] and
-                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 5):
+                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 10):
 
                         Variaveis_globais.ja_sorteados.append(meio)
                         break
@@ -112,11 +112,7 @@ class CriarRedeNeural:
                     
                     elif camada > camada_insercao_escolhida:
                         self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
-                    
-                    else:
-                        print('houve alguma exeção!!!')         
-            
-
+                 
 
     def randomizar_resultados(self):
 
