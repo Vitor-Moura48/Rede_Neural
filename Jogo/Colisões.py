@@ -56,7 +56,7 @@ class Colisoes:
                     Variaveis_globais.grupo_players.remove(player)
 
                     # pune os individuos que colidiram com a tela
-                    tempo_de_vida = (player.funcao_de_perda() * 0.5)
+                    tempo_de_vida = player.funcao_de_perda() - 1000
 
                     pesos_individuo = []
                     pesos_individuo.append([tempo_de_vida])

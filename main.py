@@ -56,9 +56,7 @@ def atualizar_objetos():
 def nova_geracao():
         Variaveis_globais.juncao_de_geracoes = []
 
-        # registra que uma geração foi completa
-        Variaveis_globais.contador_geracoes += 1
-
+        
         Variaveis_globais.valores_proporcionais = []
 
         # zera a variavel que elimina os piores players
@@ -112,6 +110,19 @@ def nova_geracao():
 
         criar_objetos(numero_inimigos, numero_players)
 
+def nova_geracao_ou_nova_partida():
+    # registra a conclusão de uma partida
+    Variaveis_globais.partida_atual_da_geracao += 1
+
+    # confere se a quantidade escolhida de partidas por geração foi completa, se sim, cria a nova geração normalmente
+    if Variaveis_globais.partida_atual_da_geracao == partidas_por_geracao:
+
+        # registra que uma geração foi completa
+        Variaveis_globais.contador_geracoes += 1
+        Variaveis_globais.partida_atual_da_geracao = 0
+        nova_geracao()
+
+
 
 criar_objetos(numero_inimigos, numero_players)
 
@@ -136,8 +147,8 @@ while True:
 
     # se todos os players foram "mortos", cria uma nova geração
     if len(Variaveis_globais.grupo_players) == 0:
-        nova_geracao()
-
+        nova_geracao_ou_nova_partida()
+       
     # define um limite de fps
     Variaveis_globais.clock.tick(fps)
 

@@ -26,7 +26,9 @@ tela.fill((000, 000, 000))
 fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 
-arquivo = 1
+partidas_por_geracao = 1
+
+arquivo = 2
 
 # teste padrão
 if arquivo == 0:
@@ -39,7 +41,7 @@ if arquivo == 0:
     configuracao_de_camadas = (quantidade_entradas, 9, 4)
 
     numero_inimigos = 15
-    numero_players = 1500
+    numero_players = 200
 
     numero_de_elitismo = numero_players * 0.2
 
@@ -47,7 +49,7 @@ if arquivo == 0:
 
     recompensa_objetivo = 100000
 
-
+# teste padrão modificado
 elif arquivo == 1:
     # define o valor do vies da rede neural
     bias = 0
@@ -56,27 +58,27 @@ elif arquivo == 1:
 
     quantidade_entradas = (projeteis_para_entrada * 5) + 4
 
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas, 4)
 
     numero_inimigos = 15
     numero_players = 1500
 
     numero_de_elitismo = numero_players * 0.4
 
-    taxa_de_mutacao_base = 0.3
+    taxa_de_mutacao_base = 0.1
 
-    recompensa_objetivo = 20000
+    recompensa_objetivo = 100000
 
 # teste com entradas minimas, elitismo médio, objetivo: 5000 loops
 elif arquivo == 2:
 
-    bias = 1
+    bias = 0
 
     projeteis_para_entrada = 1
 
     quantidade_entradas = (projeteis_para_entrada * 5) + 4
 
-    configuracao_de_camadas = (quantidade_entradas, 18, 4)
+    configuracao_de_camadas = (quantidade_entradas, 9, 4)
 
     numero_inimigos = 15
     numero_players = 1500

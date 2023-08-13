@@ -30,3 +30,5 @@ clock = pygame.time.Clock()
 
 contador = 0
 tempo_inicio = time.time()
+
+partida_atual_da_geracao = 0
