@@ -7,7 +7,8 @@ from Jogo.Colisões import *
 
 
 # função para criar os objetos
-def criar_objetos(quantidade_inimigos, quantidade_playes):
+def criar_objetos(quantidade_inimigos, quantidade_playes):   
+    indice_do_player_na_geracao = 0
    
    # cria os projeteis
     for i in range(quantidade_inimigos):
@@ -23,13 +24,15 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         if Variaveis_globais.partida_atual_da_geracao == 0:
             nova_rede = CriarRedeNeural()
             resultado = nova_rede.randomizar_resultados()
-            player = Player(*resultado)
+            player = Player(indice_do_player_na_geracao, *resultado)
+
+            indice_do_player_na_geracao += 1
         
             Variaveis_globais.grupo_players.append(player)
 
 
         else:
-            print(len(Variaveis_globais.geracao_atual))
+
             player = Variaveis_globais.geracao_atual[i]
 
  # lógica para contar o fps
