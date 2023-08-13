@@ -30,6 +30,7 @@ class Colisoes:
                     for camada in player.camadas:
                         pesos_individuo.append(camada)
 
+                   
                     Variaveis_globais.geracao_atual.append(pesos_individuo)
 
                     # se o tempo de vida dele for maior que o do melhor individuo, ele se torna o melhor
