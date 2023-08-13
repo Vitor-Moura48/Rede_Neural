@@ -30,8 +30,8 @@ class Colisoes:
                     for camada in player.camadas:
                         pesos_individuo.append(camada)
 
-                   
-                    Variaveis_globais.geracao_atual.append(pesos_individuo)
+                   # coloca os pesos do individuo no indice escolhido no inicio da geração
+                    Variaveis_globais.geracao_atual[player.indice] = pesos_individuo
 
                     # se o tempo de vida dele for maior que o do melhor individuo, ele se torna o melhor
                     if tempo_de_vida > Variaveis_globais.melhor_tempo:
@@ -65,7 +65,7 @@ class Colisoes:
                         pesos_individuo.append(camada)
                     
 
-                    Variaveis_globais.geracao_atual.append(pesos_individuo)
+                    Variaveis_globais.geracao_atual[player.indice] = pesos_individuo
 
                     # so vai para "pódio" de melhor individuo se for pelo menos 10% melhor que o atual melhor
                     if tempo_de_vida > Variaveis_globais.melhor_tempo:
