@@ -4,7 +4,10 @@ import Variaveis_globais as Variaveis_globais
 
 # classe que gerencia o player
 class Player:
-    def __init__(self, *args):
+    def __init__(self, indice, *args):
+
+        # indice que o player vai ser colocado na variavel geração atual
+        self.indice = indice
         
         self.camadas = []
 
