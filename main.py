@@ -19,11 +19,17 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
     # cria os players
     for i in range(quantidade_playes):
         
-        nova_rede = CriarRedeNeural()
-        resultado = nova_rede.randomizar_resultados()
-        player = Player(*resultado)
-       
-        Variaveis_globais.grupo_players.append(player)
+        # se todas as partidas já tiverem sido comcluidas ele cria a nova geração normalmente
+        if Variaveis_globais.partida_atual_da_geracao == partidas_por_geracao:
+            nova_rede = CriarRedeNeural()
+            resultado = nova_rede.randomizar_resultados()
+            player = Player(*resultado)
+        
+            Variaveis_globais.grupo_players.append(player)
+
+        
+        else:
+            player = Variaveis_globais.geracao_atual[i]
 
  # lógica para contar o fps
 def exibir_fps():
@@ -121,7 +127,8 @@ def nova_geracao_ou_nova_partida():
         Variaveis_globais.contador_geracoes += 1
         Variaveis_globais.partida_atual_da_geracao = 0
         nova_geracao()
-
+    else:
+        a = 2
 
 
 criar_objetos(numero_inimigos, numero_players)
