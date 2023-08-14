@@ -94,11 +94,9 @@ class Player:
         juncao = []
 
         # adiciona como entrada a distancia para cada canto da tela
-        juncao.append(self.rect_player.center[0] / 1500)
-        juncao.append(1 - (self.rect_player.center[0] / 1500))
+        juncao.append((self.rect_player.center[0] / 750) -1)
 
-        juncao.append(self.rect_player.center[1] / 500)
-        juncao.append(1 - (self.rect_player.center[1] / 500))
+        juncao.append((self.rect_player.center[1] / 250) -1)
         for coordenada in resultados:
             for valor in coordenada:
                 juncao.append(valor)

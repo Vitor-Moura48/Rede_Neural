@@ -36,7 +36,7 @@ if arquivo == 0:
     bias = 1
     projeteis_para_entrada = 8
 
-    quantidade_entradas = (projeteis_para_entrada * 5) + 4
+    quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
     configuracao_de_camadas = (quantidade_entradas, 9, 4)
 
@@ -56,7 +56,7 @@ elif arquivo == 1:
 
     projeteis_para_entrada = 4
 
-    quantidade_entradas = (projeteis_para_entrada * 5) + 4
+    quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas, 4)
 
@@ -76,12 +76,12 @@ elif arquivo == 2:
 
     projeteis_para_entrada = 1
 
-    quantidade_entradas = (projeteis_para_entrada * 5) + 4
+    quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
-    configuracao_de_camadas = (quantidade_entradas, 9, 4)
+    configuracao_de_camadas = (quantidade_entradas, 14, 4)
 
     numero_inimigos = 15
-    numero_players = 600
+    numero_players = 500
 
     numero_de_elitismo = numero_players * 0.5
 
