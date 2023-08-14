@@ -14,7 +14,6 @@ class Player:
         for arg in args:
             self.camadas.append(arg)
         
-
         # variavel para contar a quantidade de loops que o player conseguiu passar
         self.tick = 0
 

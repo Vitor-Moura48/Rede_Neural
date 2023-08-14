@@ -8,8 +8,7 @@ from Jogo.Colisões import *
 
 # função para criar os objetos
 def criar_objetos(quantidade_inimigos, quantidade_playes):   
-    indice_do_player_na_geracao = 0
-   
+
    # cria os projeteis
     for i in range(quantidade_inimigos):
 
@@ -18,7 +17,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
 
 
     # cria os players
-    for i in range(quantidade_playes):
+    for indice_do_player_na_geracao in range(quantidade_playes):
         
         # se for o inicio de uma nova geração ele cria a nova geração normalmente
         if Variaveis_globais.partida_atual_da_geracao == 0:
@@ -30,10 +29,12 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         
             Variaveis_globais.grupo_players.append(player)
 
-
+        # se não, copia a rede da geração
         else:
+            player = Player(indice_do_player_na_geracao, *Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
 
-            player = Variaveis_globais.geracao_atual[i]
+            #adiciona do grupo de players novamente
+            Variaveis_globais.grupo_players.append(player)
 
  # lógica para contar o fps
 def exibir_fps():
@@ -75,6 +76,16 @@ def nova_geracao():
         # zera os inimigos e recria todos logo a frente
         Variaveis_globais.grupo_inimigos = []
 
+       
+
+        # divide a recompensa pela quantidade de partidas para fazer a media de recompensa
+        for individuo in range(numero_players):
+            Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
+
+            if Variaveis_globais.geracao_atual[individuo][0][0] > Variaveis_globais.melhor_tempo:
+                Variaveis_globais.melhor_tempo = Variaveis_globais.geracao_atual[individuo][0][0]
+                Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo][1:]
+                
         # printa o melhor tempo
         print(f'melhor tempo {Variaveis_globais.melhor_tempo}')
 
@@ -110,10 +121,11 @@ def nova_geracao():
                 Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] +
                                              Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
                       
-
        
         # zera a geração atual para ser preenchida novamente
         Variaveis_globais.geracao_atual = []
+        for individuo in range(numero_players):
+            Variaveis_globais.geracao_atual.append([])
         Variaveis_globais.primeiro_individuo = 0
 
         Variaveis_globais.ja_sorteados = []
@@ -131,8 +143,15 @@ def nova_geracao_ou_nova_partida():
         Variaveis_globais.contador_geracoes += 1
         Variaveis_globais.partida_atual_da_geracao = 0
         nova_geracao()
+
     else:
-        a = 2
+        # zera a variavel que ajuda a eliminar os piores players
+        Variaveis_globais.primeiro_inimigo = 0
+
+        # zera os inimigos e recria todos logo a frente
+        Variaveis_globais.grupo_inimigos = []
+
+        criar_objetos(numero_inimigos, numero_players)
 
 
 criar_objetos(numero_inimigos, numero_players)
