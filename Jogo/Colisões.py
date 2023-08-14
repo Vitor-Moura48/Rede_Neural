@@ -1,6 +1,7 @@
 from Config import *
 import Variaveis_globais as Variaveis_globais
 
+
 class Colisoes:
     def __init__(self):
         pass

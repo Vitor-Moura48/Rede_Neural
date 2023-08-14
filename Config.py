@@ -6,6 +6,7 @@ from random import *
 import math
 import time
 import copy
+import pandas
 
 
 # largura e altura da tela
@@ -78,7 +79,7 @@ elif arquivo == 2:
 
     quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
-    configuracao_de_camadas = (quantidade_entradas, 14, 4)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
 
     numero_inimigos = 15
     numero_players = 500

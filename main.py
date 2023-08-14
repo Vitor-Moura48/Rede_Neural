@@ -78,13 +78,18 @@ def nova_geracao():
 
        
 
-        # divide a recompensa pela quantidade de partidas para fazer a media de recompensa
+        # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
         for individuo in range(numero_players):
             Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
 
+            # confere se existe um novo melhor individuo
             if Variaveis_globais.geracao_atual[individuo][0][0] > Variaveis_globais.melhor_tempo:
                 Variaveis_globais.melhor_tempo = Variaveis_globais.geracao_atual[individuo][0][0]
                 Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo][1:]
+
+                # adiciona ele em um arquivo csv
+                arquivo = pandas.DataFrame(Variaveis_globais.melhor_individuo)
+                arquivo.to_csv('melhor_individuo.csv', index=False, sep=';')
                 
         # printa o melhor tempo
         print(f'melhor tempo {Variaveis_globais.melhor_tempo}')
