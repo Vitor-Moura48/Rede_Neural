@@ -16,8 +16,8 @@ altura = 500
 pygame.init()
 fps = 240
 
-velocidade_projetil = 6  # 10 max no caso
-velocidade_ia = 6  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
+velocidade_projetil = 8  # 10 max no caso
+velocidade_ia = 8  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
 
 tela = pygame.display.set_mode((largura, altura))
 tela.fill((000, 000, 000))
@@ -26,7 +26,7 @@ tela.fill((000, 000, 000))
 fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 
-partidas_por_geracao = 10
+partidas_por_geracao = 5
 
 arquivo = 2
 
@@ -85,9 +85,10 @@ elif arquivo == 2:
 
     numero_de_elitismo = numero_players * 0.5
 
-    taxa_de_mutacao_base = 0.1
+    taxa_de_mutacao_base = 0.05
 
-    recompensa_objetivo = 50000
+    # faz a conta considerando a taxa de mutação base (o valor a esquerda é o necessario para chegar a 0 de mutação)
+    recompensa_objetivo = 3000 * (1 / 0.05)
 
 
 

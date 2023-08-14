@@ -17,7 +17,7 @@ class CriarRedeNeural:
                     pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
                     self.camadas[-1].append(pesos) 
         
-        self.taxa_de_mutacao = 0.03
+        self.taxa_de_mutacao = 0.01
 
        # se for a primeira geração ele randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:
