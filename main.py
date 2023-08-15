@@ -77,7 +77,6 @@ def nova_geracao():
         Variaveis_globais.grupo_inimigos = []
 
        
-
         # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
         for individuo in range(numero_players):
             Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
@@ -89,7 +88,7 @@ def nova_geracao():
 
                 # adiciona ele em um arquivo csv
                 arquivo = pandas.DataFrame(Variaveis_globais.melhor_individuo)
-                arquivo.to_csv('melhor_individuo.csv', index=False, sep=';')
+                arquivo.to_csv('melhor_individuo.csv', index=False)
                 
         # printa o melhor tempo
         print(f'melhor tempo {Variaveis_globais.melhor_tempo}')

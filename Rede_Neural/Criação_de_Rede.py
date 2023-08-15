@@ -42,8 +42,9 @@ class CriarRedeNeural:
 
         # o melhor individuo sempre será passa do para a próxima geração
         if Variaveis_globais.primeiro_individuo < numero_de_elitismo:
+          
             self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo)
-            
+        
             Variaveis_globais.primeiro_individuo += 1
 
         # faz um sorteio dos individuos com preferencia dos melhores

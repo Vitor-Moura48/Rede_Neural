@@ -27,7 +27,8 @@ class Player:
 
         # funções de ativação que posem ser usadas
     def funcao_sigmoide(self, entrada):
-        return (1 / 1 + numpy.exp(entrada))
+        saida = 1 / (1 + numpy.exp(-entrada))
+        return saida
 
     def funcao_relu(self, entrada):
         if entrada < 0:
@@ -106,7 +107,6 @@ class Player:
 
         # armazena o resultado dos calculos de cada neuronios e divide em camadas
         processamentos_da_rede = []
-      
 
         # Faz todos os calculos de cada camada e armazena na variavel acima
         for camada in range(1, len(configuracao_de_camadas)):
