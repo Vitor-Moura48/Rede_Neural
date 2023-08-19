@@ -28,14 +28,14 @@ class Player:
         self.tick += 1
 
         # as saidas definem a direção que o player vai tomar
-        if processamentos_da_rede[-1][0] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][0] > 0:
             self.posicao_x += velocidade_ia
-        if processamentos_da_rede[-1][1] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][1] > 0:
             self.posicao_x -= velocidade_ia
 
-        if processamentos_da_rede[-1][2] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][2] > 0:
             self.posicao_y += velocidade_ia
-        if processamentos_da_rede[-1][3] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][3] > 0:
             self.posicao_y -= velocidade_ia
         
         # cria um retandulo de colisão e mostra na tela

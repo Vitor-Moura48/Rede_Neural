@@ -123,17 +123,19 @@ class Processador:
                     processamento_da_camada.append(processamento_neuronio)
             
             processamentos_da_rede.append(numpy.array(processamento_da_camada))
+        
+        comandos = processamentos_da_rede[-1]
             
 
         # as saidas definem a direção que o player vai tomar
-        if processamentos_da_rede[-1][0] > 0:
+        if comandos[0] > 0:
             self.posicao_x += velocidade_ia
-        if processamentos_da_rede[-1][1] > 0:
+        if comandos[1] > 0:
             self.posicao_x -= velocidade_ia
 
-        if processamentos_da_rede[-1][2] > 0:
+        if comandos[2] > 0:
             self.posicao_y += velocidade_ia
-        if processamentos_da_rede[-1][3] > 0:
+        if comandos[3] > 0:
             self.posicao_y -= velocidade_ia
         
         # cria um retandulo de colisão e mostra na tela
