@@ -20,7 +20,9 @@ class Colisoes:
                 
    
                     # se sim, vai remover o player do grupo de players
-                    Variaveis_globais.grupo_processadores.remove(player)
+                    Variaveis_globais.grupo_players.pop(Variaveis_globais.grupo_processadores.index(player))
+                    Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_processadores.index(player))
+                    
 
                     # obter o tempo de vida do individuo
                     tempo_de_vida = player.funcao_de_perda()
@@ -54,7 +56,10 @@ class Colisoes:
 
                 # se saiu, faz a mesma coisa da colisão com um inimigo
                 if player in Variaveis_globais.grupo_processadores:
-                    Variaveis_globais.grupo_processadores.remove(player)
+                    
+                    Variaveis_globais.grupo_players.pop(Variaveis_globais.grupo_processadores.index(player))
+                    Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_processadores.index(player))
+                    
                     
                     # pune os individuos que colidiram com a tela
                     tempo_de_vida = player.funcao_de_perda() * 0.8

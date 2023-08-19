@@ -31,13 +31,17 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             indice_do_player_na_geracao += 1
         
             Variaveis_globais.grupo_processadores.append(processador)
+            Variaveis_globais.grupo_players.append(Player)
 
         # se não, copia a rede da geração
         else:
             processador = Processador(indice_do_player_na_geracao, *Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
 
+            player = Player(False, indice_do_player_na_geracao)
+
             #adiciona do grupo de players novamente
             Variaveis_globais.grupo_processadores.append(processador)
+            Variaveis_globais.grupo_players.append(Player)
 
  # lógica para contar o fps
 def exibir_fps():
