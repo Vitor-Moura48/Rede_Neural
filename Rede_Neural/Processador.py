@@ -4,13 +4,11 @@ import Variaveis_globais as Variaveis_globais
 
 # classe que gerencia o player
 class Processador:
-    def __init__(self, indice, real, *args):
+    def __init__(self, indice, *args):
 
         # indice que o player vai ser colocado na variavel geração atual
         self.indice = indice
-        
-        self.real = real
-
+    
         self.camadas = []
 
         for arg in args:
@@ -115,7 +113,7 @@ class Processador:
             processamento_da_camada = []
 
             if camada == 1:
-                for neuronio in range(configuracao_de_camadas[camada]):
+                for neuronio in range(configuracao_de_camadas[camada]):       
                     processamento_neuronio = self.funcao_relu(sum(entradas_1 * self.camadas[camada - 1][neuronio]))
                     processamento_da_camada.append(processamento_neuronio)             
                 

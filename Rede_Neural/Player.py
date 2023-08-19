@@ -2,18 +2,15 @@ from Config import *
 import Variaveis_globais as Variaveis_globais
 
 class Player:
-    def __init__(self, indice, *args):
+    def __init__(self, real, indice, *args):
 
         # indice que o player vai ser colocado na variavel geração atual
         self.indice = indice
 
+        self.real = real
+
          # variavel para contar a quantidade de loops que o player conseguiu passar
         self.tick = 0
-        
-        self.camadas = []
-
-        for arg in args:
-            self.camadas.append(arg)
         
     # pega a quantidade de loops que o player passou e retorna esse valor
     def funcao_de_perda(self):

@@ -3,6 +3,7 @@ import Variaveis_globais as Variaveis_globais
 from Jogo.Projeteis import *
 from Rede_Neural.Criação_de_Rede import *
 from Rede_Neural.Processador import *
+from Rede_Neural.Player import *
 from Jogo.Colisões import *
 
 
@@ -23,9 +24,9 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         if Variaveis_globais.partida_atual_da_geracao == 0:
             nova_rede = CriarRedeNeural()
             resultado = nova_rede.randomizar_resultados()
-            processador = Processador(indice_do_player_na_geracao, False, *resultado)
-
+            processador = Processador(indice_do_player_na_geracao, *resultado)     
             
+            player = Player(False, indice_do_player_na_geracao)
 
             indice_do_player_na_geracao += 1
         
@@ -33,7 +34,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
 
         # se não, copia a rede da geração
         else:
-            processador = Processador(indice_do_player_na_geracao, False, *Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
+            processador = Processador(indice_do_player_na_geracao, *Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
 
             #adiciona do grupo de players novamente
             Variaveis_globais.grupo_processadores.append(processador)
@@ -62,8 +63,8 @@ def atualizar_objetos():
 
     for inimigo in Variaveis_globais.grupo_inimigos:
         inimigo.update()
-    for player in Variaveis_globais.grupo_processadores:
-        player.update()
+    for processador in Variaveis_globais.grupo_processadores:
+        processador.update()
     colisoes.update()
 
 def nova_geracao():
