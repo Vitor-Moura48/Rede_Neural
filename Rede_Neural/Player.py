@@ -9,8 +9,16 @@ class Player:
 
         self.real = real
 
-         # variavel para contar a quantidade de loops que o player conseguiu passar
+        # variavel para contar a quantidade de loops que o player conseguiu passar
         self.tick = 0
+
+        # define o ponto de spaw do player
+        self.posicao_x = 750
+        self.posicao_y = 250
+
+        # cria um retandulo de colisão e mostra na tela
+        self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
+        draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))  
         
     # pega a quantidade de loops que o player passou e retorna esse valor
     def funcao_de_perda(self):
@@ -28,14 +36,14 @@ class Player:
         self.tick += 1
 
         # as saidas definem a direção que o player vai tomar
-        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][0] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[0] > 0:
             self.posicao_x += velocidade_ia
-        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][1] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[1] > 0:
             self.posicao_x -= velocidade_ia
 
-        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][2] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[2] > 0:
             self.posicao_y += velocidade_ia
-        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].processamentos_da_rede[-1][3] > 0:
+        if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[3] > 0:
             self.posicao_y -= velocidade_ia
         
         # cria um retandulo de colisão e mostra na tela
