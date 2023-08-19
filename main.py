@@ -31,7 +31,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             indice_do_player_na_geracao += 1
         
             Variaveis_globais.grupo_processadores.append(processador)
-            Variaveis_globais.grupo_players.append(Player)
+            Variaveis_globais.grupo_players.append(player)
 
         # se não, copia a rede da geração
         else:
@@ -41,7 +41,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
 
             #adiciona do grupo de players novamente
             Variaveis_globais.grupo_processadores.append(processador)
-            Variaveis_globais.grupo_players.append(Player)
+            Variaveis_globais.grupo_players.append(player)
 
  # lógica para contar o fps
 def exibir_fps():
@@ -67,8 +67,12 @@ def atualizar_objetos():
 
     for inimigo in Variaveis_globais.grupo_inimigos:
         inimigo.update()
+
     for processador in Variaveis_globais.grupo_processadores:
         processador.update()
+    for player in Variaveis_globais.grupo_players:
+        player.update()
+
     colisoes.update()
 
 def nova_geracao():
