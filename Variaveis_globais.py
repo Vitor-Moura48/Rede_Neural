@@ -27,6 +27,7 @@ primeiro_inimigo = 0
 
 # lista para juntar os objetos das classes
 grupo_inimigos = []
+grupo_processadores = []
 grupo_players = []
 
 clock = pygame.time.Clock()

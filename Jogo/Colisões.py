@@ -13,14 +13,14 @@ class Colisoes:
         self.colidiu = False
 
         # confere se cada inimigo colidiu com o player
-        for player in Variaveis_globais.grupo_players:
+        for player in Variaveis_globais.grupo_processadores:
             for inimigo in Variaveis_globais.grupo_inimigos:
               
                 if player.rect_player.colliderect(inimigo.rect_inimigo):
                 
    
                     # se sim, vai remover o player do grupo de players
-                    Variaveis_globais.grupo_players.remove(player)
+                    Variaveis_globais.grupo_processadores.remove(player)
 
                     # obter o tempo de vida do individuo
                     tempo_de_vida = player.funcao_de_perda()
@@ -48,13 +48,13 @@ class Colisoes:
     def colisao_player_tela(self):
 
         # confere se o player saiu dos limites da tela
-        for player in Variaveis_globais.grupo_players:
+        for player in Variaveis_globais.grupo_processadores:
             if player.rect_player.bottom < 0 or player.rect_player.top > altura or \
                     player.rect_player.left < 0 or player.rect_player.right > largura and not self.colidiu:
 
                 # se saiu, faz a mesma coisa da colisão com um inimigo
-                if player in Variaveis_globais.grupo_players:
-                    Variaveis_globais.grupo_players.remove(player)
+                if player in Variaveis_globais.grupo_processadores:
+                    Variaveis_globais.grupo_processadores.remove(player)
                     
                     # pune os individuos que colidiram com a tela
                     tempo_de_vida = player.funcao_de_perda() * 0.8
