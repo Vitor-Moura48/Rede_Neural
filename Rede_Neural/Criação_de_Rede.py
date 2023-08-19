@@ -86,15 +86,9 @@ class CriarRedeNeural:
             # reduz um pouco a taxa de mutação base a partir da
             self.taxa_de_mutacao = taxa_de_mutacao_base - (media_de_recompensa / recompensa_objetivo)
 
-            # inicia o novo individuo com a mesma estrutura inicial 
-            novo_individuo = []
-
-         
             # junta caracteristicas dos dois individuos para formar o novo individuo
             camada_insercao_escolhida = randint(0, len(self.camadas) - 1) 
             neuronio_insercao_escolhida = randint(0, len(self.camadas[camada_insercao_escolhida]) - 1)
-            peso_insercao_escolhida = randint(0, len(self.camadas[camada_insercao_escolhida][neuronio_insercao_escolhida]) - 1)
-
 
 
             # une os dois individuos em 1
