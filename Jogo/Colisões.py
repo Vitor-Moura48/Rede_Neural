@@ -41,8 +41,8 @@ class Colisoes:
                         self.colidiu = True
 
                     
-                     # se sim, vai remover o player do grupo de players
-                    Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_players.index(player))   
+                        # se sim, vai remover o player do grupo de players
+                        Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_players.index(player))   
                     Variaveis_globais.grupo_players.pop(Variaveis_globais.grupo_players.index(player))
 
                     # se um inimigo já tiver colidido, não é mais necessario fazer mais verificações
@@ -77,8 +77,8 @@ class Colisoes:
                         else:
                             Variaveis_globais.geracao_atual[player.indice][0][0] += tempo_de_vida
                     
-                    # se sim, vai remover o player do grupo de players
-                    Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_players.index(player))   
+                        # se sim, vai remover o player do grupo de players
+                        Variaveis_globais.grupo_processadores.pop(Variaveis_globais.grupo_players.index(player))   
                     Variaveis_globais.grupo_players.pop(Variaveis_globais.grupo_players.index(player))
 
                         
