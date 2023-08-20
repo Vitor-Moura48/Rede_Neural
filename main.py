@@ -42,6 +42,10 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             #adiciona do grupo de players novamente
             Variaveis_globais.grupo_processadores.append(processador)
             Variaveis_globais.grupo_players.append(player)
+    
+    if partida_com_jogador == True:
+        player = Player(True, 0)
+        Variaveis_globais.grupo_players.append(player)
 
  # lógica para contar o fps
 def exibir_fps():
@@ -97,9 +101,12 @@ def nova_geracao():
                 Variaveis_globais.melhor_tempo = Variaveis_globais.geracao_atual[individuo][0][0]
                 Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo][1:]
 
-                # adiciona ele em um arquivo csv
-                arquivo = pandas.DataFrame(Variaveis_globais.melhor_individuo)
-                arquivo.to_csv('melhor_individuo.csv', index=False)
+                # se o melhor tempo obtido for maior que o registrado no arquivo csv, ele passa a ser o melhor tempo
+                csv = pandas.read_csv('melhor_individuo.csv')
+                if Variaveis_globais.geracao_atual[individuo][0][0] > csv[0]:
+                    # adiciona ele em um arquivo csv
+                    arquivo = pandas.DataFrame(Variaveis_globais.melhor_tempo, Variaveis_globais.melhor_individuo)
+                    arquivo.to_csv('melhor_individuo.csv', index=False)
                 
         # printa o melhor tempo
         print(f'melhor tempo {Variaveis_globais.melhor_tempo}')
@@ -189,9 +196,37 @@ while True:
         if event.type == QUIT:
             quit()
             sys.exit()
+        
+        if event.type == pygame.KEYDOWN:
+            if pygame.key.get_pressed()[K_a]:
+                Variaveis_globais.comandos[0] = True     
+
+            if pygame.key.get_pressed()[K_d]:
+                Variaveis_globais.comandos[1] = True
+          
+            if pygame.key.get_pressed()[K_w]:
+                Variaveis_globais.comandos[2] = True        
+
+            if pygame.key.get_pressed()[K_s]:
+                Variaveis_globais.comandos[3] = True       
+        
+        if event.type == pygame.KEYUP:
+            if not pygame.key.get_pressed()[K_a]:
+                Variaveis_globais.comandos[0] = False
+
+            if not pygame.key.get_pressed()[K_d]:
+                Variaveis_globais.comandos[1] = False
+
+            if not pygame.key.get_pressed()[K_w]:
+                Variaveis_globais.comandos[2] = False
+
+            if not pygame.key.get_pressed()[K_s]:
+                Variaveis_globais.comandos[3] = False
+
+
 
     # se todos os players foram "mortos", cria uma nova geração
-    if len(Variaveis_globais.grupo_processadores) == 0:
+    if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao_ou_nova_partida()
        
     # define um limite de fps

@@ -25,6 +25,8 @@ primeiro_individuo = 0
 # variavel para ajudar a direcionar os primeiros projeteis exatamente na direção do surgimento do player, para eliminar os piores
 primeiro_inimigo = 0
 
+comandos = [[False], [False], [False], [False]]
+
 # lista para juntar os objetos das classes
 grupo_inimigos = []
 grupo_processadores = []
