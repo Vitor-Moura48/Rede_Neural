@@ -94,7 +94,7 @@ elif arquivo == 2:
 
     quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 4, 4)
 
     numero_inimigos = 15
     numero_players = 100
