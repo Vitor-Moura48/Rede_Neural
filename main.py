@@ -53,7 +53,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         # cria um ou dois players
         for i in range(quantidade_jogadores):
     
-            player = Player(True, 0)  # o 0 (index) para o jogador não importa
+            player = Player(True, i)  # o index nesse caso registra quem é o primeiro e o segundo player
             Variaveis_globais.grupo_players.append(player)
 
 # lógica para contar o fps
@@ -189,33 +189,43 @@ def nova_geracao_ou_nova_partida():
 
 # função para verificar se o jogador movimentou o player e responder
 def movimentacao_jogador():
-
-    # para movimentar o jogador 1
-    if pygame.key.get_pressed()[K_a]:
-        Variaveis_globais.grupo_players[-1].posicao_x -= velocidade_ia
-
-    if pygame.key.get_pressed()[K_d]:
-        Variaveis_globais.grupo_players[-1].posicao_x += velocidade_ia
     
-    if pygame.key.get_pressed()[K_w]:
-        Variaveis_globais.grupo_players[-1].posicao_y -= velocidade_ia       
+    # para movimentar o jogador 1
+    if Variaveis_globais.grupo_players[-1].real and Variaveis_globais.grupo_players[-1].indice == 1:
+       
+        if pygame.key.get_pressed()[K_LEFT]:
+            Variaveis_globais.grupo_players[-1].posicao_x -= velocidade_ia
 
-    if pygame.key.get_pressed()[K_s]:
-        Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia     
+        if pygame.key.get_pressed()[K_RIGHT]:
+            Variaveis_globais.grupo_players[-1].posicao_x += velocidade_ia
+        
+        if pygame.key.get_pressed()[K_UP]:
+            Variaveis_globais.grupo_players[-1].posicao_y -= velocidade_ia       
+
+        if pygame.key.get_pressed()[K_DOWN]:
+            Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia     
 
 
     # para movimentar o jogador 2
-    if pygame.key.get_pressed()[K_LEFT]:
-        Variaveis_globais.grupo_players[-2].posicao_x -= velocidade_ia
-
-    if pygame.key.get_pressed()[K_RIGHT]:
-        Variaveis_globais.grupo_players[-2].posicao_x += velocidade_ia
+    player2 = -1
     
-    if pygame.key.get_pressed()[K_UP]:
-        Variaveis_globais.grupo_players[-2].posicao_y -= velocidade_ia       
+    if len(Variaveis_globais.grupo_players) > 1:  # condições para evitar bugs em certas situações
 
-    if pygame.key.get_pressed()[K_DOWN]:
-        Variaveis_globais.grupo_players[-2].posicao_y += velocidade_ia     
+        if Variaveis_globais.grupo_players[-2].indice == 0:
+            player2 = -2
+
+    if Variaveis_globais.grupo_players[player2].real:
+        if pygame.key.get_pressed()[K_a]:
+            Variaveis_globais.grupo_players[player2].posicao_x -= velocidade_ia
+
+        if pygame.key.get_pressed()[K_d]:
+            Variaveis_globais.grupo_players[player2].posicao_x += velocidade_ia
+        
+        if pygame.key.get_pressed()[K_w]:
+            Variaveis_globais.grupo_players[player2].posicao_y -= velocidade_ia       
+
+        if pygame.key.get_pressed()[K_s]:
+            Variaveis_globais.grupo_players[player2].posicao_y += velocidade_ia     
 
 
 # cria os objetos iniciais
@@ -238,13 +248,13 @@ while True:
         if event.type == QUIT:
             quit()
             sys.exit()
-        
-    movimentacao_jogador()
     
     # se todos os players foram "mortos", cria uma nova geração ou partida
     if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao_ou_nova_partida()
-       
+
+    movimentacao_jogador()
+
     # define um limite de fps
     Variaveis_globais.clock.tick(fps)
 
