@@ -31,7 +31,7 @@ primeiro_inimigo = 0
 comandos = [[False], [False], [False], [False]]
 
 # lista para juntar os objetos das classes
-grupo_inimigos = []
+grupo_projeteis = []
 grupo_processadores = []
 grupo_players = []
 

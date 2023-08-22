@@ -14,7 +14,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
     for i in range(quantidade_inimigos):
 
         projetil = Projeteis()
-        Variaveis_globais.grupo_inimigos.append(projetil)
+        Variaveis_globais.grupo_projeteis.append(projetil)
 
 
     # cria os players a partir do valor definido em Config
@@ -75,7 +75,7 @@ def exibir_fps():
 # atualiza todos os objetos
 def atualizar_objetos():
 
-    for inimigo in Variaveis_globais.grupo_inimigos:
+    for inimigo in Variaveis_globais.grupo_projeteis:
         inimigo.update()
 
     for processador in Variaveis_globais.grupo_processadores:
@@ -94,7 +94,7 @@ def nova_geracao():
         Variaveis_globais.juncao_de_geracoes = []     
         Variaveis_globais.valores_proporcionais = []
         Variaveis_globais.primeiro_inimigo = 0
-        Variaveis_globais.grupo_inimigos = []
+        Variaveis_globais.grupo_projeteis = []
        
         # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
         for individuo in range(numero_players):
@@ -179,7 +179,7 @@ def nova_geracao_ou_nova_partida():
         Variaveis_globais.primeiro_inimigo = 0
 
         # zera os inimigos e recria todos a frente
-        Variaveis_globais.grupo_inimigos = []
+        Variaveis_globais.grupo_projeteis = []
 
         criar_objetos(numero_inimigos, numero_players)
 

@@ -14,7 +14,7 @@ class Colisoes:
 
         # confere se cada player colidiu com cada inimigo
         for player in Variaveis_globais.grupo_players:
-            for inimigo in Variaveis_globais.grupo_inimigos:
+            for inimigo in Variaveis_globais.grupo_projeteis:
               
                 if player.rect_player.colliderect(inimigo.rect_inimigo):
 
