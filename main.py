@@ -183,6 +183,21 @@ def nova_geracao_ou_nova_partida():
 
         criar_objetos(numero_inimigos, numero_players)
 
+# função para verificar se o jogador movimentou o player e responder
+def movimentacao_jogador():
+
+    if pygame.key.get_pressed()[K_a]:
+        Variaveis_globais.grupo_players[-1].posicao_x -= velocidade_ia
+
+    if pygame.key.get_pressed()[K_d]:
+        Variaveis_globais.grupo_players[-1].posicao_x += velocidade_ia
+    
+    if pygame.key.get_pressed()[K_w]:
+        Variaveis_globais.grupo_players[-1].posicao_y -= velocidade_ia       
+
+    if pygame.key.get_pressed()[K_s]:
+        Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia       
+
 # cria os objetos iniciais
 criar_objetos(numero_inimigos, numero_players)
 
@@ -204,35 +219,8 @@ while True:
             quit()
             sys.exit()
         
-        # verificações para ,ovimentar o player do jogador
-        if event.type == pygame.KEYDOWN:
-            if pygame.key.get_pressed()[K_a]:
-                Variaveis_globais.comandos[0] = True     
-
-            if pygame.key.get_pressed()[K_d]:
-                Variaveis_globais.comandos[1] = True
-          
-            if pygame.key.get_pressed()[K_w]:
-                Variaveis_globais.comandos[2] = True        
-
-            if pygame.key.get_pressed()[K_s]:
-                Variaveis_globais.comandos[3] = True       
-        
-        # verificações para parar de movimentar o jogodor quando soltar a tecla
-        if event.type == pygame.KEYUP:
-            if not pygame.key.get_pressed()[K_a]:
-                Variaveis_globais.comandos[0] = False
-
-            if not pygame.key.get_pressed()[K_d]:
-                Variaveis_globais.comandos[1] = False
-
-            if not pygame.key.get_pressed()[K_w]:
-                Variaveis_globais.comandos[2] = False
-
-            if not pygame.key.get_pressed()[K_s]:
-                Variaveis_globais.comandos[3] = False
-
-
+    movimentacao_jogador()
+    
     # se todos os players foram "mortos", cria uma nova geração ou partida
     if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao_ou_nova_partida()

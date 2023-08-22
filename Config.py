@@ -15,7 +15,7 @@ altura = 500
 
 # inicia o pygame e define um limite de fps
 pygame.init()
-fps = 500
+fps = 50
 
 velocidade_projetil = 8  # 10 max no caso
 velocidade_ia = 8  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)

@@ -2,11 +2,12 @@ from Config import *
 import Variaveis_globais as Variaveis_globais
 
 class Player:
-    def __init__(self, real, indice, *args):
+    def __init__(self, real, indice):
 
         # indice que o player vai ser colocado na variavel geração atual
         self.indice = indice
 
+        # define se o player é ou não um jogador
         self.real = real
 
         # variavel para contar a quantidade de loops que o player conseguiu passar
@@ -29,10 +30,12 @@ class Player:
 
         return tempo_em_tick
     
-    
+    # atualiza o estado do player a cada geração
     def update(self):
        
+        # se não for um jogador, conta os loops e se movimenta a partir dos comandos da sua rede
         if self.real == False:
+
             # conta os loops
             self.tick += 1
 
@@ -51,20 +54,8 @@ class Player:
             self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
             draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))
 
-        else:
-            if Variaveis_globais.comandos[0] == True:
-                self.posicao_x -= velocidade_ia
-               
-            if Variaveis_globais.comandos[1] == True:
-                self.posicao_x += velocidade_ia
-               
-
-            if Variaveis_globais.comandos[2] == True:
-                self.posicao_y -= velocidade_ia
-               
-            if Variaveis_globais.comandos[3] == True:
-                self.posicao_y += velocidade_ia
-             
+        # se for um jogador troca a cor do player
+        else:          
             
             # cria um retandulo de colisão e mostra na tela
             self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
