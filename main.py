@@ -13,7 +13,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
     # cria os projeteis a partir do valor definido em Config
     for i in range(quantidade_inimigos):
 
-        projetil = Inimigo()
+        projetil = Projeteis()
         Variaveis_globais.grupo_inimigos.append(projetil)
 
 
