@@ -48,9 +48,13 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             Variaveis_globais.grupo_players.append(player)
     
     # condição para adicionar um player para o jogador
-    if partida_com_jogador == True:
-        player = Player(True, 0)
-        Variaveis_globais.grupo_players.append(player)
+    if quantidade_jogadores > 0:
+
+        # cria um ou dois players
+        for i in range(quantidade_jogadores):
+    
+            player = Player(True, 0)  # o 0 (index) para o jogador não importa
+            Variaveis_globais.grupo_players.append(player)
 
 # lógica para contar o fps
 def exibir_fps():
@@ -186,6 +190,7 @@ def nova_geracao_ou_nova_partida():
 # função para verificar se o jogador movimentou o player e responder
 def movimentacao_jogador():
 
+    # para movimentar o jogador 1
     if pygame.key.get_pressed()[K_a]:
         Variaveis_globais.grupo_players[-1].posicao_x -= velocidade_ia
 
@@ -196,7 +201,22 @@ def movimentacao_jogador():
         Variaveis_globais.grupo_players[-1].posicao_y -= velocidade_ia       
 
     if pygame.key.get_pressed()[K_s]:
-        Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia       
+        Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia     
+
+
+    # para movimentar o jogador 2
+    if pygame.key.get_pressed()[K_LEFT]:
+        Variaveis_globais.grupo_players[-2].posicao_x -= velocidade_ia
+
+    if pygame.key.get_pressed()[K_RIGHT]:
+        Variaveis_globais.grupo_players[-2].posicao_x += velocidade_ia
+    
+    if pygame.key.get_pressed()[K_UP]:
+        Variaveis_globais.grupo_players[-2].posicao_y -= velocidade_ia       
+
+    if pygame.key.get_pressed()[K_DOWN]:
+        Variaveis_globais.grupo_players[-2].posicao_y += velocidade_ia     
+
 
 # cria os objetos iniciais
 criar_objetos(numero_inimigos, numero_players)

@@ -56,7 +56,7 @@ class Player:
 
         # se for um jogador troca a cor do player
         else:          
-            
+    
             # cria um retandulo de colisão e mostra na tela
             self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
             draw.rect(tela, (000, 255, 000), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))
