@@ -189,43 +189,78 @@ def nova_geracao_ou_nova_partida():
 
 # função para verificar se o jogador movimentou o player e responder
 def movimentacao_jogador():
-    
+   
+   # define se o player está ativo ou não (o estado começa com: não ativo)
+    estado_player1 = False
+    estado_player2 = False
+
+    # se a configuração for de um jogador, confere se ele está ativo
+    if quantidade_jogadores == 1:
+        if Variaveis_globais.grupo_players[-1].real and Variaveis_globais.grupo_players[-1].indice == 0:
+            estado_player1 = True
+            player1 = -1
+
+    # se a configuração for de dois jogadores, confere se eles estão vivos e define os indices de cada um (de acordo com a situação)
+    elif quantidade_jogadores == 2:
+
+        if len(Variaveis_globais.grupo_players) > 1:
+
+            # se o player 1 tiver indice -2, automaticamente os dois players estão vivos
+            if Variaveis_globais.grupo_players[-2].indice == 0 and Variaveis_globais.grupo_players[-2].real:
+                estado_player1 = True
+                estado_player2 = True
+
+                player1 = -2
+                player2 = -1
+
+            # se um dos dois players foram eliminados, confere se um dos dois ainda está vivo
+            elif Variaveis_globais.grupo_players[-1].indice == 0 and Variaveis_globais.grupo_players[-1].real:
+                estado_player1 = True
+                player1 = -1
+            elif Variaveis_globais.grupo_players[-1].indice == 1 and Variaveis_globais.grupo_players[-1].real:
+                estado_player2 = True
+                player2 = -1
+
+        # se só houver um player possível, confere se esse player é o 1 ou o 2
+        else:
+            if Variaveis_globais.grupo_players[-1].indice == 0 and Variaveis_globais.grupo_players[-1].real:
+                estado_player1 = True
+                player1 = -1
+
+            elif Variaveis_globais.grupo_players[-1].indice == 1 and Variaveis_globais.grupo_players[-1].real:
+                estado_player2 = True
+                player2 = -1
+
     # para movimentar o jogador 1
-    if Variaveis_globais.grupo_players[-1].real and Variaveis_globais.grupo_players[-1].indice == 1:
-       
-        if pygame.key.get_pressed()[K_LEFT]:
-            Variaveis_globais.grupo_players[-1].posicao_x -= velocidade_ia
-
-        if pygame.key.get_pressed()[K_RIGHT]:
-            Variaveis_globais.grupo_players[-1].posicao_x += velocidade_ia
-        
-        if pygame.key.get_pressed()[K_UP]:
-            Variaveis_globais.grupo_players[-1].posicao_y -= velocidade_ia       
-
-        if pygame.key.get_pressed()[K_DOWN]:
-            Variaveis_globais.grupo_players[-1].posicao_y += velocidade_ia     
+    if estado_player1:
 
 
-    # para movimentar o jogador 2
-    player2 = -1
-    
-    if len(Variaveis_globais.grupo_players) > 1:  # condições para evitar bugs em certas situações
-
-        if Variaveis_globais.grupo_players[-2].indice == 0:
-            player2 = -2
-
-    if Variaveis_globais.grupo_players[player2].real:
         if pygame.key.get_pressed()[K_a]:
-            Variaveis_globais.grupo_players[player2].posicao_x -= velocidade_ia
+            Variaveis_globais.grupo_players[player1].posicao_x -= velocidade_ia
 
         if pygame.key.get_pressed()[K_d]:
-            Variaveis_globais.grupo_players[player2].posicao_x += velocidade_ia
-        
+            Variaveis_globais.grupo_players[player1].posicao_x += velocidade_ia
+
         if pygame.key.get_pressed()[K_w]:
-            Variaveis_globais.grupo_players[player2].posicao_y -= velocidade_ia       
+            Variaveis_globais.grupo_players[player1].posicao_y -= velocidade_ia
 
         if pygame.key.get_pressed()[K_s]:
-            Variaveis_globais.grupo_players[player2].posicao_y += velocidade_ia     
+            Variaveis_globais.grupo_players[player1].posicao_y += velocidade_ia
+
+    # para movimentar o jogador 2
+    if estado_player2:
+
+        if pygame.key.get_pressed()[K_LEFT]:
+            Variaveis_globais.grupo_players[player2].posicao_x -= velocidade_ia
+
+        if pygame.key.get_pressed()[K_RIGHT]:
+            Variaveis_globais.grupo_players[player2].posicao_x += velocidade_ia
+
+        if pygame.key.get_pressed()[K_UP]:
+            Variaveis_globais.grupo_players[player2].posicao_y -= velocidade_ia
+
+        if pygame.key.get_pressed()[K_DOWN]:
+            Variaveis_globais.grupo_players[player2].posicao_y += velocidade_ia
 
 
 # cria os objetos iniciais
