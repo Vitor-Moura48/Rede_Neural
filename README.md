@@ -24,7 +24,7 @@ O projeto oferece personalização através dos seguintes parâmetros da rede ne
 - Recompensa Objetivo: A recompensa objetivo influencia a taxa de mutação dos indivíduos, quanto mais próximo do objetivo, menor a taxa de mutação.
 
  
-# Funcionamento do algoritimo genético
+# Funcionamento do algoritmo genético
 
 Para melhorar o desempenho da rede neural, foi empregado o algoritmo genético. A cada geração, são selecionados de dois em dois indivíduos aleatoriamente (com maior chance dos melhores desempenhos) para gerar um novo indivíduo com características semelhantes aos "pais", essa seleção é feita até que a nova população esteja completa. Além disso, existe uma pequena chance de alguns dos genes (pesos) sofrerem mutações durante a criação do novo indivíduo, aumentando a possibilidade de alcançar um melhor desempenho.
 
