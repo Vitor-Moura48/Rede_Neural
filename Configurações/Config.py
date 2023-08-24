@@ -15,7 +15,7 @@ altura = 500
 
 # inicia o pygame e define um limite de fps
 pygame.init()
-fps = 40
+fps = 999
 
 velocidade_projetil = 8  # 10 max no caso
 velocidade_ia = 8  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
@@ -32,7 +32,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 quantidade_jogadores = 2
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 15
+partidas_por_geracao = 1
 
 # seleciona alguma pré configuração, para testes
 arquivo = 2

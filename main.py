@@ -1,5 +1,5 @@
-from Config import *
-import Variaveis_globais as Variaveis_globais
+from Configurações.Config import *
+import Configurações.Variaveis_globais as Variaveis_globais
 from Jogo.Projeteis import *
 from Rede_Neural.Criação_de_Rede import *
 from Rede_Neural.Processador import *
@@ -111,7 +111,7 @@ def nova_geracao():
 
                 # se sim, adiciona ele em um arquivo csv
                 arquivo = pandas.DataFrame(Variaveis_globais.melhor_individuo)
-                arquivo.to_csv('melhor_individuo.csv', index=False)
+                arquivo.to_csv('Rede_neural/melhor_individuo.csv', index=False)
             
         # printa o melhor tempo
         print(f'melhor tempo {Variaveis_globais.melhor_tempo}')

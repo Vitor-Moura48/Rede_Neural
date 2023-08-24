@@ -1,5 +1,5 @@
-from Config import *
-import Variaveis_globais as Variaveis_globais
+from Configurações.Config import *
+import Configurações.Variaveis_globais as Variaveis_globais
 
 class Projeteis:  # classe que gerencia os projeteis
     def __init__(self):
@@ -11,16 +11,15 @@ class Projeteis:  # classe que gerencia os projeteis
             self.angulo = numpy.radians(0)
             self.seno = numpy.sin(self.angulo)
             self.coseno = numpy.cos(self.angulo)
-            self.configuracao = 1
 
             Variaveis_globais.primeiro_inimigo += 1
+
         elif Variaveis_globais.primeiro_inimigo == 1:
             self.posicao_x = 745
             self.posicao_y = -20
-            self.angulo = numpy.radians(270)
+            self.angulo = numpy.radians(90)
             self.seno = numpy.sin(self.angulo)
             self.coseno = numpy.cos(self.angulo)
-            self.configuracao = 2
             Variaveis_globais.primeiro_inimigo += 1
 
         # spaw padrão dos projeteis

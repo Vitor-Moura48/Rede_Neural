@@ -1,4 +1,4 @@
-from Config import *
+from Configurações.Config import *
 
 # ajuda a selecionar o melhor individuo de cada geração
 melhor_tempo = 0

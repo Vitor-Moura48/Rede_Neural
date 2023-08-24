@@ -1,5 +1,5 @@
-from Config import *
-import Variaveis_globais as Variaveis_globais
+from Configurações.Config import *
+import Configurações.Variaveis_globais as Variaveis_globais
 
 class Player:
     def __init__(self, real, indice):
