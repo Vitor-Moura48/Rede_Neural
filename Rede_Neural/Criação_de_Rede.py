@@ -19,7 +19,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
                     self.camadas[-1].append(pesos) 
         
         # difinição da taxa de mutação (para o elitismo)
-        self.taxa_de_mutacao = 0.01
+        self.taxa_de_mutacao = 0.002
 
         # se for a primeira geração, chama uma função que randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:

@@ -161,7 +161,7 @@ def nova_geracao():
         Variaveis_globais.ja_sorteados = []
 
         # cria ou recria os objetos
-        criar_objetos(numero_inimigos, numero_players)
+        criar_objetos(numero_projeteis, numero_players)
 
 def nova_geracao_ou_nova_partida():
 
@@ -185,7 +185,7 @@ def nova_geracao_ou_nova_partida():
         # zera os inimigos e recria todos a frente
         Variaveis_globais.grupo_projeteis = []
 
-        criar_objetos(numero_inimigos, numero_players)
+        criar_objetos(numero_projeteis, numero_players)
 
 # função para verificar se o jogador movimentou o player e responder
 def movimentacao_jogador():
@@ -264,7 +264,7 @@ def movimentacao_jogador():
 
 
 # cria os objetos iniciais
-criar_objetos(numero_inimigos, numero_players)
+criar_objetos(numero_projeteis, numero_players)
 
 # cria classe de colisões
 colisoes = Colisoes()

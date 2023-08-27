@@ -32,7 +32,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 quantidade_jogadores = 2
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 1
+partidas_por_geracao = 10
 
 # seleciona alguma pré configuração, para testes
 arquivo = 2
@@ -52,7 +52,7 @@ if arquivo == 0:
     configuracao_de_camadas = (quantidade_entradas, 9, 4)
 
     # define o número de players e inimigos
-    numero_inimigos = 15
+    numero_projeteis = 15
     numero_players = 200
 
     # porcentagem de players que vão ser feitas a partir do melhor individuo
@@ -76,7 +76,7 @@ elif arquivo == 1:
 
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas, 4)
 
-    numero_inimigos = 15
+    numero_projeteis = 15
     numero_players = 1500
 
     numero_de_elitismo = numero_players * 0.4
@@ -96,8 +96,8 @@ elif arquivo == 2:
 
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 4, 4)
 
-    numero_inimigos = 15
-    numero_players = 100
+    numero_projeteis = 13
+    numero_players = 110
 
     numero_de_elitismo = numero_players * 0.5
 
