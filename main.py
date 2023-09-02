@@ -6,6 +6,9 @@ from Rede_Neural.Processador import *
 from Rede_Neural.Player import *
 from Jogo.Colisões import *
 
+import cProfile
+
+
 
 # função para criar os objetos
 def criar_objetos(quantidade_inimigos, quantidade_playes):   
@@ -272,6 +275,9 @@ colisoes = Colisoes()
 # loop principal
 while True:
 
+    # preenche a tela de preto (para ser redesenhada)
+    tela.fill((000, 000, 000))
+
     # função para exibir o fps
     exibir_fps()
 
@@ -294,7 +300,11 @@ while True:
     Variaveis_globais.clock.tick(fps)
 
     # atualiza e preenche o display de preto
-    pygame.display.update()
-    tela.fill((000, 000, 000))
+    pygame.display.update() 
+
+
+
+
+   
 
 
