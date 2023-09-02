@@ -67,7 +67,7 @@ class Colisoes:
                     if not player.real:
                         
                         # reduz o tempo de vida dos players que colidiram com a tela (para evitar que as próximas redes façam a mesma coisa)
-                        tempo_de_vida = player.funcao_de_perda() * 0.8
+                        tempo_de_vida = player.funcao_de_perda()
 
                         if Variaveis_globais.partida_atual_da_geracao == 0:
                         

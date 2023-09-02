@@ -29,10 +29,10 @@ fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 
 # define o número de player (até dois)
-quantidade_jogadores = 2
+quantidade_jogadores = 0
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 10
+partidas_por_geracao = 30
 
 # seleciona alguma pré configuração, para testes
 arquivo = 2
@@ -94,14 +94,14 @@ elif arquivo == 2:
 
     quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 4, 4)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
 
     numero_projeteis = 13
-    numero_players = 110
+    numero_players = 100
 
     numero_de_elitismo = numero_players * 0.5
 
-    taxa_de_mutacao_base = 0.05
+    taxa_de_mutacao_base = 0.02
   
     recompensa_objetivo = 3000 * (1 / taxa_de_mutacao_base)
 
