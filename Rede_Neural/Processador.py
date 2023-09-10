@@ -17,14 +17,18 @@ class Processador:
             self.camadas.append(arg)
     
     # funções de ativação (usadas no final)
-    def funcao_sigmoide(self, entrada):
+    def sigmoid(self, entrada):
         saida = 1 / (1 + numpy.exp(-entrada))
         return saida
 
-    def funcao_relu(self, entrada):
+    def relu(self, entrada):
         if entrada < 0:
             entrada = 0
         return entrada
+
+    def tangente_hiperbolica(self, entrada):
+        saida = (numpy.e ** entrada - numpy.e ** -entrada) / (numpy.e ** entrada + numpy.e ** -entrada)
+        return saida
 
     # utilizada para obter a porcentagem de cada 'saida final' de acordo com a proporção
     def funcao_softmax(self, saidas):
@@ -36,10 +40,13 @@ class Processador:
     def selecionar_ativacao(self, entradas, camada, neuronio, tipo):
         
         if tipo == 1:
-            return self.funcao_sigmoide(sum(entradas * self.camadas[camada - 1][neuronio]))
+            return self.sigmoid(sum(entradas * self.camadas[camada - 1][neuronio]))
 
         elif tipo == 2:
-            return self.funcao_relu(sum(entradas * self.camadas[camada - 1][neuronio]))
+            return self.relu(sum(entradas * self.camadas[camada - 1][neuronio]))
+        
+        elif tipo == 3:
+            return self.tangente_hiperbolica(sum(entradas * self.camadas[camada - 1][neuronio]))
 
 
     # função para retornar as entradas para a rede neural
@@ -48,35 +55,71 @@ class Processador:
         # variavel que vai ser retornada após passar pelas funções
         resultados_sensores = []
 
-        # função que obtem as distâncias de cada inimigo para o jogador e retorna o valor
-        def obter_distancias():
-            for projetil in Variaveis_globais.grupo_projeteis:
+        if convolucional:
+            contador_sesores_da_linha = 0
+             
 
-                informacoes_inimigo = projetil.informar_posicao()
-                distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[0]) / 110)
-                distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[1]) / 110)
+            ponto_inicial = [Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.left - ((alcance_de_visao - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.width) // 2), 
+                             Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.top - ((alcance_de_visao - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.height) // 2)]
             
-                distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
+            
+            for i in range(quantidade_entradas - 2): 
+                contador_sesores_da_linha += 1
 
-                # retorna junto algumas outras informações
-                resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3], velocidade_projetil])
+                if ponto_inicial[0] <= 0:
+                    ponto_inicial[0] = 1
+                if ponto_inicial[0] >= largura:
+                    ponto_inicial[0] = largura - 1 
+                if ponto_inicial[1] <= 0:
+                    ponto_inicial[1] = 1
+                if ponto_inicial[1] >= altura:
+                    ponto_inicial[1] = altura - 1  
 
-        # função que ordena cada coordenada (dos inimigos) de acordo com os que estão mais próximos
-        def ordenar_cada_inimigo():
-            resultados_sensores.sort(key=lambda x: x[0])
+            
+                if tela.get_at(ponto_inicial)[0] == 0:
+                    resultados_sensores.append(0)
+                elif tela.get_at(ponto_inicial)[0] == 255:
+                    resultados_sensores.append(1)
+                
+                if contador_sesores_da_linha <= (alcance_de_visao // dimensoes_projetil[0]):
+                    ponto_inicial[0] += dimensoes_projetil[0]
+                else:
+                    ponto_inicial[0] -= (alcance_de_visao // dimensoes_projetil[0] * dimensoes_projetil[0])
+                    ponto_inicial[1] += dimensoes_projetil[1]
 
-        # função que apaga as coordenadas exedentes e apaga a distancia absoluta dos resultados (usada para "ordenar cada inimigo")
-        def normatizar_o_resultado():
-            while len(resultados_sensores) > projeteis_para_entrada:
-                resultados_sensores.pop(-1)
+                    contador_sesores_da_linha = 0
 
-            for coordenada in range(projeteis_para_entrada):  
-                resultados_sensores[coordenada].pop(0)
+        
+        else:
+            # função que obtem as distâncias de cada inimigo para o jogador e retorna o valor
+            def obter_distancias():
+                for projetil in Variaveis_globais.grupo_projeteis:
 
-        # chama todas essas funções
-        obter_distancias()
-        ordenar_cada_inimigo()
-        normatizar_o_resultado()
+                    informacoes_inimigo = projetil.informar_posicao()
+                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[0]) / 110)
+                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[1]) / 110)
+                
+                    distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
+
+                    # retorna junto algumas outras informações
+                    resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3], velocidade_projetil])
+
+            # função que ordena cada coordenada (dos inimigos) de acordo com os que estão mais próximos
+            def ordenar_cada_inimigo():
+                resultados_sensores.sort(key=lambda x: x[0])
+
+            # função que apaga as coordenadas exedentes e apaga a distancia absoluta dos resultados (usada para "ordenar cada inimigo")
+            def normatizar_o_resultado():
+                while len(resultados_sensores) > projeteis_para_entrada:
+                    resultados_sensores.pop(-1)
+
+                for coordenada in range(projeteis_para_entrada):  
+                    resultados_sensores[coordenada].pop(0)
+
+            # chama todas essas funções
+            obter_distancias()
+            ordenar_cada_inimigo()
+            normatizar_o_resultado()
 
         # retorna as coordenadas mais próximas
         return resultados_sensores
@@ -94,10 +137,16 @@ class Processador:
         entrada_da_rede.append((Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[0] / 750) -1)
         entrada_da_rede.append((Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[1] / 250) -1)
         
-        # junta todos os dados que vão para a entrada da rede em uma única lista
-        for coordenada in resultados:
-            for valor in coordenada:
-                entrada_da_rede.append(valor)
+
+        if convolucional:
+            for sensor in resultados:
+                entrada_da_rede.append(sensor)
+        
+        else:
+            # junta todos os dados que vão para a entrada da rede em uma única lista
+            for coordenada in resultados:
+                for valor in coordenada:
+                    entrada_da_rede.append(valor)
 
         # transforma as listas em arrays (para facilitar os calculos)
         self.entradas_1 = numpy.array(entrada_da_rede)

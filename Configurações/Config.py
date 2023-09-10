@@ -24,6 +24,9 @@ velocidade_ia = 10  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (
 tela = pygame.display.set_mode((largura, altura))
 tela.fill((000, 000, 000))
 
+dimensoes_projetil = (10, 10)
+dimensoes_rede = (10, 10)
+
 # difine a fonte e um texto inicial para a tela
 fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
@@ -33,6 +36,8 @@ quantidade_jogadores = 0
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
 partidas_por_geracao = 30
+
+convolucional = False
 
 # seleciona alguma pré configuração, para testes
 arquivo = 2
@@ -90,15 +95,19 @@ elif arquivo == 2:
 
     bias = 0
 
-    projeteis_para_entrada = 1
-
-    quantidade_entradas = (projeteis_para_entrada * 5) + 2
-
+    if convolucional:
+        alcance_de_visao = 160
+        quantidade_entradas = (alcance_de_visao // dimensoes_projetil[0]) * (alcance_de_visao // dimensoes_projetil[1]) + 2
+    else:
+        projeteis_para_entrada = 1
+        quantidade_entradas = (projeteis_para_entrada * 5) + 2
+   
+        
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
     funcoes_de_camadas = (2, 2, True)
 
     numero_projeteis = 13
-    numero_players = 100
+    numero_players = 10
 
     numero_de_elitismo = numero_players * 0.5
 
