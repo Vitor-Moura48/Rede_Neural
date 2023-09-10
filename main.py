@@ -9,7 +9,6 @@ from Jogo.Colisões import *
 import cProfile
 
 
-
 # função para criar os objetos
 def criar_objetos(quantidade_inimigos, quantidade_playes):   
 

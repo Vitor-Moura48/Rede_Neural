@@ -18,7 +18,7 @@ pygame.init()
 fps = 999
 
 velocidade_projetil = 8  # 10 max no caso
-velocidade_ia = 8  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
+velocidade_ia = 10  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
 
 # define dimensões e cor da tela
 tela = pygame.display.set_mode((largura, altura))
@@ -95,6 +95,7 @@ elif arquivo == 2:
     quantidade_entradas = (projeteis_para_entrada * 5) + 2
 
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
+    funcoes_de_camadas = (2, 2, True)
 
     numero_projeteis = 13
     numero_players = 100
