@@ -29,6 +29,17 @@ class Player:
         tempo_em_tick = self.tick
 
         return tempo_em_tick
+
+    # retorna o valor mínimo para ativar o neuronio
+    def valor_de_ativacao(self):
+        
+        # se for sigmoid, o valor mínimo é 0.5
+        if funcoes_de_camadas[-2] == 1:
+            return 0.5
+        
+        # se for Relu, o valor mínimo é 0
+        elif funcoes_de_camadas[-2] == 2:
+            return 0
     
     # atualiza o estado do player a cada geração
     def update(self):
@@ -39,17 +50,30 @@ class Player:
             # conta os loops
             self.tick += 1
 
-            # as saidas definem a direção que o player vai tomar
-            if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[0] > 0:
-                self.posicao_x += velocidade_ia
-            if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[1] > 0:
-                self.posicao_x -= velocidade_ia
+            # se houver a função softmax, controla a direção a partir do quanto a rede "quer" ir para uma direção
+            if funcoes_de_camadas[-1] == True:
+                self.posicao_x += velocidade_ia * Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[0]
+                self.posicao_x -= velocidade_ia * Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[1]
+                self.posicao_y += velocidade_ia * Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[2]
+                self.posicao_y -= velocidade_ia * Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[3]
 
-            if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[2] > 0:
-                self.posicao_y += velocidade_ia
-            if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[3] > 0:
-                self.posicao_y -= velocidade_ia
-            
+            # as saidas definem a direção que o player vai tomar
+            else:
+                valor_de_ativacao = self.valor_de_ativacao()
+
+                if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[0] > valor_de_ativacao:
+                    self.posicao_x += velocidade_ia
+                                    
+                if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[1] > valor_de_ativacao:
+                    self.posicao_x -= velocidade_ia
+                                     
+                if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[2] > valor_de_ativacao:
+                    self.posicao_y += velocidade_ia             
+
+                if Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(self)].comandos[3] > valor_de_ativacao:
+                    self.posicao_y -= velocidade_ia
+                    
+                    
             # cria um retandulo de colisão e mostra na tela
             self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
             draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))
