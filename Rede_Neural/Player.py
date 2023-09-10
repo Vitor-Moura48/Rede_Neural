@@ -18,8 +18,8 @@ class Player:
         self.posicao_y = 250
 
         # cria um retandulo de colisão e mostra na tela
-        self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
-        draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))  
+        self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
+        draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))  
         
     # pega a quantidade de loops que o player passou e retorna esse valor
     def funcao_de_perda(self):
@@ -39,6 +39,10 @@ class Player:
         
         # se for Relu, o valor mínimo é 0
         elif funcoes_de_camadas[-2] == 2:
+            return 0
+        
+        # se for Tangente Hiperbólica, o valor mínimo é 0
+        elif funcoes_de_camadas[-2] == 3:
             return 0
     
     # atualiza o estado do player a cada geração
@@ -75,12 +79,12 @@ class Player:
                     
                     
             # cria um retandulo de colisão e mostra na tela
-            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
-            draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))
+            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
+            draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
 
         # se for um jogador troca a cor do player
         else:          
     
             # cria um retandulo de colisão e mostra na tela
-            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, 10, 10))
-            draw.rect(tela, (000, 255, 000), (self.posicao_x - 5, self.posicao_y - 5, 10, 10))
+            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
+            draw.rect(tela, (000, 255, 000), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))

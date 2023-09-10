@@ -36,7 +36,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio])):
-                    self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8)
+                    self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12)
                     self.camadas[camada][neuronio][-1] = bias
 
     # função utilizada para recriar uma geração
@@ -131,7 +131,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
 
                     # quanto maior a taxa de mutação, mais provavel daquele neuronio mudado
                     if uniform(0, 1) <= self.taxa_de_mutacao:
-                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 8) 
+                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12) 
 
         # retorna todos os pesos do individuo deposi da mutação
         return (self.camadas)

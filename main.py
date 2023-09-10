@@ -1,5 +1,6 @@
 from funcoes_main import *
 
+
 # loop principal
 while True:
 

@@ -86,6 +86,6 @@ class Projeteis:  # classe que gerencia os projeteis
         self.posicao_y += velocidade_projetil * self.seno
 
         # cria um retandulo de colisão e mostra na tela
-        self.rect_inimigo = pygame.Rect((self.posicao_x, self.posicao_y, 10, 10))
-        pygame.draw.rect(tela, (255, 000, 000), (self.posicao_x, self.posicao_y, 10, 10))
+        self.rect_inimigo = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
+        pygame.draw.rect(tela, (255, 000, 000), (self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
 
