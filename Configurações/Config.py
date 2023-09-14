@@ -9,6 +9,7 @@ import copy
 import pandas
 
 
+
 # largura e altura da tela
 largura = 1500
 altura = 500
