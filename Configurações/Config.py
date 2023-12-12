@@ -6,9 +6,9 @@ from random import *
 import math
 import time
 import copy
-import pandas
-
-
+import torch
+import os
+import json
 
 # largura e altura da tela
 largura = 1500
@@ -98,7 +98,9 @@ elif arquivo == 2:
 
     if convolucional:
         alcance_de_visao = 160
-        quantidade_entradas = (alcance_de_visao // dimensoes_projetil[0]) * (alcance_de_visao // dimensoes_projetil[1]) + 2
+        quantidade_sensores_x = (alcance_de_visao // dimensoes_projetil[0])
+        quantidade_sensores_y = (alcance_de_visao // dimensoes_projetil[1])
+        quantidade_entradas = quantidade_sensores_x * quantidade_sensores_y + 2
     else:
         projeteis_para_entrada = 1
         quantidade_entradas = (projeteis_para_entrada * 5) + 2
@@ -108,11 +110,11 @@ elif arquivo == 2:
     funcoes_de_camadas = (2, 2, True)
 
     numero_projeteis = 13
-    numero_players = 10
+    numero_players = 100
 
     numero_de_elitismo = numero_players * 0.5
 
-    taxa_de_mutacao_base = 0.02
+    taxa_de_mutacao_base = 0.04
   
     recompensa_objetivo = 3000 * (1 / taxa_de_mutacao_base)
 

@@ -22,9 +22,7 @@ class Processador:
         return saida
 
     def relu(self, entrada):
-        if entrada < 0:
-            entrada = 0
-        return entrada
+        return numpy.maximum(0, entrada)
 
     def tangente_hiperbolica(self, entrada):
         saida = (numpy.e ** entrada - numpy.e ** -entrada) / (numpy.e ** entrada + numpy.e ** -entrada)
@@ -80,11 +78,13 @@ class Processador:
                     resultados_sensores.append(0)
                 elif tela.get_at(ponto_inicial)[0] == 255:
                     resultados_sensores.append(1)
+                else:
+                    resultados_sensores.append(0.5)
                 
-                if contador_sesores_da_linha <= (alcance_de_visao // dimensoes_projetil[0]):
+                if contador_sesores_da_linha < (quantidade_sensores_x):
                     ponto_inicial[0] += dimensoes_projetil[0]
                 else:
-                    ponto_inicial[0] -= (alcance_de_visao // dimensoes_projetil[0] * dimensoes_projetil[0])
+                    ponto_inicial[0] -= (dimensoes_projetil[0] * (quantidade_sensores_x - 1))
                     ponto_inicial[1] += dimensoes_projetil[1]
 
                     contador_sesores_da_linha = 0
@@ -126,7 +126,7 @@ class Processador:
     
     # atualiza o estado da rede a cada iteração
     def update(self):
-       
+    
         # obtem as informações dos projeteis mais próximos
         resultados = self.obter_entradas()
 

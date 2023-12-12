@@ -70,12 +70,12 @@ class Colisoes:
                         tempo_de_vida = player.funcao_de_perda()
 
                         if Variaveis_globais.partida_atual_da_geracao == 0:
-                        
+           
                             pesos_individuo = []
                             pesos_individuo.append([tempo_de_vida])
                             for camada in Variaveis_globais.grupo_processadores[Variaveis_globais.grupo_players.index(player)].camadas:
                                 pesos_individuo.append(camada)
-                            
+                  
                             Variaveis_globais.geracao_atual[player.indice] = pesos_individuo
 
                         else:

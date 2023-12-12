@@ -18,7 +18,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
                     pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
                     self.camadas[-1].append(pesos) 
         
-        # difinição da taxa de mutação (para o elitismo)
+        # definição da taxa de mutação (para o elitismo)
         self.taxa_de_mutacao = 0.002
 
         # se for a primeira geração, chama uma função que randomiza todos os pesos
@@ -46,7 +46,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         if Variaveis_globais.primeiro_individuo < numero_de_elitismo:  # pode ser feito mais de um clone no melhor individuo
           
             # obtem os pesos do melhor individuo
-            self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo)
+            self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo[1:])
         
             # registra que foi feita mais uma cópia
             Variaveis_globais.primeiro_individuo += 1
@@ -128,7 +128,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio]) - 1):
-
+        
                     # quanto maior a taxa de mutação, mais provavel daquele neuronio mudado
                     if uniform(0, 1) <= self.taxa_de_mutacao:
                         self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12) 

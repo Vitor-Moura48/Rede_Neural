@@ -1,9 +1,19 @@
 from Configurações.Config import *
 
-# ajuda a selecionar o melhor individuo de cada geração
-melhor_tempo = 0
+# se o arquivo de melhor individuo existir
+if os.path.exists("Rede_Neural/melhor_individuo.json"):
 
-melhor_individuo = []
+    # lê o arquivo e armazena os pesos
+    with open("Rede_neural/melhor_individuo.json", 'r') as arquivo:
+        camadas = json.load(arquivo)
+
+    melhor_individuo = camadas
+    melhor_tempo = camadas[0][0]
+
+else:
+    melhor_individuo = []
+    # ajuda a selecionar o melhor individuo de cada geração
+    melhor_tempo = 0
 
 contador_geracoes = 0
 

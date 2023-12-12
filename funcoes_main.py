@@ -101,22 +101,41 @@ def nova_geracao():
         Variaveis_globais.valores_proporcionais = []
         Variaveis_globais.primeiro_inimigo = 0
         Variaveis_globais.grupo_projeteis = []
-       
+
+        melhor_tempo_da_geracao = 0
         # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
         for individuo in range(numero_players):
             Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
 
+            # marca o melhor tempo da geração
+            if Variaveis_globais.geracao_atual[individuo][0][0] > melhor_tempo_da_geracao:
+                melhor_tempo_da_geracao = Variaveis_globais.geracao_atual[individuo][0][0]      
+
             # confere se existe um novo melhor individuo
             if Variaveis_globais.geracao_atual[individuo][0][0] > Variaveis_globais.melhor_tempo:
                 Variaveis_globais.melhor_tempo = Variaveis_globais.geracao_atual[individuo][0][0]
-                Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo][1:]
+                Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo]
+
+                # tranforma os dados ndrray em listas normais
+                pesos_normalizados = []
+                for camada in Variaveis_globais.melhor_individuo:
+                    camada_atual = []
+
+                    for neuronio in camada:
+                        if isinstance(neuronio, numpy.ndarray):
+                            camada_atual.append(neuronio.tolist())
+                        else:
+                            camada_atual.append(neuronio)
+                    pesos_normalizados.append(camada_atual)   
 
                 # se sim, adiciona ele em um arquivo csv
-                arquivo = pandas.DataFrame(Variaveis_globais.melhor_individuo)
-                arquivo.to_csv('Rede_neural/melhor_individuo.csv', index=False)
-            
+                with open("Rede_neural/melhor_individuo.json", 'w') as arquivo:
+                    json.dump(pesos_normalizados, arquivo)
+    
+
         # printa o melhor tempo
-        print(f'melhor tempo {Variaveis_globais.melhor_tempo}')
+        print(f'melhor tempo global: {Variaveis_globais.melhor_tempo}')
+        print(f"melhor tempo da partida; {melhor_tempo_da_geracao}")
 
         # pega a geração atual e passa ela para as gerações passadas, se for a primeira, duplica ela
         if Variaveis_globais.contador_geracoes == 1:
