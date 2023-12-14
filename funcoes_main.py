@@ -28,7 +28,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             # cria a rede para processar as entradas
             nova_rede = CriarRedeNeural()
             resultado = nova_rede.randomizar_resultados()
-            processador = Processador(indice_do_player_na_geracao, *resultado)     
+            processador = Processador(indice_do_player_na_geracao, resultado)     
             
             # cria o player, que vai aparecer na tela
             player = Player(False, indice_do_player_na_geracao)
@@ -41,7 +41,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
 
         # se não, copia as redes daquela geração
         else:
-            processador = Processador(indice_do_player_na_geracao, *Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
+            processador = Processador(indice_do_player_na_geracao, Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
 
             player = Player(False, indice_do_player_na_geracao)
 

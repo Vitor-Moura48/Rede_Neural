@@ -4,18 +4,16 @@ import Configurações.Variaveis_globais as Variaveis_globais
 
 # classe que gerencia o player
 class Processador:
-    def __init__(self, indice, *args):
+    def __init__(self, indice, camadas):
 
         # indice que o player vai ser colocado na variavel geração atual
         self.indice = indice
+
+        self.camadas = camadas
     
         # variavel que vai armazenar todos os pesos daquela rede (gerados na criação de rede)
-        self.camadas = []
+        self.tensores = [torch.tensor(camada, dtype=torch.float64) for camada in camadas] ##############################
 
-        # cada arg é uma camada
-        for arg in args:
-            self.camadas.append(arg)
-    
     # funções de ativação (usadas no final)
     def sigmoid(self, entrada):
         saida = 1 / (1 + numpy.exp(-entrada))
@@ -24,6 +22,10 @@ class Processador:
     def relu(self, entrada):
         return numpy.maximum(0, entrada)
 
+    # é a função relu com um coeficiente para valores negativos
+    def learkrelu(self, entrada):
+        return numpy.maximum(entrada * 0.1, entrada)
+    
     def tangente_hiperbolica(self, entrada):
         saida = (numpy.e ** entrada - numpy.e ** -entrada) / (numpy.e ** entrada + numpy.e ** -entrada)
         return saida
@@ -31,21 +33,25 @@ class Processador:
     # utilizada para obter a porcentagem de cada 'saida final' de acordo com a proporção
     def funcao_softmax(self, saidas):
         resultado = numpy.exp(saidas)/sum(numpy.exp(saidas))
-        
+ 
         return resultado
    
     # seleciona a função de ativação de acordo com a configuração
     def selecionar_ativacao(self, entradas, camada, neuronio, tipo):
-        
-        if tipo == 1:
+
+        if tipo == 4:
+            return self.learkrelu(sum(entradas * self.camadas[camada - 1][neuronio]))     
+               
+        elif tipo == 1:
             return self.sigmoid(sum(entradas * self.camadas[camada - 1][neuronio]))
 
         elif tipo == 2:
+       
             return self.relu(sum(entradas * self.camadas[camada - 1][neuronio]))
         
         elif tipo == 3:
             return self.tangente_hiperbolica(sum(entradas * self.camadas[camada - 1][neuronio]))
-
+    
 
     # função para retornar as entradas para a rede neural
     def obter_entradas(self):
@@ -102,7 +108,7 @@ class Processador:
                     distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
 
                     # retorna junto algumas outras informações
-                    resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3], velocidade_projetil])
+                    resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3]])
 
             # função que ordena cada coordenada (dos inimigos) de acordo com os que estão mais próximos
             def ordenar_cada_inimigo():
@@ -144,45 +150,25 @@ class Processador:
         
         else:
             # junta todos os dados que vão para a entrada da rede em uma única lista
-            for coordenada in resultados:
-                for valor in coordenada:
-                    entrada_da_rede.append(valor)
+            for dado in resultados[0]:
+                entrada_da_rede.append(dado)
+        
+        self.entrada_da_rede_tensor = torch.tensor(entrada_da_rede, dtype=torch.float64) ##################################################
 
-        # transforma as listas em arrays (para facilitar os calculos)
-        self.entradas_1 = numpy.array(entrada_da_rede)
-
-        # armazena o resultado dos calculos de cada neuronios e divide em camadas
-        self.processamentos_da_rede = []
+        # armazena o resultado dos calculos de cada neuronio e divide em camadas
+        self.processamentos_da_rede_tensor = [self.entrada_da_rede_tensor]  ###########################################
 
         # Faz todos os calculos de cada camada e armazena na variavel acima
         for camada in range(1, len(configuracao_de_camadas)):
 
-            # zera o processamento da camada a cada iteração do for
-            processamento_da_camada = []
-            
+            saida_camada_tensor = torch.matmul(self.processamentos_da_rede_tensor[-1], self.tensores[camada - 1].t()) ###########################################
+            saida_camada_tensor_ativada = torch.relu(saida_camada_tensor) ################################
+            self.processamentos_da_rede_tensor.append(saida_camada_tensor_ativada) ######################################
 
-            # se for a primeira camada, faz os calculos com a lista de entradas já obtida
-            if camada == 1:
-                
-                # multiplica cada valor de entrada pelo seu respectivo peso, soma tudo e passa esse valor pelafunção de ativação (para cada neuronio de cada camada)
-                for neuronio in range(configuracao_de_camadas[camada]):       
-                    processamento_neuronio = self.selecionar_ativacao(self.entradas_1, camada, neuronio, funcoes_de_camadas[camada - 1])
-
-                    # adiciona o processamento do neuronio na lista daquela camada
-                    processamento_da_camada.append(processamento_neuronio)             
-                
-            else:
-                # mesma lógica, porém usa a camada anterior como entrada para a camada atual
-                for neuronio in range(configuracao_de_camadas[camada]):     
-                    processamento_neuronio = self.selecionar_ativacao(self.processamentos_da_rede[-1], camada, neuronio, funcoes_de_camadas[camada - 1])
-                    processamento_da_camada.append(processamento_neuronio)
-            
-            # a cada camada concluída, adiciona ela em uma lista (para ser usada como entrada para a próxima)
-            self.processamentos_da_rede.append(numpy.array(processamento_da_camada))
-        
+          
         if funcoes_de_camadas[-1] == True:
-            self.processamentos_da_rede[-1] = self.funcao_softmax(self.processamentos_da_rede[-1])
-        
+            self.processamentos_da_rede_tensor[-1] = self.funcao_softmax(self.processamentos_da_rede_tensor[-1]) ########################################
+
         # variavel que contem o valor de saída da rede neural
-        self.comandos = self.processamentos_da_rede[-1]
-            
+        self.comandos = self.processamentos_da_rede_tensor[-1].tolist()
+

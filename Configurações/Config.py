@@ -6,9 +6,10 @@ from random import *
 import math
 import time
 import copy
-import torch
 import os
 import json
+from cProfile import run
+import torch
 
 # largura e altura da tela
 largura = 1500
@@ -36,7 +37,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 quantidade_jogadores = 0
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 30
+partidas_por_geracao = 10
 
 convolucional = False
 
@@ -103,20 +104,20 @@ elif arquivo == 2:
         quantidade_entradas = quantidade_sensores_x * quantidade_sensores_y + 2
     else:
         projeteis_para_entrada = 1
-        quantidade_entradas = (projeteis_para_entrada * 5) + 2
+        quantidade_entradas = (projeteis_para_entrada * 4) + 2
    
         
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
-    funcoes_de_camadas = (2, 2, True)
+    funcoes_de_camadas = (2, 2, False)
 
-    numero_projeteis = 13
-    numero_players = 100
+    numero_projeteis = 4
+    numero_players = 200
 
     numero_de_elitismo = numero_players * 0.5
 
-    taxa_de_mutacao_base = 0.04
+    taxa_de_mutacao_base = 0.05
   
-    recompensa_objetivo = 3000 * (1 / taxa_de_mutacao_base)
+    recompensa_objetivo = 4000 * (1 / taxa_de_mutacao_base)
 
 
 
