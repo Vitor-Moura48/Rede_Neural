@@ -37,7 +37,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio])):
                     self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12)
-                    self.camadas[camada][neuronio][-1] = bias
+                self.camadas[camada][neuronio][-1] = bias
 
     # função utilizada para recriar uma geração
     def reproduzir_geracao(self):

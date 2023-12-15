@@ -28,7 +28,6 @@ class Projeteis:  # classe que gerencia os projeteis
 
     # função para tornar aleatorio a direção e ponto de partida dos projeteis
     def spaw(self):
-        global tela
 
         # randomiza se o spaw vai ser "esqueda/direita" ou "cima/baixo"
         self.configuracao = choice([1, 2])

@@ -167,7 +167,7 @@ class Processador:
 
           
         if funcoes_de_camadas[-1] == True:
-            self.processamentos_da_rede_tensor[-1] = self.funcao_softmax(self.processamentos_da_rede_tensor[-1]) ########################################
+            self.processamentos_da_rede_tensor[-1] = torch.softmax(self.processamentos_da_rede_tensor[-1], dim=0) ########################################
 
         # variavel que contem o valor de saída da rede neural
         self.comandos = self.processamentos_da_rede_tensor[-1].tolist()

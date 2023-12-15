@@ -6,9 +6,6 @@ from Rede_Neural.Processador import *
 from Rede_Neural.Player import *
 from Jogo.Colisões import *
 
-import cProfile
-
-
 # função para criar os objetos
 def criar_objetos(quantidade_inimigos, quantidade_playes):   
 
@@ -77,16 +74,17 @@ def exibir_fps():
     # exibe a taxa de fps no display
     tela.blit(mensagem_fps_para_tela, (1350, 50))
 
+def update_processador(processador):
+        processador.update()
 
 # atualiza todos os objetos
 def atualizar_objetos():
-
     for inimigo in Variaveis_globais.grupo_projeteis:
         inimigo.update()
-
+    
     for processador in Variaveis_globais.grupo_processadores:
         processador.update()
-
+    
     for player in Variaveis_globais.grupo_players:
         player.update()
 

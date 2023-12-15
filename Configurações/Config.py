@@ -37,7 +37,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 quantidade_jogadores = 0
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 10
+partidas_por_geracao = 2
 
 convolucional = False
 
@@ -95,7 +95,7 @@ elif arquivo == 1:
 # teste com entradas minimas, elitismo médio
 elif arquivo == 2:
 
-    bias = 0
+    bias = 1
 
     if convolucional:
         alcance_de_visao = 160
@@ -108,10 +108,10 @@ elif arquivo == 2:
    
         
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
-    funcoes_de_camadas = (2, 2, False)
+    funcoes_de_camadas = (2, 2, True)
 
     numero_projeteis = 4
-    numero_players = 200
+    numero_players = 400
 
     numero_de_elitismo = numero_players * 0.5
 
