@@ -5,51 +5,49 @@ import Configurações.Variaveis_globais as Variaveis_globais
 class CriarRedeNeural:  # classe responsável por criar a rede neural
     def __init__(self):
 
-        # variavel onde vão ser colocados os pesos (para retornar-los no final)
+        # variavel onde vão ser colocados os pesos 
         self.camadas = []
 
-        # lógica para criação automatica da rede neural (variavel de definição em Config)
-        for camada in range(len(configuracao_de_camadas) - 1):  # -1 porque a ultima camada não passa os pesos para nenhuma outra
+        # cria a estrutura com base nas configurações definidas
+        for camada in range(len(configuracao_de_camadas) - 1):  # -1 porque a primeira camada é  de entrada inicial
             self.camadas.append([])
 
-            for neuronios in range(configuracao_de_camadas[camada + 1]): # +1 porque a primeira camada é apenas a camada de entrada
-
-                    # adiciona os pesos (de cada neuronio) na sua respectiva camada
-                    pesos = numpy.array([0] * configuracao_de_camadas[camada], dtype=float)
-                    self.camadas[-1].append(pesos) 
+            for neuronio in range(configuracao_de_camadas[camada + 1]): # +1 porque a primeira camada é apenas a camada de entrada
+                # adiciona os pesos (de cada neuronio) na sua respectiva camada
+                self.camadas[-1].append(numpy.array([0] * configuracao_de_camadas[camada], dtype=float)) 
         
-        # definição da taxa de mutação (para o elitismo)
-        self.taxa_de_mutacao = 0.002
+        # definição da taxa de mutação
+        self.taxa_de_mutacao = taxa_de_mutacao_base
 
         # se for a primeira geração, chama uma função que randomiza todos os pesos
         if Variaveis_globais.contador_geracoes == 0:
-            self.criar_geracao()
+            self.iniciar_geracoes()
             
         # caso não for a primeira geração, ele faz uma nova a partir da(s) anterior(es)
         else: 
-            self.reproduzir_geracao()     
+            self.nova_geracao()
 
     # função utilizada para criar a primeira geração
-    def criar_geracao(self):
+    def iniciar_geracoes(self):
                 
         # randomizando cada peso de forma aleatória
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio])):
-                    self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12)
+                    self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 16)
                 self.camadas[camada][neuronio][-1] = bias
 
-    # função utilizada para recriar uma geração
-    def reproduzir_geracao(self):
+    # função utilizada para criar um anova geração
+    def nova_geracao(self):
 
         # o melhor individuo sempre será passado para a próxima geração
-        if Variaveis_globais.primeiro_individuo < numero_de_elitismo:  # pode ser feito mais de um clone no melhor individuo
+        if Variaveis_globais.individuos_elite < numero_de_elitismo:  # pode ser feito mais de uma cópia do melhor indivíduo
           
-            # obtem os pesos do melhor individuo
+            # obtem os pesos do melhor indivíduo
             self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo[1:])
         
             # registra que foi feita mais uma cópia
-            Variaveis_globais.primeiro_individuo += 1
+            Variaveis_globais.individuos_elite += 1
 
         # faz um sorteio dos individuos com preferencia dos melhores
         else:
@@ -131,7 +129,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         
                     # quanto maior a taxa de mutação, mais provavel daquele neuronio mudado
                     if uniform(0, 1) <= self.taxa_de_mutacao:
-                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 12) 
+                        self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 16) 
 
         # retorna todos os pesos do individuo deposi da mutação
         return (self.camadas)

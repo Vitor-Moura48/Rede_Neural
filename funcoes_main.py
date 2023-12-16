@@ -15,26 +15,23 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         projetil = Projeteis()
         Variaveis_globais.grupo_projeteis[i] = projetil 
 
-
     # cria os players a partir do valor definido em Config
     for indice_do_player_na_geracao in range(quantidade_playes):
-        
-        # se for o inicio de uma nova geração ele cria a nova geração normalmente
+
+        # cria o player, que vai aparecer na tela
+        player = Player(False, indice_do_player_na_geracao)
+
+        # se for o início de uma nova geração ele cria a nova geração normalmente
         if Variaveis_globais.partida_atual_da_geracao == 0:
 
             # cria a rede para processar as entradas
             nova_rede = CriarRedeNeural()
             resultado = nova_rede.randomizar_resultados()
             processador = Processador(indice_do_player_na_geracao, resultado) 
-            
-            # cria o player, que vai aparecer na tela
-            player = Player(False, indice_do_player_na_geracao)
-
+         
         # se não, copia as redes daquela geração
         else:
             processador = Processador(indice_do_player_na_geracao, Variaveis_globais.geracao_atual[indice_do_player_na_geracao][1:])
-
-            player = Player(False, indice_do_player_na_geracao)
 
         # adiciona do grupo de redes e players novamente
         Variaveis_globais.grupo_processadores[indice_do_player_na_geracao] = processador
@@ -68,9 +65,6 @@ def exibir_fps():
     # exibe a taxa de fps no display
     tela.blit(mensagem_fps_para_tela, (1350, 50))
 
-def update_processador(processador):
-        processador.update()
-
 # atualiza todos os objetos
 def atualizar_objetos():
     for projetil in Variaveis_globais.grupo_projeteis.values():
@@ -87,99 +81,74 @@ def atualizar_objetos():
 
 # função para criar uma nova geração
 def nova_geracao():
-        
-        # zera algumas variaveis que serão usadas a frente
-        Variaveis_globais.juncao_de_geracoes = []     
-        Variaveis_globais.valores_proporcionais = []
-        Variaveis_globais.primeiro_inimigo = 0
-        Variaveis_globais.grupo_projeteis = {}
+    
+    # zera algumas variaveis que serão usadas depois
+    Variaveis_globais.individuos_elite = 0
+    Variaveis_globais.ja_sorteados = []
+    Variaveis_globais.juncao_de_geracoes = []     
+    Variaveis_globais.grupo_projeteis = {}
 
-        melhor_tempo_da_geracao = 0
-        # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
-        for individuo in range(numero_players):
-            Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
+    melhor_tempo_da_geracao = 0
+    # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
+    for individuo in range(numero_players):
+        Variaveis_globais.geracao_atual[individuo][0][0] /= partidas_por_geracao
 
-            # marca o melhor tempo da geração
-            if Variaveis_globais.geracao_atual[individuo][0][0] > melhor_tempo_da_geracao:
-                melhor_tempo_da_geracao = Variaveis_globais.geracao_atual[individuo][0][0]      
+        # marca o melhor tempo da geração
+        if Variaveis_globais.geracao_atual[individuo][0][0] > melhor_tempo_da_geracao:
+            melhor_tempo_da_geracao = Variaveis_globais.geracao_atual[individuo][0][0]      
 
             # confere se existe um novo melhor individuo
             if Variaveis_globais.geracao_atual[individuo][0][0] > Variaveis_globais.melhor_tempo:
                 Variaveis_globais.melhor_tempo = Variaveis_globais.geracao_atual[individuo][0][0]
                 Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo]
 
-                # tranforma os dados ndrray em listas normais
-                pesos_normalizados = []
-                for camada in Variaveis_globais.melhor_individuo:
-                    camada_atual = []
-
-                    for neuronio in camada:
-                        if isinstance(neuronio, numpy.ndarray):
-                            camada_atual.append(neuronio.tolist())
-                        else:
-                            camada_atual.append(neuronio)
-                    pesos_normalizados.append(camada_atual)   
-
+                # tranforma os dados ndrray em listas normais 
+                pesos_normalizados = [neuronio.to_list() if isinstance(neuronio, numpy.ndarray) else neuronio 
+                                        for camada in Variaveis_globais.melhor_individuoneuronio 
+                                            for neuronio in camada]
+                
                 # se sim, adiciona ele em um arquivo csv
                 with open("Rede_neural/melhor_individuo.json", 'w') as arquivo:
                     json.dump(pesos_normalizados, arquivo)
-    
 
-        # printa o melhor tempo
-        print(f'melhor tempo global: {Variaveis_globais.melhor_tempo}')
-        print(f"melhor tempo da partida; {melhor_tempo_da_geracao}")
+    # printa o melhor tempo
+    print(f'melhor tempo global: {Variaveis_globais.melhor_tempo}')
+    print(f"melhor tempo da partida; {melhor_tempo_da_geracao}")
 
-        # pega a geração atual e passa ela para as gerações passadas, se for a primeira, duplica ela
-        if Variaveis_globais.contador_geracoes == 1:
-            Variaveis_globais.geracao_avo = Variaveis_globais.geracao_atual
-            Variaveis_globais.geracao_anterior = Variaveis_globais.geracao_atual
+    # pega a geração atual e passa ela para as gerações passadas
+    Variaveis_globais.geracao_avo = Variaveis_globais.geracao_anterior
+    Variaveis_globais.geracao_anterior = Variaveis_globais.geracao_atual
 
-        else:
-            Variaveis_globais.geracao_avo = Variaveis_globais.geracao_anterior
-            Variaveis_globais.geracao_anterior = Variaveis_globais.geracao_atual
+    # junta as duas gerações mais recentes e organiza os individuos pela recompensa obtida por cada um  
+    Variaveis_globais.juncao_de_geracoes = Variaveis_globais.geracao_avo + Variaveis_globais.geracao_anterior
+    Variaveis_globais.juncao_de_geracoes.sort(key=lambda x: x[0])
 
-        # junta as duas gerações mais recentes e organiza os individuos pela recompensa obtida por cada um  
-        Variaveis_globais.juncao_de_geracoes = Variaveis_globais.geracao_avo + Variaveis_globais.geracao_anterior
-        Variaveis_globais.juncao_de_geracoes.sort(key=lambda x: x[0])
+    # soma todas as recompensas dos individuos
+    total_de_recompesa = sum(individuo[0][0] for individuo in Variaveis_globais.juncao_de_geracoes)
+   
+    Variaveis_globais.valores_proporcionais = [Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa]
+    # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
+    for individuo in range(1, len(Variaveis_globais.juncao_de_geracoes) - 1):
 
-        total_de_recompesa = 0
+        # soma o valor anterior com o do individuo (para manter os valores "progredindo")
+        Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] + Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
+                    
+    # zera a geração atual para ser preenchida novamente
+    Variaveis_globais.geracao_atual = []
+    # recria a estrutura da geração atual (vazia)
+    for individuo in range(numero_players):
+        Variaveis_globais.geracao_atual.append([])
 
-        # soma todas as recompensas dos individuos
-        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):      
-            total_de_recompesa += int(Variaveis_globais.juncao_de_geracoes[individuo][0][0])
-
-        
-        # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
-        for individuo in range(len(Variaveis_globais.juncao_de_geracoes)):
-
-            # adiciona o valor do primeiro individuo normalmente
-            if individuo == 0:
-                Variaveis_globais.valores_proporcionais.append(Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
-
-                # soma o valor anterior com o do individuo (para manter os valores "progredindo")
-            else:
-                Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] +
-                                             Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
-                      
-       
-        # zera a geração atual para ser preenchida novamente
-        Variaveis_globais.geracao_atual = []
-
-        # recria a estrutura da geração atual (vazia)
-        for individuo in range(numero_players):
-            Variaveis_globais.geracao_atual.append([])
-
-        # zera variaveis que vão ser usadas depois
-        Variaveis_globais.primeiro_individuo = 0
-        Variaveis_globais.ja_sorteados = []
-
-        # cria ou recria os objetos
-        criar_objetos(numero_projeteis, numero_players)
+    # cria ou recria os objetos
+    criar_objetos(numero_projeteis, numero_players)
 
 def nova_geracao_ou_nova_partida():
 
     # registra a conclusão de uma partida
-    Variaveis_globais.partida_atual_da_geracao += 1
+    Variaveis_globais.partida_atual_da_geracao += 1    
+
+    # zera a variavel que ajuda a eliminar os piores players
+    Variaveis_globais.primeiro_inimigo = 0
 
     # confere se a quantidade escolhida de partidas por geração foi completa, se sim, cria a nova geração normalmente
     if Variaveis_globais.partida_atual_da_geracao == partidas_por_geracao:
@@ -192,15 +161,13 @@ def nova_geracao_ou_nova_partida():
         nova_geracao()
 
     else:
-        # zera a variavel que ajuda a eliminar os piores players
-        Variaveis_globais.primeiro_inimigo = 0
-
-        # zera os inimigos e recria todos a frente
+        
+        # zera os inimigos e recria todos depois
         Variaveis_globais.grupo_projeteis = {}
 
         criar_objetos(numero_projeteis, numero_players)
 
-# função para verificar se o jogador movimentou o player e responder
+# função para verificar se o jogador movimentou o player e responder (melhorar depois)
 def movimentacao_jogador():
    
    # define se o player está ativo ou não (o estado começa com: não ativo)

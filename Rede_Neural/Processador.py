@@ -6,50 +6,25 @@ class Processador:
     def __init__(self, indice, camadas):
 
         self.indice = indice
-
         self.camadas = camadas
     
         # variavel que vai armazenar todos os pesos daquela rede (gerados na criação de rede)
         self.tensores = [torch.tensor(camada, dtype=torch.float64) for camada in camadas] ##############################
 
-    # funções de ativação (usadas no final)
-    def sigmoid(self, entrada):
-        saida = 1 / (1 + numpy.exp(-entrada))
-        return saida
-
-    def relu(self, entrada):
-        return numpy.maximum(0, entrada)
-
-    # é a função relu com um coeficiente para valores negativos
-    def learkrelu(self, entrada):
-        return numpy.maximum(entrada * 0.1, entrada)
-    
-    def tangente_hiperbolica(self, entrada):
-        saida = (numpy.e ** entrada - numpy.e ** -entrada) / (numpy.e ** entrada + numpy.e ** -entrada)
-        return saida
-
-    # utilizada para obter a porcentagem de cada 'saida final' de acordo com a proporção
-    def funcao_softmax(self, saidas):
-        resultado = numpy.exp(saidas)/sum(numpy.exp(saidas))
- 
-        return resultado
-   
     # seleciona a função de ativação de acordo com a configuração
-    def selecionar_ativacao(self, entradas, camada, neuronio, tipo):
+    def aplicar_ativacao(self, tensor, tipo):
 
-        if tipo == 4:
-            return self.learkrelu(sum(entradas * self.camadas[camada - 1][neuronio]))     
-               
-        elif tipo == 1:
-            return self.sigmoid(sum(entradas * self.camadas[camada - 1][neuronio]))
-
+        if tipo == 1:
+            return F.sigmoid(tensor)
+            
         elif tipo == 2:
-       
-            return self.relu(sum(entradas * self.camadas[camada - 1][neuronio]))
+            return F.relu(tensor)
         
         elif tipo == 3:
-            return self.tangente_hiperbolica(sum(entradas * self.camadas[camada - 1][neuronio]))
+            return F.tanh(tensor)
     
+        if tipo == 4:
+            return F.leaky_relu(tensor)
 
     # função para retornar as entradas para a rede neural
     def obter_entradas(self):
@@ -60,10 +35,8 @@ class Processador:
         if convolucional:
             contador_sesores_da_linha = 0
              
-
-            ponto_inicial = [Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.left - ((alcance_de_visao - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.width) // 2), 
-                             Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.top - ((alcance_de_visao - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.height) // 2)]
-            
+            ponto_inicial = [Variaveis_globais.grupo_players[self.indice].rect.left - ((alcance_de_visao - Variaveis_globais.grupo_players[self.indice].rect.width) // 2), 
+                             Variaveis_globais.grupo_players[self.indice].rect.top - ((alcance_de_visao - Variaveis_globais.grupo_players[self.indice].rect.height) // 2)]
             
             for i in range(quantidade_entradas - 2): 
                 contador_sesores_da_linha += 1
@@ -93,7 +66,6 @@ class Processador:
 
                     contador_sesores_da_linha = 0
 
-        
         else:
             # função que obtem as distâncias de cada inimigo para o jogador e retorna o valor
           
@@ -102,8 +74,8 @@ class Processador:
                     
                     informacoes_inimigo = projetil.informar_posicao()
 
-                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[self.indice].rect_player.center[0]) / 110)
-                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[self.indice].rect_player.center[1]) / 110)
+                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[self.indice].rect.center[0]) / 110)
+                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[self.indice].rect.center[1]) / 110)
                     
                     distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
 
@@ -137,12 +109,7 @@ class Processador:
         resultados = self.obter_entradas()
 
         # variavel que vai conter os dados de entrada da rede
-        entrada_da_rede = []
-
-        # adiciona como entrada a distancia para cada canto da tela
-        entrada_da_rede.append((Variaveis_globais.grupo_players[self.indice].rect_player.center[0] / 750) -1)
-        entrada_da_rede.append((Variaveis_globais.grupo_players[self.indice].rect_player.center[1] / 250) -1)
-        
+        entrada_da_rede = [(Variaveis_globais.grupo_players[self.indice].rect.center[0] / 750) -1, (Variaveis_globais.grupo_players[self.indice].rect.center[1] / 250) -1]
 
         if convolucional:
             for sensor in resultados:
@@ -150,24 +117,21 @@ class Processador:
         
         else:
             # junta todos os dados que vão para a entrada da rede em uma única lista
-            for dado in resultados[0]:
-                entrada_da_rede.append(dado)
+            for projetil in resultados:
+                entrada_da_rede.extend(projetil)
         
-        self.entrada_da_rede_tensor = torch.tensor(entrada_da_rede, dtype=torch.float64) ##################################################
-
-        # armazena o resultado dos calculos de cada neuronio e divide em camadas
-        self.processamentos_da_rede_tensor = [self.entrada_da_rede_tensor]  ###########################################
+        # armazena o resultado das entradas ou de alguma fase intermediária
+        self.estado_atual_da_rede = torch.tensor(entrada_da_rede, dtype=torch.float64)  ###########################################
 
         # Faz todos os calculos de cada camada e armazena na variavel acima
         for camada in range(1, len(configuracao_de_camadas)):
 
-            saida_camada_tensor = torch.matmul(self.processamentos_da_rede_tensor[-1], self.tensores[camada - 1].t()) ###########################################
-            saida_camada_tensor_ativada = torch.relu(saida_camada_tensor) ################################
-            self.processamentos_da_rede_tensor.append(saida_camada_tensor_ativada) ######################################
+            saida_camada_tensor = torch.matmul(self.estado_atual_da_rede, self.tensores[camada - 1].t()) ###########################################
+            saida_camada_tensor_ativada = self.aplicar_ativacao(saida_camada_tensor, Variaveis_globais.funcoes_de_camadas[camada - 1])
+            self.estado_atual_da_rede = saida_camada_tensor_ativada ######################################
 
-          
         if funcoes_de_camadas[-1] == True:
-            self.processamentos_da_rede_tensor[-1] = torch.softmax(self.processamentos_da_rede_tensor[-1], dim=0) ########################################
+            self.estado_atual_da_rede = torch.softmax(self.estado_atual_da_rede, dim=0) ########################################
 
         # variavel que contem o valor de saída da rede neural
-        self.comandos = self.processamentos_da_rede_tensor[-1].tolist()
+        self.comandos = self.estado_atual_da_rede.tolist()

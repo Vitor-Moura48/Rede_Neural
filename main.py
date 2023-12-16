@@ -4,7 +4,6 @@ run('''
 # loop principal
 while True:
     
-
     # preenche a tela de preto (para ser redesenhada)
     tela.fill((000, 000, 000))
 
@@ -20,7 +19,7 @@ while True:
             quit()
             sys.exit()
     
-    # se todos os players foram "mortos", cria uma nova geração ou partida
+    # se todos os players foram eliminados, cria uma nova geração ou partida
     if len(Variaveis_globais.grupo_players) == 0:
         nova_geracao_ou_nova_partida()
 
@@ -30,9 +29,8 @@ while True:
     # define um limite de fps
     Variaveis_globais.clock.tick(fps)
 
-    # atualiza e preenche o display de preto
+    # atualiza o display
     pygame.display.update() 
-
 
 ''')
 

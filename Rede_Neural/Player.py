@@ -17,19 +17,11 @@ class Player:
         self.posicao_x = 750
         self.posicao_y = 250
 
+        self.valor_de_ativacao = self.valor_de_ativacao()
+
         # cria um retandulo de colisão e mostra na tela
-        self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
-        draw.rect(tela, (000, 000, 255), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))  
-        
-    # pega a quantidade de loops que o player passou e retorna esse valor
-    def funcao_de_perda(self):
-
-        '''fim = time.time()
-        tempo_normalizado = (fim - self.inicio) / 60'''
-        tempo_em_tick = self.tick
-
-        return tempo_em_tick
-
+        self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_rede[0], dimensoes_rede[1]))
+     
     # retorna o valor mínimo para ativar o neuronio
     def valor_de_ativacao(self):
         
@@ -56,37 +48,33 @@ class Player:
 
             # se houver a função softmax, controla a direção a partir do quanto a rede "quer" ir para uma direção
             if funcoes_de_camadas[-1] == True:
-                self.posicao_x += velocidade_ia * Variaveis_globais.grupo_processadores[self.indice].comandos[0]
-                self.posicao_x -= velocidade_ia * Variaveis_globais.grupo_processadores[self.indice].comandos[1]
-                self.posicao_y += velocidade_ia * Variaveis_globais.grupo_processadores[self.indice].comandos[2]
-                self.posicao_y -= velocidade_ia * Variaveis_globais.grupo_processadores[self.indice].comandos[3]
+                self.posicao_x += velocidade_ia * (Variaveis_globais.grupo_processadores[self.indice].comandos[0] - Variaveis_globais.grupo_processadores[self.indice].comandos[1])
+                self.posicao_y += velocidade_ia * (Variaveis_globais.grupo_processadores[self.indice].comandos[2] - Variaveis_globais.grupo_processadores[self.indice].comandos[3])
 
             # as saidas definem a direção que o player vai tomar
             else:
-                valor_de_ativacao = self.valor_de_ativacao()
 
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[0] > valor_de_ativacao:
+                if Variaveis_globais.grupo_processadores[self.indice].comandos[0] > self.valor_de_ativacao:
                     self.posicao_x += velocidade_ia
                                     
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[1] > valor_de_ativacao:
+                if Variaveis_globais.grupo_processadores[self.indice].comandos[1] > self.valor_de_ativacao:
                     self.posicao_x -= velocidade_ia
                                      
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[2] > valor_de_ativacao:
+                if Variaveis_globais.grupo_processadores[self.indice].comandos[2] > self.valor_de_ativacao:
                     self.posicao_y += velocidade_ia             
 
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[3] > valor_de_ativacao:
+                if Variaveis_globais.grupo_processadores[self.indice].comandos[3] > self.valor_de_ativacao:
                     self.posicao_y -= velocidade_ia
                     
                     
             # cria um retandulo de colisão e mostra na tela
-            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
-            draw.rect(tela, (000, 000, 255), self.rect_player)
-            draw.rect(tela, (000, 255, 000), self.rect_player, 2)
-
+            self.rect.center = (self.posicao_x, self.posicao_y)
+            draw.rect(tela, (000, 000, 255), self.rect)
+            draw.rect(tela, (000, 255, 000), self.rect, 2)
 
         # se for um jogador troca a cor do player
         else:          
     
             # cria um retandulo de colisão e mostra na tela
-            self.rect_player = pygame.Rect((self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))
+            self.rect.center = (self.posicao_x, self.posicao_y)
             draw.rect(tela, (000, 255, 000), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))

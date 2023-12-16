@@ -1,15 +1,15 @@
 import pygame
 from pygame import *
-import sys
-import numpy
+
+import sys, os, time, copy
 from random import *
-import math
-import time
-import copy
-import os
+
 import json
 from cProfile import run
+
 import torch
+import torch.nn.functional as F
+import numpy
 
 # largura e altura da tela
 largura = 1500
@@ -33,70 +33,24 @@ dimensoes_rede = (10, 10)
 fonte = pygame.font.Font(None, 32)
 mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 
-# define o número de player (até dois)
-quantidade_jogadores = 0
-
-# quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 50
-
-convolucional = False
-
 # seleciona alguma pré configuração, para testes
 arquivo = 2
 
 # teste padrão
 if arquivo == 0:
-    # define o valor do vies da rede neural
-    bias = 1
-
-    # quantos projeteis vão ser passados para a rede (se 5, os 5 mais próximos vão ser passados)
-    projeteis_para_entrada = 8
-
-    # variavel que armazena o valor total de entradas a partir de quantos projeteis vão ser colocados
-    quantidade_entradas = (projeteis_para_entrada * 5) + 2
-
-    # define quantas camadas vão ter e quantos neuronios em cada uma
-    configuracao_de_camadas = (quantidade_entradas, 9, 4)
-
-    # define o número de players e inimigos
-    numero_projeteis = 15
-    numero_players = 200
-
-    # porcentagem de players que vão ser feitas a partir do melhor individuo
-    numero_de_elitismo = numero_players * 0.2
-
-    # chance de mutação de um peso ao passar pela fução de mutação
-    taxa_de_mutacao_base = 0.1
-
-    # faz a conta considerando a taxa de mutação base (o valor a esquerda é o necessario para chegar a 0 de taxa de mutação)
-    recompensa_objetivo = 10000 * (1 / taxa_de_mutacao_base)
-
-### abaixo são os outros testes, fazem a mesma coisa que o primeiro
+    pass
 
 elif arquivo == 1:
-    # define o valor do vies da rede neural
-    bias = 0
+   pass
 
-    projeteis_para_entrada = 4
-
-    quantidade_entradas = (projeteis_para_entrada * 5) + 2
-
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas, 4)
-
-    numero_projeteis = 15
-    numero_players = 1500
-
-    numero_de_elitismo = numero_players * 0.4
-
-    taxa_de_mutacao_base = 0.1
-
-    recompensa_objetivo = 10000 * (1 / taxa_de_mutacao_base)
-
-# teste com entradas minimas, elitismo médio
 elif arquivo == 2:
 
+    # define o número de player (até dois)
+    quantidade_jogadores = 0
+    
     bias = 1
 
+    convolucional = False
     if convolucional:
         alcance_de_visao = 160
         quantidade_sensores_x = (alcance_de_visao // dimensoes_projetil[0])
@@ -110,12 +64,17 @@ elif arquivo == 2:
     configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
     funcoes_de_camadas = (2, 2, True)
 
+    # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
+    partidas_por_geracao = 2
+
     numero_projeteis = 4
-    numero_players = 1000
+    numero_players = 400
 
     numero_de_elitismo = numero_players * 0.5
 
     taxa_de_mutacao_base = 0.05
+    # definição da taxa de mutação (para o elitismo)
+    taxa_de_mutacao_elite = 0.01
   
     recompensa_objetivo = 10000 * (1 / taxa_de_mutacao_base)
 

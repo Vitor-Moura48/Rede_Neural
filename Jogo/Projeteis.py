@@ -25,6 +25,8 @@ class Projeteis:  # classe que gerencia os projeteis
         # spaw padrão dos projeteis
         else:
           self.spaw()
+        
+        self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
 
     # função para tornar aleatorio a direção e ponto de partida dos projeteis
     def spaw(self):
@@ -59,19 +61,16 @@ class Projeteis:  # classe que gerencia os projeteis
             # escolhe um ângulo de direção de acordo com o lado escolhido e calcula o seno e coseno
             if self.posicao_y == -20:
                 self.angulo = numpy.radians(randint(30, 150))
-                self.seno = math.sin(self.angulo)
-                self.coseno = math.cos(self.angulo)
+                self.seno = numpy.sin(self.angulo)
+                self.coseno = numpy.cos(self.angulo)
             else:
                 self.angulo = numpy.radians(randint(210, 330))
-                self.seno = math.sin(self.angulo)
-                self.coseno = math.cos(self.angulo)
-
+                self.seno = numpy.sin(self.angulo)
+                self.coseno = numpy.cos(self.angulo)
 
     # função que retorna algumas informações do projetil (usado no processamento da rede)
     def informar_posicao(self):
-        direcao_x_do_projetil = self.coseno
-        direcao_y_do_projetil = self.seno
-        return self.rect.center[0], self.rect.center[1], direcao_x_do_projetil, direcao_y_do_projetil
+        return self.rect.center[0], self.rect.center[1], self.coseno, self.seno
 
     # atualiza estado a cada iteração
     def update(self):
@@ -85,6 +84,6 @@ class Projeteis:  # classe que gerencia os projeteis
         self.posicao_y += velocidade_projetil * self.seno
 
         # cria um retandulo de colisão e mostra na tela
-        self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
-        pygame.draw.rect(tela, (255, 000, 000), (self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
+        self.rect.center = (self.posicao_x, self.posicao_y)
+        pygame.draw.rect(tela, (255, 000, 000), self.rect)
 
