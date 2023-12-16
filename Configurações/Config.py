@@ -17,7 +17,7 @@ altura = 500
 
 # inicia o pygame e define um limite de fps
 pygame.init()
-fps = 999
+fps = 9999
 
 velocidade_projetil = 8  # 10 max no caso
 velocidade_ia = 10  # 9 max no caso (10 inimogo, 10 player) 10 + 9 = 19  -- 20 (10 + 10)
@@ -37,7 +37,7 @@ mensagem_fps_para_tela = fonte.render('fps 0', True, (255, 000, 000))
 quantidade_jogadores = 0
 
 # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-partidas_por_geracao = 2
+partidas_por_geracao = 50
 
 convolucional = False
 
@@ -111,13 +111,13 @@ elif arquivo == 2:
     funcoes_de_camadas = (2, 2, True)
 
     numero_projeteis = 4
-    numero_players = 400
+    numero_players = 1000
 
     numero_de_elitismo = numero_players * 0.5
 
     taxa_de_mutacao_base = 0.05
   
-    recompensa_objetivo = 4000 * (1 / taxa_de_mutacao_base)
+    recompensa_objetivo = 10000 * (1 / taxa_de_mutacao_base)
 
 
 

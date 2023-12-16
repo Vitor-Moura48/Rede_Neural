@@ -71,7 +71,7 @@ class Projeteis:  # classe que gerencia os projeteis
     def informar_posicao(self):
         direcao_x_do_projetil = self.coseno
         direcao_y_do_projetil = self.seno
-        return self.rect_inimigo.center[0], self.rect_inimigo.center[1], direcao_x_do_projetil, direcao_y_do_projetil
+        return self.rect.center[0], self.rect.center[1], direcao_x_do_projetil, direcao_y_do_projetil
 
     # atualiza estado a cada iteração
     def update(self):
@@ -85,6 +85,6 @@ class Projeteis:  # classe que gerencia os projeteis
         self.posicao_y += velocidade_projetil * self.seno
 
         # cria um retandulo de colisão e mostra na tela
-        self.rect_inimigo = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
+        self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
         pygame.draw.rect(tela, (255, 000, 000), (self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
 

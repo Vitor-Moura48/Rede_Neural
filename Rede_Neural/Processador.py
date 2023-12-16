@@ -1,12 +1,10 @@
 from Configurações.Config import *
 import Configurações.Variaveis_globais as Variaveis_globais
 
-
 # classe que gerencia o player
 class Processador:
     def __init__(self, indice, camadas):
 
-        # indice que o player vai ser colocado na variavel geração atual
         self.indice = indice
 
         self.camadas = camadas
@@ -98,13 +96,15 @@ class Processador:
         
         else:
             # função que obtem as distâncias de cada inimigo para o jogador e retorna o valor
+          
             def obter_distancias():
-                for projetil in Variaveis_globais.grupo_projeteis:
-
+                for projetil in Variaveis_globais.grupo_projeteis.values():
+                    
                     informacoes_inimigo = projetil.informar_posicao()
-                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[0]) / 110)
-                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[1]) / 110)
-                
+
+                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[self.indice].rect_player.center[0]) / 110)
+                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[self.indice].rect_player.center[1]) / 110)
+                    
                     distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
 
                     # retorna junto algumas outras informações
@@ -129,7 +129,7 @@ class Processador:
 
         # retorna as coordenadas mais próximas
         return resultados_sensores
-    
+
     # atualiza o estado da rede a cada iteração
     def update(self):
     
@@ -140,8 +140,8 @@ class Processador:
         entrada_da_rede = []
 
         # adiciona como entrada a distancia para cada canto da tela
-        entrada_da_rede.append((Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[0] / 750) -1)
-        entrada_da_rede.append((Variaveis_globais.grupo_players[Variaveis_globais.grupo_processadores.index(self)].rect_player.center[1] / 250) -1)
+        entrada_da_rede.append((Variaveis_globais.grupo_players[self.indice].rect_player.center[0] / 750) -1)
+        entrada_da_rede.append((Variaveis_globais.grupo_players[self.indice].rect_player.center[1] / 250) -1)
         
 
         if convolucional:
@@ -171,4 +171,3 @@ class Processador:
 
         # variavel que contem o valor de saída da rede neural
         self.comandos = self.processamentos_da_rede_tensor[-1].tolist()
-

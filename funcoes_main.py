@@ -13,7 +13,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
     for i in range(quantidade_inimigos):
 
         projetil = Projeteis()
-        Variaveis_globais.grupo_projeteis.append(projetil)
+        Variaveis_globais.grupo_projeteis[i] = projetil 
 
 
     # cria os players a partir do valor definido em Config
@@ -25,16 +25,10 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
             # cria a rede para processar as entradas
             nova_rede = CriarRedeNeural()
             resultado = nova_rede.randomizar_resultados()
-            processador = Processador(indice_do_player_na_geracao, resultado)     
+            processador = Processador(indice_do_player_na_geracao, resultado) 
             
             # cria o player, que vai aparecer na tela
             player = Player(False, indice_do_player_na_geracao)
-
-            indice_do_player_na_geracao += 1
-
-            # adiciona a rede e o player em uma lista
-            Variaveis_globais.grupo_processadores.append(processador)
-            Variaveis_globais.grupo_players.append(player)
 
         # se não, copia as redes daquela geração
         else:
@@ -42,9 +36,9 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
 
             player = Player(False, indice_do_player_na_geracao)
 
-            # adiciona do grupo de redes e players novamente
-            Variaveis_globais.grupo_processadores.append(processador)
-            Variaveis_globais.grupo_players.append(player)
+        # adiciona do grupo de redes e players novamente
+        Variaveis_globais.grupo_processadores[indice_do_player_na_geracao] = processador
+        Variaveis_globais.grupo_players[indice_do_player_na_geracao] = player
     
     # condição para adicionar um player para o jogador
     if quantidade_jogadores > 0:
@@ -53,7 +47,7 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
         for i in range(quantidade_jogadores):
     
             player = Player(True, i)  # o index nesse caso registra quem é o primeiro e o segundo player
-            Variaveis_globais.grupo_players.append(player)
+            Variaveis_globais.grupo_players[i] = player
 
 # lógica para contar o fps
 def exibir_fps():
@@ -79,13 +73,13 @@ def update_processador(processador):
 
 # atualiza todos os objetos
 def atualizar_objetos():
-    for inimigo in Variaveis_globais.grupo_projeteis:
-        inimigo.update()
+    for projetil in Variaveis_globais.grupo_projeteis.values():
+        projetil.update()
     
-    for processador in Variaveis_globais.grupo_processadores:
+    for processador in Variaveis_globais.grupo_processadores.values():
         processador.update()
     
-    for player in Variaveis_globais.grupo_players:
+    for player in Variaveis_globais.grupo_players.values():
         player.update()
 
     # confere as colisões
@@ -98,7 +92,7 @@ def nova_geracao():
         Variaveis_globais.juncao_de_geracoes = []     
         Variaveis_globais.valores_proporcionais = []
         Variaveis_globais.primeiro_inimigo = 0
-        Variaveis_globais.grupo_projeteis = []
+        Variaveis_globais.grupo_projeteis = {}
 
         melhor_tempo_da_geracao = 0
         # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
@@ -202,7 +196,7 @@ def nova_geracao_ou_nova_partida():
         Variaveis_globais.primeiro_inimigo = 0
 
         # zera os inimigos e recria todos a frente
-        Variaveis_globais.grupo_projeteis = []
+        Variaveis_globais.grupo_projeteis = {}
 
         criar_objetos(numero_projeteis, numero_players)
 
