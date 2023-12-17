@@ -9,12 +9,12 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         self.camadas = []
 
         # cria a estrutura com base nas configurações definidas
-        for camada in range(len(configuracao_de_camadas) - 1):  # -1 porque a primeira camada é  de entrada inicial
+        for camada in range(1, len(configuracao_de_camadas)):  # 1 porque a primeira camada é  de entrada inicial
             self.camadas.append([])
 
-            for neuronio in range(configuracao_de_camadas[camada + 1]): # +1 porque a primeira camada é apenas a camada de entrada
+            for neuronio in range(configuracao_de_camadas[camada]): # +1 porque a primeira camada é apenas a camada de entrada
                 # adiciona os pesos (de cada neuronio) na sua respectiva camada
-                self.camadas[-1].append(numpy.array([0] * configuracao_de_camadas[camada], dtype=float)) 
+                self.camadas[-1].append(numpy.array([0] * configuracao_de_camadas[camada - 1], dtype=float)) 
         
         # definição da taxa de mutação
         self.taxa_de_mutacao = taxa_de_mutacao_base
@@ -35,7 +35,6 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             for neuronio in range(len(self.camadas[camada])):
                 for peso in range(len(self.camadas[camada][neuronio])):
                     self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 16)
-                self.camadas[camada][neuronio][-1] = bias
 
     # função utilizada para criar um anova geração
     def nova_geracao(self):
@@ -57,9 +56,9 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
 
                 # variaveis usadas para a roleta
                 roleta = uniform(0, 1)
-                primeiro = 0
-
+                
                 # variaveis usadas para a busca binária
+                primeiro = 0
                 ultimo = len(Variaveis_globais.valores_proporcionais) - 1
                 meio = (primeiro + ultimo) // 2
 
@@ -68,18 +67,18 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
                     
                     # se só sobrou uma alternativa ou se a busca encontrou o individuo
                     if meio == primeiro or meio == ultimo or (roleta > Variaveis_globais.valores_proporcionais[meio - 1] and
-                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 10):  # count < indica quantas vezes o mesmo individuo pode ser selecionado
+                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 4):  # count < indica quantas vezes o mesmo individuo pode ser selecionado
 
                         # registra o index daquele individuo em uma lista e para a busca
                         Variaveis_globais.ja_sorteados.append(meio)
                         break
 
-                    # se o individuo estiver na metade posterior da metade analizada, elimina a metade anterior (a cada iteração a busca tem mais chances de ocorrer)
+                    # se o individuo estiver na metade posterior da metade analizada, elimina a metade anterior (a cada iteração a busca tem mais chances de encontrar)
                     elif roleta > Variaveis_globais.valores_proporcionais[meio]:
                         primeiro = meio + 1
                         meio = (primeiro + ultimo) // 2
                     
-                    # mesma lógica, elimina a metade posterior (em vez da posterior)
+                    # mesma lógica, elimina a metade posterior (em vez da anterior)
                     else:
                         ultimo = meio - 1
                         meio = (primeiro + ultimo) // 2
@@ -92,7 +91,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             roleta_2 = roleta()
 
             # calcula a média do desempenho dos dois individuos sorteados
-            media_de_recompensa = ((Variaveis_globais.juncao_de_geracoes[roleta_1][0][0] + Variaveis_globais.juncao_de_geracoes[roleta_1][0][0]) / 2) 
+            media_de_recompensa = ((Variaveis_globais.juncao_de_geracoes[roleta_1][0][0] + Variaveis_globais.juncao_de_geracoes[roleta_2][0][0]) / 2) 
 
             # reduz um pouco a taxa de mutação base de acordo com a aproximação do objetivo
             self.taxa_de_mutacao = taxa_de_mutacao_base - (media_de_recompensa / recompensa_objetivo)
@@ -101,22 +100,14 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             camada_insercao_escolhida = randint(0, len(self.camadas) - 1) 
             neuronio_insercao_escolhida = randint(0, len(self.camadas[camada_insercao_escolhida]) - 1)
 
-
-            # une os dois individuos em 1
+            # combina os dois individuos
             for camada in range(len(self.camadas)):
                 for neuronio in range(len(self.camadas[camada])):
 
-                    if camada < camada_insercao_escolhida:                                         
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]# camada +1 porque a primeira camada = fitness
-                    
-                    elif camada == camada_insercao_escolhida and neuronio < neuronio_insercao_escolhida: 
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_1][camada + 1][neuronio]
-                
-
-                    elif camada == camada_insercao_escolhida and neuronio >= neuronio_insercao_escolhida:
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
-                    
-                    elif camada > camada_insercao_escolhida:
+                    if camada < camada_insercao_escolhida or (camada == camada_insercao_escolhida and neuronio < neuronio_insercao_escolhida):                                         
+                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_1][camada + 1][neuronio]# camada +1 porque a primeira camada = fitness
+                  
+                    elif camada > camada_insercao_escolhida or (camada == camada_insercao_escolhida and neuronio >= neuronio_insercao_escolhida):
                         self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
                  
     # função utilizada para simular a mutação
@@ -125,9 +116,9 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         # randomizando cada peso de acordo com a taxa de mutação
         for camada in range(len(self.camadas)):
             for neuronio in range(len(self.camadas[camada])):
-                for peso in range(len(self.camadas[camada][neuronio]) - 1):
+                for peso in range(len(self.camadas[camada][neuronio])):
         
-                    # quanto maior a taxa de mutação, mais provavel daquele neuronio mudado
+                    # quanto maior a taxa de mutação, mais provavel é a alteração
                     if uniform(0, 1) <= self.taxa_de_mutacao:
                         self.camadas[camada][neuronio][peso] = round(uniform(-1, 1), 16) 
 

@@ -65,10 +65,10 @@ elif arquivo == 2:
     funcoes_de_camadas = (2, 2, True)
 
     # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-    partidas_por_geracao = 2
+    partidas_por_geracao = 50
 
     numero_projeteis = 4
-    numero_players = 400
+    numero_players = 1000
 
     numero_de_elitismo = numero_players * 0.5
 

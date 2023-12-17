@@ -103,8 +103,8 @@ def nova_geracao():
                 Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo]
 
                 # tranforma os dados ndrray em listas normais 
-                pesos_normalizados = [neuronio.to_list() if isinstance(neuronio, numpy.ndarray) else neuronio 
-                                        for camada in Variaveis_globais.melhor_individuoneuronio 
+                pesos_normalizados = [neuronio.tolist() if isinstance(neuronio, numpy.ndarray) else neuronio 
+                                        for camada in Variaveis_globais.melhor_individuo
                                             for neuronio in camada]
                 
                 # se sim, adiciona ele em um arquivo csv

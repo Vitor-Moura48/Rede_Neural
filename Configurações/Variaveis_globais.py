@@ -8,7 +8,7 @@ if os.path.exists("Rede_Neural/melhor_individuo.json"):
         camadas = json.load(arquivo)
 
     melhor_individuo = camadas
-    melhor_tempo = camadas[0][0]
+    melhor_tempo = camadas[0]
 
 else:
     melhor_individuo = []
