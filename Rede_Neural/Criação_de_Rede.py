@@ -54,38 +54,16 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             # função que retorna os individuos que podem ser sorteados
             def roleta():
 
-                # variaveis usadas para a roleta
-                roleta = uniform(0, 1)
-                
-                # variaveis usadas para a busca binária
-                primeiro = 0
-                ultimo = len(Variaveis_globais.valores_proporcionais) - 1
-                meio = (primeiro + ultimo) // 2
-
-                # faz uma busca binaria do individuo sorteado
                 while True:
-                    
-                    # se só sobrou uma alternativa ou se a busca encontrou o individuo
-                    if meio == primeiro or meio == ultimo or (roleta > Variaveis_globais.valores_proporcionais[meio - 1] and
-                        roleta < Variaveis_globais.valores_proporcionais[meio + 1] and Variaveis_globais.ja_sorteados.count(meio) < 4):  # count < indica quantas vezes o mesmo individuo pode ser selecionado
+                    # sorteia um valor e busca seu indice
+                    roleta = uniform(0, 1)
+                    indice = numpy.searchsorted(Variaveis_globais.valores_proporcionais, roleta)
 
-                        # registra o index daquele individuo em uma lista e para a busca
-                        Variaveis_globais.ja_sorteados.append(meio)
+                    if Variaveis_globais.ja_sorteados.count(indice) < 4:
                         break
-
-                    # se o individuo estiver na metade posterior da metade analizada, elimina a metade anterior (a cada iteração a busca tem mais chances de encontrar)
-                    elif roleta > Variaveis_globais.valores_proporcionais[meio]:
-                        primeiro = meio + 1
-                        meio = (primeiro + ultimo) // 2
-                    
-                    # mesma lógica, elimina a metade posterior (em vez da anterior)
-                    else:
-                        ultimo = meio - 1
-                        meio = (primeiro + ultimo) // 2
-
-                # retorna o index do individuo sorteado
-                return meio
-           
+                
+                return indice
+                
             # sorteia dois individuos
             roleta_1 = roleta()
             roleta_2 = roleta()

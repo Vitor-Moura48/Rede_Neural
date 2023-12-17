@@ -126,7 +126,7 @@ class Processador:
         # Faz todos os calculos de cada camada e armazena na variavel acima
         for camada in range(1, len(configuracao_de_camadas)):
 
-            saida_camada_tensor = torch.matmul(self.estado_atual_da_rede, self.tensores[camada - 1].t()) ###########################################
+            saida_camada_tensor = torch.matmul(self.estado_atual_da_rede, self.tensores[camada - 1].t()) + bias ###########################################
             saida_camada_tensor_ativada = self.aplicar_ativacao(saida_camada_tensor, Variaveis_globais.funcoes_de_camadas[camada - 1])
             self.estado_atual_da_rede = saida_camada_tensor_ativada ######################################
 
