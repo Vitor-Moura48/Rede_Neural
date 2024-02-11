@@ -2,6 +2,7 @@ import pygame
 from pygame import *
 
 import sys, os, time, copy
+from functools import cache
 from random import *
 
 import json
@@ -61,11 +62,11 @@ elif arquivo == 2:
         quantidade_entradas = (projeteis_para_entrada * 4) + 2
    
         
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4)
-    funcoes_de_camadas = (2, 2, True)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4, 4)
+    funcoes_de_camadas = (2, 2, 2, True)
 
     # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
-    partidas_por_geracao = 50
+    partidas_por_geracao = 30
 
     numero_projeteis = 4
     numero_players = 800

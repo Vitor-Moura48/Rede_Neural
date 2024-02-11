@@ -64,6 +64,8 @@ def exibir_fps():
     
     # exibe a taxa de fps no display
     tela.blit(mensagem_fps_para_tela, (1350, 50))
+    tela.blit(fonte.render(f"geração {Variaveis_globais.contador_geracoes}", True, (255, 000, 000)), (1350, 80))
+    tela.blit(fonte.render(f"partida {Variaveis_globais.partida_atual_da_geracao}", True, (255, 000, 000)), (1350, 110))
 
 # atualiza todos os objetos
 def atualizar_objetos():
@@ -88,6 +90,10 @@ def nova_geracao():
     Variaveis_globais.juncao_de_geracoes = []     
     Variaveis_globais.grupo_projeteis = {}
 
+     # salva algumas informações
+    with open("Rede_neural/informacoes.json", 'w') as arquivo:
+        json.dump([Variaveis_globais.contador_geracoes], arquivo)
+
     melhor_tempo_da_geracao = 0
     # divide a recompensa pela quantidade de partidas para fazer a media de recompensa 
     for individuo in range(numero_players):
@@ -103,21 +109,39 @@ def nova_geracao():
                 Variaveis_globais.melhor_individuo = Variaveis_globais.geracao_atual[individuo]
 
                 # tranforma os dados ndrray em listas normais 
-                pesos_normalizados = [neuronio.tolist() if isinstance(neuronio, numpy.ndarray) else neuronio 
+                pesos_normalizados = [
+                                        [neuronio.tolist() if isinstance(neuronio, numpy.ndarray) else neuronio for neuronio in camada]
                                         for camada in Variaveis_globais.melhor_individuo
-                                            for neuronio in camada]
-                
+                                        ]
+
                 # se sim, adiciona ele em um arquivo csv
                 with open("Rede_neural/melhor_individuo.json", 'w') as arquivo:
                     json.dump(pesos_normalizados, arquivo)
 
-    # printa o melhor tempo
+    # printa o melhor tempo geral e o melhor tempo dessa geração
     print(f'melhor tempo global: {Variaveis_globais.melhor_tempo}')
-    print(f"melhor tempo da partida; {melhor_tempo_da_geracao}")
+    print(f"melhor tempo da geração; {melhor_tempo_da_geracao}")
 
     # pega a geração atual e passa ela para as gerações passadas
     Variaveis_globais.geracao_avo = Variaveis_globais.geracao_anterior
     Variaveis_globais.geracao_anterior = Variaveis_globais.geracao_atual
+
+    # salva a geração em um arquivo
+    def salvar_geracao(geracao, nome_do_arquivo):
+        
+        with open(nome_do_arquivo, 'w') as arquivo:
+            # tranforma os dados ndrray em listas normais 
+            lista_geracao = [   
+                                [
+                                [neuronio.tolist() if isinstance(neuronio, numpy.ndarray) else neuronio for neuronio in camada]
+                                for camada in individuo 
+                                ]
+                                for individuo in geracao
+                            ]
+            json.dump(lista_geracao, arquivo)
+    
+    salvar_geracao(Variaveis_globais.geracao_anterior, "Rede_Neural/geracao_anterior.json")
+    salvar_geracao(Variaveis_globais.geracao_avo, "Rede_Neural/geracao_avo.json")
 
     # junta as duas gerações mais recentes e organiza os individuos pela recompensa obtida por cada um  
     Variaveis_globais.juncao_de_geracoes = Variaveis_globais.geracao_avo + Variaveis_globais.geracao_anterior
@@ -125,8 +149,9 @@ def nova_geracao():
 
     # soma todas as recompensas dos individuos
     total_de_recompesa = sum(individuo[0][0] for individuo in Variaveis_globais.juncao_de_geracoes)
-   
-    Variaveis_globais.valores_proporcionais = [Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa]
+
+    # adiciona a proporção de recompensa do primeiro individuo
+    Variaveis_globais.valores_proporcionais = [Variaveis_globais.juncao_de_geracoes[0][0][0] / total_de_recompesa]
     # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
     for individuo in range(1, len(Variaveis_globais.juncao_de_geracoes) - 1):
 
@@ -135,6 +160,7 @@ def nova_geracao():
                     
     # zera a geração atual para ser preenchida novamente
     Variaveis_globais.geracao_atual = []
+    
     # recria a estrutura da geração atual (vazia)
     for individuo in range(numero_players):
         Variaveis_globais.geracao_atual.append([])
@@ -151,7 +177,7 @@ def nova_geracao_ou_nova_partida():
     Variaveis_globais.primeiro_inimigo = 0
 
     # confere se a quantidade escolhida de partidas por geração foi completa, se sim, cria a nova geração normalmente
-    if Variaveis_globais.partida_atual_da_geracao == partidas_por_geracao:
+    if Variaveis_globais.partida_atual_da_geracao >= partidas_por_geracao:
 
         # registra que uma geração foi completa
         Variaveis_globais.contador_geracoes += 1
@@ -161,7 +187,7 @@ def nova_geracao_ou_nova_partida():
         nova_geracao()
 
     else:
-        
+
         # zera os inimigos e recria todos depois
         Variaveis_globais.grupo_projeteis = {}
 
@@ -203,6 +229,7 @@ def movimentacao_jogador():
 
         # se só houver um player possível, confere se esse player é o 1 ou o 2
         else:
+
             if Variaveis_globais.grupo_players[-1].indice == 0 and Variaveis_globais.grupo_players[-1].real:
                 estado_player1 = True
                 player1 = -1
@@ -242,10 +269,34 @@ def movimentacao_jogador():
         if pygame.key.get_pressed()[K_DOWN]:
             Variaveis_globais.grupo_players[player2].posicao_y += velocidade_ia
 
+def iniciar_save():
 
+    # junta as duas gerações mais recentes e organiza os individuos pela recompensa obtida por cada um  
+    Variaveis_globais.juncao_de_geracoes = Variaveis_globais.geracao_avo + Variaveis_globais.geracao_anterior
+    Variaveis_globais.juncao_de_geracoes.sort(key=lambda x: x[0])
+
+    # soma todas as recompensas dos individuos
+    total_de_recompesa = sum(individuo[0][0] for individuo in Variaveis_globais.juncao_de_geracoes)
+   
+    Variaveis_globais.valores_proporcionais = [Variaveis_globais.juncao_de_geracoes[0][0][0] / total_de_recompesa]
+    # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
+    for individuo in range(1, len(Variaveis_globais.juncao_de_geracoes) - 1):
+
+        # soma o valor anterior com o do individuo (para manter os valores "progredindo")
+        Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] + Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
+                    
+    # zera a geração atual para ser preenchida novamente
+    Variaveis_globais.geracao_atual = []
+    # recria a estrutura da geração atual (vazia)
+    for individuo in range(numero_players):
+        Variaveis_globais.geracao_atual.append([])
+
+if Variaveis_globais.contador_geracoes > 0:
+    iniciar_save()
 
 # cria os objetos iniciais
 criar_objetos(numero_projeteis, numero_players)
+    
 
 # cria classe de colisões
 colisoes = Colisoes()

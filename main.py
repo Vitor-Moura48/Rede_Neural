@@ -1,5 +1,4 @@
 from funcoes_main import *
-run('''
 
 # loop principal
 while True:
@@ -10,6 +9,10 @@ while True:
     # função para exibir o fps
     exibir_fps()
 
+    # se todos os players foram eliminados, cria uma nova geração ou partida
+    if len(Variaveis_globais.grupo_players) == 0:
+        nova_geracao_ou_nova_partida()
+
     # função para dar update em todos os objetos
     atualizar_objetos()
 
@@ -18,10 +21,6 @@ while True:
         if event.type == QUIT:
             quit()
             sys.exit()
-    
-    # se todos os players foram eliminados, cria uma nova geração ou partida
-    if len(Variaveis_globais.grupo_players) == 0:
-        nova_geracao_ou_nova_partida()
 
     # para contralar o jogador no teclado ou joystick
     movimentacao_jogador()
@@ -32,7 +31,6 @@ while True:
     # atualiza o display
     pygame.display.update() 
 
-''')
 
    
 

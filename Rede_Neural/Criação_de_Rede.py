@@ -41,7 +41,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
 
         # o melhor individuo sempre será passado para a próxima geração
         if Variaveis_globais.individuos_elite < numero_de_elitismo:  # pode ser feito mais de uma cópia do melhor indivíduo
-          
+               
             # obtem os pesos do melhor indivíduo
             self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo[1:])
         

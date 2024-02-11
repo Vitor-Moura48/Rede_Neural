@@ -4,27 +4,7 @@ import Configurações.Variaveis_globais as Variaveis_globais
 class Projeteis:  # classe que gerencia os projeteis
     def __init__(self):
     
-        # cria dois projeteis na direção do spaw do projetil (para eliminar os que não se movem)
-        if Variaveis_globais.primeiro_inimigo == 0:
-            self.posicao_x = -20
-            self.posicao_y = 245
-            self.angulo = numpy.radians(0)
-            self.seno = numpy.sin(self.angulo)
-            self.coseno = numpy.cos(self.angulo)
-
-            Variaveis_globais.primeiro_inimigo += 1
-
-        elif Variaveis_globais.primeiro_inimigo == 1:
-            self.posicao_x = 745
-            self.posicao_y = -20
-            self.angulo = numpy.radians(90)
-            self.seno = numpy.sin(self.angulo)
-            self.coseno = numpy.cos(self.angulo)
-            Variaveis_globais.primeiro_inimigo += 1
-
-        # spaw padrão dos projeteis
-        else:
-          self.spaw()
+        self.spaw()
         
         self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
 
