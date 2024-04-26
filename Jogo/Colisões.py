@@ -10,11 +10,11 @@ class Colisoes:
     def verificar_colisao(self):
         
         chaves_para_eliminar = []
-        # confere se cada player colidiu com cada inimigo
+        # confere se cada player colidiu com cada projétil
         for player in Variaveis_globais.grupo_players.values():
             if player.rect.collidelist([projetil.rect for projetil in Variaveis_globais.grupo_projeteis.values()]) != -1 or \
                 player.rect.bottom < 0 or player.rect.top > altura or player.rect.left < 0 or player.rect.right > largura:
-
+        
                 # se colidiu e não for o jogador:
                 if player.real == False:
                 

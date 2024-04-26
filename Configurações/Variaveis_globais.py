@@ -1,6 +1,5 @@
 from Configurações.Config import *
 
-
 # se o arquivo da geração anterior existir
 if os.path.exists("Rede_Neural/geracao_anterior.json"):
 
@@ -60,7 +59,6 @@ partida_atual_da_geracao = 0
 # listas usadas na criação de uma nova geração
 juncao_de_geracoes = []
 valores_proporcionais = []
-ja_sorteados = []
 
 # variavel para ajudar a manter sempre o melhor player
 individuos_elite = 0
@@ -76,5 +74,5 @@ grupo_players = {}
 clock = pygame.time.Clock()
 
 # variaveis para contar o fps
-contador = 0
+contador_frames = 0
 tempo_inicio = time.time()

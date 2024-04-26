@@ -54,13 +54,9 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             # função que retorna os individuos que podem ser sorteados
             def roleta():
 
-                while True:
-                    # sorteia um valor e busca seu indice
-                    roleta = uniform(0, 1)
-                    indice = numpy.searchsorted(Variaveis_globais.valores_proporcionais, roleta)
-
-                    if Variaveis_globais.ja_sorteados.count(indice) < 4:
-                        break
+                # sorteia um valor e busca seu indice
+                roleta = uniform(0, 1)
+                indice = numpy.searchsorted(Variaveis_globais.valores_proporcionais, roleta)
                 
                 return indice
                 

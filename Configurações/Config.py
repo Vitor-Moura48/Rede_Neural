@@ -1,7 +1,7 @@
 import pygame
 from pygame import *
 
-import sys, os, time, copy
+import sys, os, time, copy, math
 from functools import cache
 from random import *
 
@@ -12,9 +12,10 @@ import torch
 import torch.nn.functional as F
 import numpy
 
+
 # largura e altura da tela
-largura = 1500
-altura = 500
+largura = 800
+altura = 800
 
 # inicia o pygame e define um limite de fps
 pygame.init()
@@ -49,7 +50,7 @@ elif arquivo == 2:
     # define o número de player (até dois)
     quantidade_jogadores = 0
     
-    bias = 1
+    bias = 0
 
     convolucional = False
     if convolucional:
@@ -62,16 +63,16 @@ elif arquivo == 2:
         quantidade_entradas = (projeteis_para_entrada * 4) + 2
    
         
-    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, 4, 4)
-    funcoes_de_camadas = (2, 2, 2, True)
+    configuracao_de_camadas = (quantidade_entradas, quantidade_entradas * 2, quantidade_entradas, 4)
+    funcoes_de_camadas = (4, 4, 4, True)
 
     # quantas partidas vão ter por geração (quanto mais partidas, mais confiavel o resultado, porém, mais lento)
     partidas_por_geracao = 30
 
     numero_projeteis = 4
-    numero_players = 800
+    numero_players = 500
 
-    numero_de_elitismo = numero_players * 0.5
+    numero_de_elitismo = numero_players * 0.4
 
     taxa_de_mutacao_base = 0.05
     # definição da taxa de mutação (para o elitismo)

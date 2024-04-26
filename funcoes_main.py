@@ -7,12 +7,16 @@ from Rede_Neural.Player import *
 from Jogo.Colisões import *
 
 # função para criar os objetos
-def criar_objetos(quantidade_inimigos, quantidade_playes):   
+def criar_objetos(quantidade_projeteis, quantidade_playes):   
 
+    # define a posiçãao e direção inicial (opcional)
+    coordendas_iniciais = [[largura + 20, altura / 2, numpy.radians(180)], [largura / 2, -20, numpy.radians(90)], [-20, altura / 2, 0], [largura / 2, altura + 20, numpy.radians(270)]]
     # cria os projeteis a partir do valor definido em Config
-    for i in range(quantidade_inimigos):
-
-        projetil = Projeteis()
+    for i in range(quantidade_projeteis):
+        if i > 0:
+            projetil = Projeteis()       
+        else:
+            projetil = Projeteis(choice(coordendas_iniciais)) # escolhe um projétil para mirar no centro de pawn (para eliminar os que ficam parados)
         Variaveis_globais.grupo_projeteis[i] = projetil 
 
     # cria os players a partir do valor definido em Config
@@ -45,33 +49,36 @@ def criar_objetos(quantidade_inimigos, quantidade_playes):
     
             player = Player(True, i)  # o index nesse caso registra quem é o primeiro e o segundo player
             Variaveis_globais.grupo_players[i] = player
-
+  
 # lógica para contar o fps
 def exibir_fps():
     global mensagem_fps_para_tela
 
-    Variaveis_globais.contador += 1
+    Variaveis_globais.contador_frames += 1
     tempo_atual = time.time()
 
-    # a cada segundo, printa a quantidade de loops feitos
-    if (tempo_atual - Variaveis_globais.tempo_inicio) > 1:
+    delta = tempo_atual - Variaveis_globais.tempo_inicio
+    # a cada x segundos, printa a quantidade de loops feitos
+    if (delta) > 0.5:
 
-        mensagem_fps = "fps " + str(Variaveis_globais.contador)
+        mensagem_fps = "fps " + str(round(Variaveis_globais.contador_frames / delta))
         mensagem_fps_para_tela = fonte.render(mensagem_fps, True, (255, 000, 000))
 
-        Variaveis_globais.contador = 0
+
+        Variaveis_globais.contador_frames = 0
         Variaveis_globais.tempo_inicio = tempo_atual
     
     # exibe a taxa de fps no display
-    tela.blit(mensagem_fps_para_tela, (1350, 50))
-    tela.blit(fonte.render(f"geração {Variaveis_globais.contador_geracoes}", True, (255, 000, 000)), (1350, 80))
-    tela.blit(fonte.render(f"partida {Variaveis_globais.partida_atual_da_geracao}", True, (255, 000, 000)), (1350, 110))
+    tela.blit(mensagem_fps_para_tela, (largura * 0.8, altura * 0.05))
+    tela.blit(fonte.render(f"geração {Variaveis_globais.contador_geracoes}", True, (255, 000, 000)), (largura * 0.8, altura * 0.1))
+    tela.blit(fonte.render(f"partida {Variaveis_globais.partida_atual_da_geracao}", True, (255, 000, 000)), (largura * 0.8, altura * 0.15))
 
 # atualiza todos os objetos
 def atualizar_objetos():
+
     for projetil in Variaveis_globais.grupo_projeteis.values():
         projetil.update()
-    
+
     for processador in Variaveis_globais.grupo_processadores.values():
         processador.update()
     
@@ -86,7 +93,6 @@ def nova_geracao():
     
     # zera algumas variaveis que serão usadas depois
     Variaveis_globais.individuos_elite = 0
-    Variaveis_globais.ja_sorteados = []
     Variaveis_globais.juncao_de_geracoes = []     
     Variaveis_globais.grupo_projeteis = {}
 
@@ -153,14 +159,14 @@ def nova_geracao():
     # adiciona a proporção de recompensa do primeiro individuo
     Variaveis_globais.valores_proporcionais = [Variaveis_globais.juncao_de_geracoes[0][0][0] / total_de_recompesa]
     # adiciona proporcionalmente um valor de acordo com a recompensa de cada individuo (para a roleta)
-    for individuo in range(1, len(Variaveis_globais.juncao_de_geracoes) - 1):
-
+    for individuo in range(1, len(Variaveis_globais.juncao_de_geracoes)):
+        
         # soma o valor anterior com o do individuo (para manter os valores "progredindo")
         Variaveis_globais.valores_proporcionais.append(Variaveis_globais.valores_proporcionais[-1] + Variaveis_globais.juncao_de_geracoes[individuo][0][0] / total_de_recompesa)
-                    
+
     # zera a geração atual para ser preenchida novamente
     Variaveis_globais.geracao_atual = []
-    
+
     # recria a estrutura da geração atual (vazia)
     for individuo in range(numero_players):
         Variaveis_globais.geracao_atual.append([])
@@ -293,10 +299,9 @@ def iniciar_save():
 
 if Variaveis_globais.contador_geracoes > 0:
     iniciar_save()
-
+    
 # cria os objetos iniciais
 criar_objetos(numero_projeteis, numero_players)
-    
 
 # cria classe de colisões
 colisoes = Colisoes()

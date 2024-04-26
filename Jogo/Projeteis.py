@@ -2,24 +2,33 @@ from Configurações.Config import *
 import Configurações.Variaveis_globais as Variaveis_globais
 
 class Projeteis:  # classe que gerencia os projeteis
-    def __init__(self):
-    
-        self.spaw()
+    def __init__(self, *args):
+        
+        # se tiver argumentos (provavelmente é de posição e diração)
+        if len(args) > 0:
+            self.posicao_x = args[0][0]
+            self.posicao_y = args[0][1]
+            self.seno = numpy.sin(args[0][2])
+            self.coseno = numpy.cos(args[0][2])
+
+        # spawn padrão
+        else:
+            self.spawn()
         
         self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_projetil[0], dimensoes_projetil[1]))
 
     # função para tornar aleatorio a direção e ponto de partida dos projeteis
-    def spaw(self):
+    def spawn(self):
 
-        # randomiza se o spaw vai ser "esqueda/direita" ou "cima/baixo"
+        # randomiza se o spawn vai ser "esqueda/direita" ou "cima/baixo"
         self.configuracao = choice([1, 2])
 
         # se for "esquerda/direita", define qual dos dois lados
         if self.configuracao == 1:
-            self.posicao_x = choice([-20, 1520])
+            self.posicao_x = choice([-20, largura + 20])
 
             # define um ponto no eixo eixo y aleatório
-            self.posicao_y = randint(20, 480)
+            self.posicao_y = randint(-20, altura + 20)
             
             # escolhe um ângulo de direção de acordo com o lado escolhido e calcula o seno e coseno
             if self.posicao_x == -20:
@@ -33,10 +42,10 @@ class Projeteis:  # classe que gerencia os projeteis
 
         # se "cima/baixo", define qual dos dois lados
         else:
-            self.posicao_y = choice([-20, 520])
+            self.posicao_y = choice([-20, altura + 20])
 
             # define um ponto no eixo x aleatório
-            self.posicao_x = randint(20, 1480)
+            self.posicao_x = randint(-20, largura + 20)
 
             # escolhe um ângulo de direção de acordo com o lado escolhido e calcula o seno e coseno
             if self.posicao_y == -20:
@@ -55,15 +64,21 @@ class Projeteis:  # classe que gerencia os projeteis
     # atualiza estado a cada iteração
     def update(self):
 
-        # respawna os projeteis quando saem da área
-        if self.posicao_x < -60 or self.posicao_x > 1560 or self.posicao_y < -60 or self.posicao_y > 560:
-            self.spaw()
-
         # faz a movimentação dos projeteis
         self.posicao_x += velocidade_projetil * self.coseno
         self.posicao_y += velocidade_projetil * self.seno
 
+        # respawna os projeteis quando saem da área
+        if self.posicao_x < -20 or self.posicao_x > (largura + 20) or self.posicao_y < -20 or self.posicao_y > altura + 20:
+            self.spawn()
+
         # cria um retandulo de colisão e mostra na tela
         self.rect.center = (self.posicao_x, self.posicao_y)
         pygame.draw.rect(tela, (255, 000, 000), self.rect)
+
+        
+
+        
+
+        
 

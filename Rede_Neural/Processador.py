@@ -74,10 +74,11 @@ class Processador:
                     
                     informacoes_inimigo = projetil.informar_posicao()
 
-                    distancia_x = 1 - (abs(informacoes_inimigo[0] - Variaveis_globais.grupo_players[self.indice].rect.center[0]) / 110)
-                    distancia_y = 1 - (abs(informacoes_inimigo[1] - Variaveis_globais.grupo_players[self.indice].rect.center[1]) / 110)
-                    
-                    distancia = (distancia_x ** 2 + distancia_y ** 2) ** 0.5
+                    # calcul o quão distnte o projetil está do player (1 = o projetil mais distante à direita, -1 à esquerda)
+                    distancia_x = (informacoes_inimigo[0] - Variaveis_globais.grupo_players[self.indice].rect.center[0]) / largura
+                    distancia_y = (informacoes_inimigo[1] - Variaveis_globais.grupo_players[self.indice].rect.center[1]) / altura
+                  
+                    distancia = math.hypot(distancia_x, distancia_y)
 
                     # retorna junto algumas outras informações
                     resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3]])
@@ -90,7 +91,7 @@ class Processador:
             def normatizar_o_resultado():
                 while len(resultados_sensores) > projeteis_para_entrada:
                     resultados_sensores.pop(-1)
-
+            
                 for coordenada in range(projeteis_para_entrada):  
                     resultados_sensores[coordenada].pop(0)
 
@@ -98,6 +99,7 @@ class Processador:
             obter_distancias()
             ordenar_cada_inimigo()
             normatizar_o_resultado()
+            
 
         # retorna as coordenadas mais próximas
         return resultados_sensores
@@ -109,7 +111,7 @@ class Processador:
         resultados = self.obter_entradas()
 
         # variavel que vai conter os dados de entrada da rede
-        entrada_da_rede = [(Variaveis_globais.grupo_players[self.indice].rect.center[0] / 750) -1, (Variaveis_globais.grupo_players[self.indice].rect.center[1] / 250) -1]
+        entrada_da_rede = [(Variaveis_globais.grupo_players[self.indice].rect.center[0] / (largura / 2)) -1, (Variaveis_globais.grupo_players[self.indice].rect.center[1] / (altura / 2)) -1]
 
         if convolucional:
             for sensor in resultados:

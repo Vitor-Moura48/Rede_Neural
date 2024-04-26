@@ -14,8 +14,8 @@ class Player:
         self.tick = 0
 
         # define o ponto de spaw do player
-        self.posicao_x = 750
-        self.posicao_y = 250
+        self.posicao_x = largura / 2
+        self.posicao_y = altura / 2
 
         self.valor_de_ativacao = self.valor_de_ativacao()
 
