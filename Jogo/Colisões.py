@@ -1,5 +1,5 @@
 from Configurações.Config import *
-import Configurações.Variaveis_globais as Variaveis_globais
+import Configurações.Global as Global
 
 #classe para conferir conliões
 class Colisoes:
@@ -11,8 +11,8 @@ class Colisoes:
         
         chaves_para_eliminar = []
         # confere se cada player colidiu com cada projétil
-        for player in Variaveis_globais.grupo_players.values():
-            if player.rect.collidelist([projetil.rect for projetil in Variaveis_globais.grupo_projeteis.values()]) != -1 or \
+        for player in Global.grupo_players.values():
+            if player.rect.collidelist([projetil.rect for projetil in Global.grupo_projeteis.values()]) != -1 or \
                 player.rect.bottom < 0 or player.rect.top > altura or player.rect.left < 0 or player.rect.right > largura:
         
                 # se colidiu e não for o jogador:
@@ -22,23 +22,23 @@ class Colisoes:
                     tempo_de_vida = player.tick
 
                     # se for a primeira partida de geração, preenche a a lista de geração_atual
-                    if Variaveis_globais.partida_atual_da_geracao == 0:
+                    if Global.partida_atual_da_geracao == 0:
                     
                         # junta o tempo de vida e os pesos da rede em uma lista e coloca os pesos do individuo no indice escolhido no inicio da geração
-                        Variaveis_globais.geracao_atual[player.indice] = [[tempo_de_vida]] + Variaveis_globais.grupo_processadores[player.indice].camadas
+                        Global.geracao_atual[player.indice] = [[tempo_de_vida]] + Global.grupo_processadores[player.indice].camadas
 
                     # se não for a primeira partida, apenas incrementa o valor (para tirar a média no futuro)
                     else:
-                        Variaveis_globais.geracao_atual[player.indice][0][0] += tempo_de_vida
+                        Global.geracao_atual[player.indice][0][0] += tempo_de_vida
 
                     # apaga a rede da lista de redes (se não for o própio jogador)
-                    del Variaveis_globais.grupo_processadores[player.indice]
+                    del Global.grupo_processadores[player.indice]
                 
                 chaves_para_eliminar.append(player.indice)
 
         # apaga o player da lista de players
         for chave in chaves_para_eliminar:
-            del Variaveis_globais.grupo_players[chave]
+            del Global.grupo_players[chave]
                 
     # função para chamar as funções de colisão a cada iteração
     def update(self):

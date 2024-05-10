@@ -1,5 +1,5 @@
 from Configurações.Config import *
-import Configurações.Variaveis_globais as Variaveis_globais
+import Configurações.Global as Global
 
 class Projeteis:  # classe que gerencia os projeteis
     def __init__(self, *args):

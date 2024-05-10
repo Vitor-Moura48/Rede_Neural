@@ -1,5 +1,5 @@
 from Configurações.Config import *
-import Configurações.Variaveis_globais as Variaveis_globais
+import Configurações.Global as Global
 
 class Player:
     def __init__(self, real, indice):
@@ -48,22 +48,22 @@ class Player:
 
             # se houver a função softmax, controla a direção a partir do quanto a rede "quer" ir para uma direção
             if funcoes_de_camadas[-1] == True:
-                self.posicao_x += velocidade_ia * (Variaveis_globais.grupo_processadores[self.indice].comandos[0] - Variaveis_globais.grupo_processadores[self.indice].comandos[1])
-                self.posicao_y += velocidade_ia * (Variaveis_globais.grupo_processadores[self.indice].comandos[2] - Variaveis_globais.grupo_processadores[self.indice].comandos[3])
+                self.posicao_x += velocidade_ia * (Global.grupo_processadores[self.indice].comandos[0] - Global.grupo_processadores[self.indice].comandos[1])
+                self.posicao_y += velocidade_ia * (Global.grupo_processadores[self.indice].comandos[2] - Global.grupo_processadores[self.indice].comandos[3])
 
             # as saidas definem a direção que o player vai tomar
             else:
 
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[0] > self.valor_de_ativacao:
+                if Global.grupo_processadores[self.indice].comandos[0] > self.valor_de_ativacao:
                     self.posicao_x += velocidade_ia
                                     
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[1] > self.valor_de_ativacao:
+                if Global.grupo_processadores[self.indice].comandos[1] > self.valor_de_ativacao:
                     self.posicao_x -= velocidade_ia
                                      
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[2] > self.valor_de_ativacao:
+                if Global.grupo_processadores[self.indice].comandos[2] > self.valor_de_ativacao:
                     self.posicao_y += velocidade_ia             
 
-                if Variaveis_globais.grupo_processadores[self.indice].comandos[3] > self.valor_de_ativacao:
+                if Global.grupo_processadores[self.indice].comandos[3] > self.valor_de_ativacao:
                     self.posicao_y -= velocidade_ia
                     
                     

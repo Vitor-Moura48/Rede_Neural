@@ -1,5 +1,5 @@
 from Configurações.Config import *
-import Configurações.Variaveis_globais as Variaveis_globais
+import Configurações.Global as Global
 
 
 class CriarRedeNeural:  # classe responsável por criar a rede neural
@@ -20,7 +20,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
         self.taxa_de_mutacao = taxa_de_mutacao_base
 
         # se for a primeira geração, chama uma função que randomiza todos os pesos
-        if Variaveis_globais.contador_geracoes == 0:
+        if Global.contador_geracoes == 0:
             self.iniciar_geracoes()
             
         # caso não for a primeira geração, ele faz uma nova a partir da(s) anterior(es)
@@ -40,13 +40,13 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
     def nova_geracao(self):
 
         # o melhor individuo sempre será passado para a próxima geração
-        if Variaveis_globais.individuos_elite < numero_de_elitismo:  # pode ser feito mais de uma cópia do melhor indivíduo
+        if Global.individuos_elite < numero_de_elitismo:  # pode ser feito mais de uma cópia do melhor indivíduo
                
             # obtem os pesos do melhor indivíduo
-            self.camadas = copy.deepcopy(Variaveis_globais.melhor_individuo[1:])
+            self.camadas = copy.deepcopy(Global.melhor_individuo[1:])
         
             # registra que foi feita mais uma cópia
-            Variaveis_globais.individuos_elite += 1
+            Global.individuos_elite += 1
 
         # faz um sorteio dos individuos com preferencia dos melhores
         else:
@@ -56,7 +56,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
 
                 # sorteia um valor e busca seu indice
                 roleta = uniform(0, 1)
-                indice = numpy.searchsorted(Variaveis_globais.valores_proporcionais, roleta)
+                indice = numpy.searchsorted(Global.valores_proporcionais, roleta)
                 
                 return indice
                 
@@ -65,7 +65,7 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
             roleta_2 = roleta()
 
             # calcula a média do desempenho dos dois individuos sorteados
-            media_de_recompensa = ((Variaveis_globais.juncao_de_geracoes[roleta_1][0][0] + Variaveis_globais.juncao_de_geracoes[roleta_2][0][0]) / 2) 
+            media_de_recompensa = ((Global.juncao_de_geracoes[roleta_1][0][0] + Global.juncao_de_geracoes[roleta_2][0][0]) / 2) 
 
             # reduz um pouco a taxa de mutação base de acordo com a aproximação do objetivo
             self.taxa_de_mutacao = taxa_de_mutacao_base - (media_de_recompensa / recompensa_objetivo)
@@ -79,10 +79,10 @@ class CriarRedeNeural:  # classe responsável por criar a rede neural
                 for neuronio in range(len(self.camadas[camada])):
 
                     if camada < camada_insercao_escolhida or (camada == camada_insercao_escolhida and neuronio < neuronio_insercao_escolhida):                                         
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_1][camada + 1][neuronio]# camada +1 porque a primeira camada = fitness
+                        self.camadas[camada][neuronio] = Global.juncao_de_geracoes[roleta_1][camada + 1][neuronio]# camada +1 porque a primeira camada = fitness
                   
                     elif camada > camada_insercao_escolhida or (camada == camada_insercao_escolhida and neuronio >= neuronio_insercao_escolhida):
-                        self.camadas[camada][neuronio] = Variaveis_globais.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
+                        self.camadas[camada][neuronio] = Global.juncao_de_geracoes[roleta_2][camada + 1][neuronio]
                  
     # função utilizada para simular a mutação
     def randomizar_resultados(self):
