@@ -1,5 +1,6 @@
 import pygame
 from pygame import *
+import tkinter as tk
 
 import sys, os, time, copy, math
 from functools import cache
@@ -7,6 +8,7 @@ from random import *
 
 import json
 from cProfile import run
+import numba
 
 import torch
 import torch.nn.functional as F
@@ -70,7 +72,7 @@ elif arquivo == 2:
     partidas_por_geracao = 30
 
     numero_projeteis = 4
-    numero_players = 500
+    numero_players = 3000
 
     numero_de_elitismo = numero_players * 0.4
 

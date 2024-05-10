@@ -297,6 +297,7 @@ def iniciar_save():
     for individuo in range(numero_players):
         Variaveis_globais.geracao_atual.append([])
 
+
 if Variaveis_globais.contador_geracoes > 0:
     iniciar_save()
     
@@ -305,4 +306,3 @@ criar_objetos(numero_projeteis, numero_players)
 
 # cria classe de colisões
 colisoes = Colisoes()
-
