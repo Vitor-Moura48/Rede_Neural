@@ -68,7 +68,6 @@ class Processador:
 
         else:
             # função que obtem as distâncias de cada inimigo para o jogador e retorna o valor
-          
             def obter_distancias():
                 for projetil in Global.grupo_projeteis.values():
                     
@@ -84,7 +83,7 @@ class Processador:
                     resultados_sensores.append([distancia, distancia_x, distancia_y, informacoes_inimigo[2], informacoes_inimigo[3]])
 
             # função que ordena cada coordenada (dos inimigos) de acordo com os que estão mais próximos
-            def ordenar_cada_inimigo():
+            def ordenar_distancias():
                 resultados_sensores.sort(key=lambda x: x[0])
 
             # função que apaga as coordenadas exedentes e apaga a distancia absoluta dos resultados (usada para "ordenar cada inimigo")
@@ -97,7 +96,7 @@ class Processador:
 
             # chama todas essas funções
             obter_distancias()
-            ordenar_cada_inimigo()
+            ordenar_distancias()
             normatizar_o_resultado()
             
 
@@ -109,7 +108,7 @@ class Processador:
     
         # obtem as informações dos projeteis mais próximos
         resultados = self.obter_entradas()
-
+        
         # variavel que vai conter os dados de entrada da rede
         entrada_da_rede = [(Global.grupo_players[self.indice].rect.center[0] / (largura / 2)) -1, (Global.grupo_players[self.indice].rect.center[1] / (altura / 2)) -1]
 
