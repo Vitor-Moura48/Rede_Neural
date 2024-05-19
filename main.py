@@ -8,7 +8,7 @@ while True:
 
     # se todos os players foram eliminados, cria uma nova geração ou partida
     if len(estrategia_evolutiva.gerenciador.agentes) == 0:
-        estrategia_evolutiva.gerenciador.finalizar_partida()
+        finalizar_partida()
 
     # função para dar update em todos os objetos
     atualizar_objetos()
@@ -23,7 +23,7 @@ while True:
     movimentacao_jogador()
 
     # define um limite de fps
-    Global.clock.tick(fps)
+    clock.tick(fps)
 
     # atualiza o display
     pygame.display.update() 

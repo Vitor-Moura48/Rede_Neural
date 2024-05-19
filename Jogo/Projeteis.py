@@ -75,6 +75,8 @@ class Projeteis:  # classe que gerencia os projeteis
         # cria um retandulo de colisão e mostra na tela
         self.rect.center = (self.posicao_x, self.posicao_y)
         pygame.draw.rect(tela, (255, 000, 000), self.rect)
+    
+grupo_projeteis = []
 
         
 

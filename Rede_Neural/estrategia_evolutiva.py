@@ -139,4 +139,4 @@ class GerenciadorNeural:
         self.agentes.remove(agente)
 
         if self.contador_partidas == self.partidas_por_geracao:
-            self.geracao_atual.append([[agente.distancia_percorrida]] + agente.rede_neural.camadas)
+            self.geracao_atual.append([[agente.recompensa]] + agente.rede_neural.camadas)
