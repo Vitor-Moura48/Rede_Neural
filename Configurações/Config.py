@@ -70,7 +70,7 @@ elif arquivo == 2:
     partidas_por_geracao = 30
 
     numero_projeteis = 4
-    numero_players = 500
+    numero_players = 400
 
     numero_de_elitismo = numero_players * 0.4
 

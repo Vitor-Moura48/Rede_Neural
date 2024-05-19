@@ -5,6 +5,7 @@ from Rede_Neural.Criação_de_Rede import *
 from Rede_Neural.Processador import *
 from Rede_Neural.Player import *
 from Jogo.Colisões import *
+from Rede_Neural import estrategia_evolutiva
 
 # função para criar os objetos
 def criar_objetos(quantidade_projeteis, quantidade_playes):   
@@ -299,6 +300,8 @@ def iniciar_save():
 
 if Global.contador_geracoes > 0:
     iniciar_save()
+
+estrategia_evolutiva.gerenciador = estrategia_evolutiva.GerenciadorNeural(500, 10, 0.4, Player)
     
 # cria os objetos iniciais
 criar_objetos(numero_projeteis, numero_players)
