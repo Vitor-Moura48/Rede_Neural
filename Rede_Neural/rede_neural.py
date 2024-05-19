@@ -89,6 +89,9 @@ class RedeNeural:
     
         elif tipo == 'leaky_relu':
             return F.leaky_relu(tensor)
+
+        else:
+            print("Função de ativação não encontrada!")
     
     # retorna o valor mínimo para ativar o neuronio
     def valor_de_ativacao(self):

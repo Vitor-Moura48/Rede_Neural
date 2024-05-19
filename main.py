@@ -6,12 +6,9 @@ while True:
     # preenche a tela de preto (para ser redesenhada)
     tela.fill((000, 000, 000))
 
-    # função para exibir o fps
-    exibir_fps()
-
     # se todos os players foram eliminados, cria uma nova geração ou partida
-    if len(Global.grupo_players) == 0:
-        nova_geracao_ou_nova_partida()
+    if len(estrategia_evolutiva.gerenciador.agentes) == 0:
+        estrategia_evolutiva.gerenciador.finalizar_partida()
 
     # função para dar update em todos os objetos
     atualizar_objetos()

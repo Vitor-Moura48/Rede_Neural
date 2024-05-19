@@ -1,31 +1,42 @@
 from Configurações.Config import *
 import Configurações.Global as Global
+from Rede_Neural.rede_neural import RedeNeural
 
-# classe que gerencia o player
-class Processador:
-    def __init__(self, indice, camadas):
+class Player:
+    def __init__(self, real=False):
 
-        self.indice = indice
-        self.camadas = camadas
-    
-        # variavel que vai armazenar todos os pesos daquela rede (gerados na criação de rede)
-        self.tensores = [torch.tensor(camada, dtype=torch.float64) for camada in camadas] ##############################
+        self.rede_neural = RedeNeural([6, 12, 6, 4], ['leaky_relu', 'leaky_relu', 'leaky_relu'], 0, 0.06)
 
-    # seleciona a função de ativação de acordo com a configuração
-    def aplicar_ativacao(self, tensor, tipo):
+        # define se o player é ou não um jogador
+        self.real = real
 
-        if tipo == 1:
-            return F.sigmoid(tensor)
-            
-        elif tipo == 2:
-            return F.relu(tensor)
+        # variavel para contar a quantidade de loops que o player conseguiu passar
+        self.tick = 0
+
+        # define o ponto de spaw do player
+        self.posicao_x = largura / 2
+        self.posicao_y = altura / 2
+
+        self.valor_de_ativacao = self.valor_de_ativacao()
+
+        # cria um retandulo de colisão e mostra na tela
+        self.rect = pygame.Rect((self.posicao_x, self.posicao_y, dimensoes_rede[0], dimensoes_rede[1]))
+     
+    # retorna o valor mínimo para ativar o neuronio
+    def valor_de_ativacao(self):
         
-        elif tipo == 3:
-            return F.tanh(tensor)
+        # se for sigmoid, o valor mínimo é 0.5
+        if funcoes_de_camadas[-2] == 1:
+            return 0.5
+        
+        # se for Relu, o valor mínimo é 0
+        elif funcoes_de_camadas[-2] == 2:
+            return 0
+        
+        # se for Tangente Hiperbólica, o valor mínimo é 0
+        elif funcoes_de_camadas[-2] == 3:
+            return 0
     
-        if tipo == 4:
-            return F.leaky_relu(tensor)
-
     # função para retornar as entradas para a rede neural
     def obter_entradas(self):
 
@@ -35,8 +46,8 @@ class Processador:
         if convolucional:
             contador_sesores_da_linha = 0
              
-            ponto_inicial = [Global.grupo_players[self.indice].rect.left - ((alcance_de_visao - Global.grupo_players[self.indice].rect.width) // 2), 
-                             Global.grupo_players[self.indice].rect.top - ((alcance_de_visao - Global.grupo_players[self.indice].rect.height) // 2)]
+            ponto_inicial = [self.rect.left - ((alcance_de_visao - self.rect.width) // 2), 
+                             self.rect.top - ((alcance_de_visao - self.rect.height) // 2)]
             
             for i in range(quantidade_entradas - 2): 
                 contador_sesores_da_linha += 1
@@ -74,8 +85,8 @@ class Processador:
                     informacoes_inimigo = projetil.informar_posicao()
 
                     # calcul o quão distnte o projetil está do player (1 = o projetil mais distante à direita, -1 à esquerda)
-                    distancia_x = (informacoes_inimigo[0] - Global.grupo_players[self.indice].rect.center[0]) / largura
-                    distancia_y = (informacoes_inimigo[1] - Global.grupo_players[self.indice].rect.center[1]) / altura
+                    distancia_x = (informacoes_inimigo[0] - self.rect.center[0]) / largura
+                    distancia_y = (informacoes_inimigo[1] - self.rect.center[1]) / altura
                   
                     distancia = math.hypot(distancia_x, distancia_y)
 
@@ -98,41 +109,49 @@ class Processador:
             obter_distancias()
             ordenar_distancias()
             normatizar_o_resultado()
+        
+        entradas = [(self.rect.center[0] / (largura / 2)) -1, (self.rect.center[1] / (altura / 2)) -1]
+
+        for projetil in resultados_sensores:
+            entradas.extend(projetil)
             
 
         # retorna as coordenadas mais próximas
-        return resultados_sensores
-
-    # atualiza o estado da rede a cada iteração
-    def update(self):
+        return entradas
     
-        # obtem as informações dos projeteis mais próximos
-        resultados = self.obter_entradas()
-        
-        # variavel que vai conter os dados de entrada da rede
-        entrada_da_rede = [(Global.grupo_players[self.indice].rect.center[0] / (largura / 2)) -1, (Global.grupo_players[self.indice].rect.center[1] / (altura / 2)) -1]
+    # atualiza o estado do player a cada geração
+    def update(self):
+       
+        # se não for um jogador, conta os loops e se movimenta a partir dos comandos da sua rede
+        if self.real == False:
 
-        if convolucional:
-            for sensor in resultados:
-                entrada_da_rede.append(sensor)
-        
-        else:
-            # junta todos os dados que vão para a entrada da rede em uma única lista
-            for projetil in resultados:
-                entrada_da_rede.extend(projetil)
-        
-        # armazena o resultado das entradas ou de alguma fase intermediária
-        self.estado_atual_da_rede = torch.tensor(entrada_da_rede, dtype=torch.float64)  ###########################################
+            # conta os loops
+            self.tick += 1
 
-        # Faz todos os calculos de cada camada e armazena na variavel acima
-        for camada in range(1, len(configuracao_de_camadas)):
+            self.rede_neural.definir_entrada(self.obter_entradas())
+            output = self.rede_neural.obter_saida()
 
-            saida_camada_tensor = torch.matmul(self.estado_atual_da_rede, self.tensores[camada - 1].t()) + bias ###########################################
-            saida_camada_tensor_ativada = self.aplicar_ativacao(saida_camada_tensor, Global.funcoes_de_camadas[camada - 1])
-            self.estado_atual_da_rede = saida_camada_tensor_ativada ######################################
+            if output[0]:
+                self.posicao_x += velocidade_ia
+                                
+            if output[1]:
+                self.posicao_x -= velocidade_ia
+                                    
+            if output[2]:
+                self.posicao_y += velocidade_ia             
 
-        if funcoes_de_camadas[-1] == True:
-            self.estado_atual_da_rede = torch.softmax(self.estado_atual_da_rede, dim=0) ########################################
+            if output[3]:
+                self.posicao_y -= velocidade_ia
+                
+                    
+            # cria um retandulo de colisão e mostra na tela
+            self.rect.center = (self.posicao_x, self.posicao_y)
+            draw.rect(tela, (000, 000, 255), self.rect)
+            draw.rect(tela, (000, 255, 000), self.rect, 2)
 
-        # variavel que contem o valor de saída da rede neural
-        self.comandos = self.estado_atual_da_rede.tolist()
+        # se for um jogador troca a cor do player
+        else:          
+    
+            # cria um retandulo de colisão e mostra na tela
+            self.rect.center = (self.posicao_x, self.posicao_y)
+            draw.rect(tela, (000, 255, 000), (self.posicao_x - 5, self.posicao_y - 5, dimensoes_rede[0], dimensoes_rede[1]))

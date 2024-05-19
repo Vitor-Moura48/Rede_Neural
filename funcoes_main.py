@@ -1,14 +1,14 @@
 from Configurações.Config import *
 import Configurações.Global as Global
 from Jogo.Projeteis import *
-from Rede_Neural.Criação_de_Rede import *
-from Rede_Neural.Processador import *
-from Rede_Neural.Player import *
+from Jogo.Player import *
 from Jogo.Colisões import *
 from Rede_Neural import estrategia_evolutiva
 
 # função para criar os objetos
 def criar_objetos(quantidade_projeteis, quantidade_playes):   
+
+    estrategia_evolutiva.gerenciador.nova_partida()
 
     # define a posiçãao e direção inicial (opcional)
     coordendas_iniciais = [[largura + 20, altura / 2, numpy.radians(180)], [largura / 2, -20, numpy.radians(90)], [-20, altura / 2, 0], [largura / 2, altura + 20, numpy.radians(270)]]
@@ -20,71 +20,17 @@ def criar_objetos(quantidade_projeteis, quantidade_playes):
             projetil = Projeteis(choice(coordendas_iniciais)) # escolhe um projétil para mirar no centro de pawn (para eliminar os que ficam parados)
         Global.grupo_projeteis[i] = projetil 
 
-    # cria os players a partir do valor definido em Config
-    for indice_do_player_na_geracao in range(quantidade_playes):
-
-        # cria o player, que vai aparecer na tela
-        player = Player(False, indice_do_player_na_geracao)
-
-        # se for o início de uma nova geração ele cria a nova geração normalmente
-        if Global.partida_atual_da_geracao == 0:
-
-            # cria a rede para processar as entradas
-            nova_rede = CriarRedeNeural()
-            resultado = nova_rede.randomizar_resultados()
-            processador = Processador(indice_do_player_na_geracao, resultado) 
-         
-        # se não, copia as redes daquela geração
-        else:
-            processador = Processador(indice_do_player_na_geracao, Global.geracao_atual[indice_do_player_na_geracao][1:])
-
-        # adiciona do grupo de redes e players novamente
-        Global.grupo_processadores[indice_do_player_na_geracao] = processador
-        Global.grupo_players[indice_do_player_na_geracao] = player
-    
-    # condição para adicionar um player para o jogador
-    if quantidade_jogadores > 0:
-
-        # cria um ou dois players
-        for i in range(quantidade_jogadores):
-    
-            player = Player(True, i)  # o index nesse caso registra quem é o primeiro e o segundo player
-            Global.grupo_players[i] = player
-  
-# lógica para contar o fps
-def exibir_fps():
-    global mensagem_fps_para_tela
-
-    Global.contador_frames += 1
-    tempo_atual = time.time()
-
-    delta = tempo_atual - Global.tempo_inicio
-    # a cada x segundos, printa a quantidade de loops feitos
-    if (delta) > 0.5:
-
-        mensagem_fps = "fps " + str(round(Global.contador_frames / delta))
-        mensagem_fps_para_tela = fonte.render(mensagem_fps, True, (255, 000, 000))
-
-
-        Global.contador_frames = 0
-        Global.tempo_inicio = tempo_atual
-    
-    # exibe a taxa de fps no display
-    tela.blit(mensagem_fps_para_tela, (largura * 0.8, altura * 0.05))
-    tela.blit(fonte.render(f"geração {Global.contador_geracoes}", True, (255, 000, 000)), (largura * 0.8, altura * 0.1))
-    tela.blit(fonte.render(f"partida {Global.partida_atual_da_geracao}", True, (255, 000, 000)), (largura * 0.8, altura * 0.15))
-
 # atualiza todos os objetos
 def atualizar_objetos():
+
+    # função para exibir o fps
+    #visualizador.dados.update()
 
     for projetil in Global.grupo_projeteis.values():
         projetil.update()
 
-    for processador in Global.grupo_processadores.values():
-        processador.update()
-    
-    for player in Global.grupo_players.values():
-        player.update()
+    for agente in estrategia_evolutiva.gerenciador.agentes:
+        agente.update()
 
     # confere as colisões
     colisoes.update()
@@ -298,13 +244,9 @@ def iniciar_save():
     for individuo in range(numero_players):
         Global.geracao_atual.append([])
 
-if Global.contador_geracoes > 0:
-    iniciar_save()
 
 estrategia_evolutiva.gerenciador = estrategia_evolutiva.GerenciadorNeural(500, 10, 0.4, Player)
-    
-# cria os objetos iniciais
-criar_objetos(numero_projeteis, numero_players)
+criar_objetos(numero_projeteis, numero_players) # cria os objetos iniciais
 
 # cria classe de colisões
 colisoes = Colisoes()

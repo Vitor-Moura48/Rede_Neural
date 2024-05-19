@@ -49,7 +49,7 @@ class GerenciadorNeural:
         self.total_redes = []
 
         # salva algumas informações
-        with open("dados/saves/informacoes.json", 'w') as arquivo:
+        with open("recursos/saves/informacoes.json", 'w') as arquivo:
             json.dump([self.contador_geracoes], arquivo)
        
         # divide a recompensa pela quantidade de partidas para fazer a media de recompensa
@@ -73,7 +73,7 @@ class GerenciadorNeural:
                                             ]
 
                     # se sim, adiciona o agente em um arquivo csv
-                    with open("dados/saves/melhor_individuo.json", 'w') as arquivo:
+                    with open("recursos/saves/melhor_individuo.json", 'w') as arquivo:
                         json.dump(pesos_normalizados, arquivo)
 
         # printa o melhor tempo geral e o melhor tempo dessa geração
@@ -84,8 +84,8 @@ class GerenciadorNeural:
         self.geracao_avo = self.geracao_anterior
         self.geracao_anterior = self.geracao_atual
         
-        self.salvar_geracao(self.geracao_anterior, "dados/saves/geracao_anterior.json")
-        self.salvar_geracao(self.geracao_avo, "dados/saves/geracao_avo.json")
+        self.salvar_geracao(self.geracao_anterior, "recursos/saves/geracao_anterior.json")
+        self.salvar_geracao(self.geracao_avo, "recursos/saves/geracao_avo.json")
 
         self.carregar_redes()
     
@@ -124,11 +124,11 @@ class GerenciadorNeural:
     
     def verificar_arquivos(self):
             
-        self.geracao_anterior = self.carregar_arquivos("dados/saves/geracao_anterior.json", [])
-        self.contador_geracoes = self.carregar_arquivos("dados/saves/informacoes.json", [0])[0] 
-        self.geracao_avo = self.carregar_arquivos("dados/saves/geracao_avo.json", [])
-        self.melhor_agente = self.carregar_arquivos("dados/saves/melhor_individuo.json", None)
-        self.melhor_record = self.carregar_arquivos("dados/saves/melhor_individuo.json", [[0]])[0][0]
+        self.geracao_anterior = self.carregar_arquivos("recursos/saves/geracao_anterior.json", [])
+        self.contador_geracoes = self.carregar_arquivos("recursos/saves/informacoes.json", [0])[0] 
+        self.geracao_avo = self.carregar_arquivos("recursos/saves/geracao_avo.json", [])
+        self.melhor_agente = self.carregar_arquivos("recursos/saves/melhor_individuo.json", None)
+        self.melhor_record = self.carregar_arquivos("recursos/saves/melhor_individuo.json", [[0]])[0][0]
     
     def ativar_agentes(self, classe, *arg): # preenche a lista de agentes novos ou reativa os agentes
         self.agentes = [classe(*arg) for _ in range(self.numero_players)] if self.contador_partidas == 1 else copy.deepcopy(self.agentes_inativos)
